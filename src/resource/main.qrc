@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/shaders">
+        <file alias="shader.vert">shaders/shader.vert</file>
+        <file alias="shader.frag">shaders/shader.frag</file>
+    </qresource>
+
+    <qresource prefix="/img">
+        <file alias="default">img/default.jpg</file>
+    </qresource>
+</RCC>

@@ -42,7 +42,6 @@ void Grid::generateVertices(const float width, const float height, const float t
 
 	const int size=nVertices();
 	_vertices.resize(2*size);
-	// _textures.resize(nVertices());
 
 	const float scalingX=1.0/(_stepX-1.0);
 	const float scalingY=1.0/(_stepY-1.0);
@@ -53,13 +52,15 @@ void Grid::generateVertices(const float width, const float height, const float t
     {
         for(int col=0; col<_stepX; col++ )
         {
-            _vertices[index++] = w * scalingX * col + offsetX; //TODO
-            _vertices[index++] = h * scalingY * row + offsetY; //TODO
+            _vertices[index++] = w * scalingX * col + offsetX;
+            _vertices[index++] = h * scalingY * row + offsetY;
 
             _vertices[index++] = scalingX * col;
             _vertices[index++] = scalingY * row;
         }
     }
+
+    assert(index==_vertices.size());
 }
 
 void Grid::generateIndices()
@@ -87,6 +88,7 @@ void Grid::generateIndices()
             }
         }
     }
+    assert(index==_indices.size());
     // if ( (mHeight&1) && mHeight>2 ) {
         // mpIndices[i++] = (mHeight-1) * mWidth;
     // }

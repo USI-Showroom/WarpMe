@@ -17,7 +17,6 @@ public:
     }
 
     inline const std::vector<float> &vertices() const { return _vertices; }
-    // inline const std::vector<float> &textures() const { return _textures; }
     inline const std::vector<GLuint> &indices()  const { return _indices; }
 
     inline int nVertices() const { return _stepX*_stepY*2; }
@@ -29,7 +28,7 @@ private:
     void generateIndices();
 
     int _stepX, _stepY;
-    std::vector<float> _vertices;//, _textures;
+    std::vector<float> _vertices;
     std::vector<GLuint> _indices;
     
 };

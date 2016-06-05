@@ -36,19 +36,17 @@ public:
 
 	void toggleMorphMode();
 	void togglePreseveBounday();
-	inline void clear() { _targetPoly.clear(); _sourcePoly.clear(); }
+	inline void clear() { _targetPoly.clear(); _sourcePoly.clear(); update(); }
 
 private:
 	void checkGLError(const std::string &msg);
 	void setUniforms();
 
-	void deleteAll();
-	void generateVAO();
+	void updateVBO();
 
 	QVector2D mouseToOpenGl(QMouseEvent *e) const;
 
 protected:
-	// void paintGL();
 	void initializeGL();
 	void paintEvent(QPaintEvent *e);
 

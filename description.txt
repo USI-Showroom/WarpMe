@@ -1,0 +1,38 @@
+Deformazione di immagini sulla GPU con coordinate baricentriche
+
+Descrizione:
+
+Il corso è diviso in due parti, una teorica ed una, più piccola, pratica.
+
+Nella prima parte introdurremo il concetto di coordinate baricentriche e la sua generalizzazione a poligoni con più di tre lati. Esploreremo in seguito le varie applicazioni concentrandoci sulle mappe baricentriche che trasformano l'area di un poligono sorgente nell'area di un poligono obiettivo. Infine ci concentreremo sulle coordinate "mean value" e vedremo come riformularle per poterle implementare in modo efficiente.
+
+Continueremo la teoria vedendo le basi della "computer graphics" concentrandoci su OpenGl e vedremo concetti come "mesh", "texture coordinate", "strip" di triangoli, "shaders", etc. Ci concentreremo inoltre sul funzionamento di OpenGl ("pipeline") e vedremo come sfruttarlo, ed in particolare come usare la programmazione "shader" per implementare le mappe baricentriche.
+
+
+Nella seconda parte, svilupperemo un programma che permette di deformare un'immagine in modo interattivo sfruttando la scheda grafica e le coordinate "mean value". Il programma permette di disegnare un poligono (sorgente) su un immagine, poi, trascinando i vertici si crea il poligono obiettivo che deformerà l'immagine.
+
+Cominceremo con le basi di programmazione vedendo cicli (loops), istruzioni condizionali (if/else), array e tipi/funzioni primitive nel linguaggio che useremo. Vedremo superficialmente le varie parti di codice già implementato collegandole alla teoria. Infine ci sarà la possibilità di implementare le funzionalità di base del programma attraverso l'implementazione delle coordinate "mean value" in uno "shader".
+
+
+
+Obiettivi:
+
+- capire il concetto di coordinate baricentriche
+- acquisire basi di "computer graphics" e OpenGl
+- capire il funzionamento di OpenGl
+- imparare le basi della programmazione "shader"
+
+
+Prerequisiti:
+
+- basi di analisi (e.g., funzioni, polinomi, etc.)
+- geometria vettoriale (e.g., prodotto scalare, prodotto vettoriale, etc.)
+- trigonometria (e.g., identità trigonometriche, trasformazioni, etc.)
+- basi di programmazione sono benvenute
+
+
+
+
+Biografia del relatore:
+
+Teseo Schneider è un dottorando presso la facoltà di Scienze Informatiche dell'USI dal 2012. La sua ricerca è nell'ambito della "computer graphics" e geometria. Ha ottenuto il Master in Informatica con specializzazione in Scienze Computazionali presso l'USI nel 2012, lavorando in parallelo come assistente di ricerca (2010-2012). Durante i suoi studi di dottorato ha insegnato durante le giornate speciali LiLu2 (2013), ha seguito dei ragazzi durante il LAM (2013), i TecDays (2014, 2015, 2016), ed ha partecipato al festival della scienza (2015). Inoltre, è stato impiegato come assistente nei seguenti corsi: "Computer Graphics" (2012, 2013, 2014) e "Geometry Processing" (2014). Infine ha partecipate a più mostre nell'ambito della promozione dell'informatica, Sportech (2012, 2014), decennale della facoltà di informatica (2014), e CeBIT (2015).

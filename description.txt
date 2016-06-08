@@ -2,7 +2,7 @@ Deformazione di immagini sulla GPU con coordinate baricentriche
 
 Descrizione:
 
-Il corso è diviso in due parti, una teorica ed una, più piccola, pratica.
+Il corso è diviso in due parti, una teorica ed una pratica.
 
 Nella prima parte introdurremo il concetto di coordinate baricentriche e la sua generalizzazione a poligoni con più di tre lati. Esploreremo in seguito le varie applicazioni concentrandoci sulle mappe baricentriche che trasformano l'area di un poligono sorgente nell'area di un poligono obiettivo. Infine ci concentreremo sulle coordinate "mean value" e vedremo come riformularle per poterle implementare in modo efficiente.
 

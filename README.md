@@ -14,10 +14,14 @@ You need:
 
 ### Mac/linux
 
-Use your favorite package manager  (e.g., macports, yum, apt-get, etc...) to install the three dependencies. On Mac clang is better than g++
+Use your favorite package manager (e.g., macports, yum, apt-get, etc...) to install the three dependencies. 
+On Mac clang is better than g++ and can be installed for free with xcode
 
 ### Windows
 
 * Install Visual Studio, the express or community version are free, to obtain the C++ compiler. 
-* Download cmake from its official website (https://cmake.org/download/)
-* Download Qt5.* from http://www.qt.io/download/ and install in C:\\. Install the compatible version with your C++ compiler
+* Download cmake from its official website (https://cmake.org/download/).
+* Download Qt5.* from http://www.qt.io/download/ and install in C:\\. Carefull: install the version compatible with your C++ compiler.
+
+## Compiling
+Use cmake to generate make files (on unix), xcode project (on mac), or visual studio project (on windows).

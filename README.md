@@ -9,9 +9,7 @@ Hardware accelerated image morphing with barycentric coordinates
 You need:
 
 * C++ compiler
-
 * Cmake
-
 * Qt5
 
 ### Mac/linux

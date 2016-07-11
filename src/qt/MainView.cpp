@@ -4,6 +4,8 @@
 #include <windows.h>
 #include <gl\gl.h>
 #include <gl\GLU.h>
+#else
+#include <OpenGL/gl3.h>
 #endif
 #include <QGLWidget>
 #include <QDateTime>
@@ -11,7 +13,7 @@
 #include "MainView.hpp"
 #include <cmath>
 #include <fstream>
-#include <OpenGL/gl3.h>
+#include <qopengl.h>
 
 MainView::MainView(QWidget *parent)
 : super(parent), _shader(this), _grid(100,100), _texture(NULL), _morphMode(false), _preserveBounday(false), _currentIndex(-1)
@@ -21,14 +23,25 @@ MainView::MainView(QWidget *parent)
 
 MainView::~MainView()
 { 
-    glBindVertexArray(0);
-    glDeleteVertexArrays(1, &_vao);
+#ifdef WIN32
+    funs.glBindVertexArray(0);
+	funs.glDeleteVertexArrays(1, &_vao);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glDeleteBuffers(1, &_ibo);
+	funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	funs.glDeleteBuffers(1, &_ibo);
 
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glDeleteBuffers(1, &_vbo);
+	funs.glBindBuffer(GL_ARRAY_BUFFER,0);
+	funs.glDeleteBuffers(1, &_vbo);
+#else
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &_vao);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &_ibo);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &_vbo);
+#endif
 
     if(_texture)
     {
@@ -112,6 +125,17 @@ void MainView::setTexture(const QString &path)
 void MainView::updateVBO()
 {
     checkGLError("begin_genvao");
+#ifdef WIN32
+	funs.glBindVertexArray(_vao);
+	checkGLError("end_genvao");
+
+	funs.glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	funs.glBufferData(GL_ARRAY_BUFFER, _grid.vertices().size() * sizeof(GLfloat), &_grid.vertices()[0], GL_DYNAMIC_DRAW);
+
+	funs.glVertexAttribPointer(_posLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	funs.glVertexAttribPointer(_textureLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+	funs.glBindBuffer(GL_ARRAY_BUFFER, 0);
+#else
     glBindVertexArray(_vao);
     checkGLError("end_genvao");
 
@@ -121,6 +145,7 @@ void MainView::updateVBO()
     glVertexAttribPointer(_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), 0);
     glVertexAttribPointer(_textureLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), (void *)(2* sizeof(GLfloat)));
     glBindBuffer(GL_ARRAY_BUFFER,0);
+#endif
     checkGLError("end_bufferdata");
 }
 
@@ -128,7 +153,9 @@ void MainView::initializeGL() {
 
     printf("Supported GLSL version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-
+#ifdef WIN32
+	funs.initializeOpenGLFunctions();
+#endif
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
@@ -155,8 +182,21 @@ void MainView::initializeGL() {
     _posLoc     = _shader.attributeLocation("posIn");
     _textureLoc = _shader.attributeLocation("textureIn");
 
-    glGenVertexArrays(1, &_vao);
-    glGenBuffers(1, &_vbo);
+#ifdef WIN32
+    funs.glGenVertexArrays(1, &_vao);
+    funs.glGenBuffers(1, &_vbo);
+
+	setTexture(":/img/default");
+
+	funs.glBindVertexArray(_vao);
+	funs.glGenBuffers(1, &_ibo);
+	funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+	funs.glBufferData(GL_ELEMENT_ARRAY_BUFFER, _grid.indices().size() * sizeof(GLuint), &_grid.indices()[0], GL_STATIC_DRAW);
+	funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	checkGLError("end_ibufferdata");
+#else
+	glGenVertexArrays(1, &_vao);
+	glGenBuffers(1, &_vbo);
 
     setTexture(":/img/default");
 
@@ -166,7 +206,7 @@ void MainView::initializeGL() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, _grid.indices().size() * sizeof(GLuint), &_grid.indices()[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     checkGLError("end_ibufferdata");
-
+#endif
     checkGLError("end_init");
 }
 
@@ -228,18 +268,29 @@ void MainView::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // glLineWidth(10);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glLineWidth(10);
 
     _shader.bind();
     setUniforms();
 
     _texture->bind();
 
-    
+#ifdef WIN32
+	funs.glBindVertexArray(_vao);
+	funs.glEnableVertexAttribArray(_posLoc);
+	funs.glEnableVertexAttribArray(_textureLoc);
+	funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+	funs.glDrawElements(GL_TRIANGLE_STRIP, _grid.indices().size(), GL_UNSIGNED_INT, (void*)0);
+
+	funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	funs.glDisableVertexAttribArray(_posLoc);
+	funs.glDisableVertexAttribArray(_textureLoc);
+	funs.glBindVertexArray(0);
+#else
     glBindVertexArray(_vao);
     glEnableVertexAttribArray(_posLoc);
     glEnableVertexAttribArray(_textureLoc);
@@ -250,7 +301,7 @@ void MainView::paintEvent(QPaintEvent *e)
     glDisableVertexAttribArray(_posLoc);
     glDisableVertexAttribArray(_textureLoc);
     glBindVertexArray(0);
-
+#endif
     checkGLError("end_unbind");
 
     _shader.release();

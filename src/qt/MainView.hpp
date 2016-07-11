@@ -10,6 +10,10 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 
+#ifdef WIN32
+#include <QOpenGLFunctions_3_0>
+#endif
+
 #include <QImage>
 
 #include "Grid.hpp"
@@ -50,8 +54,12 @@ protected:
 	void initializeGL();
 	void paintEvent(QPaintEvent *e);
 
-
-
+#ifdef WIN32
+	void resizeGL(int width, int height)
+	{
+		glViewport(0, 0, (GLint)width, (GLint)height);
+	}
+#endif
 
 
 private:
@@ -68,4 +76,9 @@ private:
 	bool _morphMode, _preserveBounday;
 	int _currentIndex;
 	QVector2D _currentPosition;
+
+#ifdef WIN32
+	QOpenGLFunctions_3_0 funs;
+#endif // WIN32
+
 };

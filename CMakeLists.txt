@@ -4,7 +4,7 @@ project(BarycentricMapping)
 
 
 IF(WIN32)
-	SET(CMAKE_PREFIX_PATH "C:\\Qt\\5.7\\msvc2015")
+	SET(CMAKE_PREFIX_PATH "$ENV{QT_PATH}")
 ENDIF()
 
 

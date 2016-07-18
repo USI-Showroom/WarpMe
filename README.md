@@ -9,7 +9,7 @@ Hardware accelerated image morphing with barycentric coordinates
 You need:
 
 * C++ compiler
-* Cmake
+* cmake
 * Qt5
 
 ### Mac/linux
@@ -22,6 +22,7 @@ On Mac clang is better than g++ and can be installed for free with xcode
 * Install Visual Studio, the express or community version are free, to obtain the C++ compiler. 
 * Download cmake from its official website (https://cmake.org/download/).
 * Download Qt5.* from http://www.qt.io/download/ and install in C:\\. Carefull: install the 32bit version compatible with your C++ compiler.
+* Set the enviromement variable QT_PATH to the installation of Qt (e.g., C:\\Qt\\5.7\\msvc2015).
 
 ## Compiling
 Use cmake to generate make files (on unix), xcode project (on mac), or visual studio project (on windows).

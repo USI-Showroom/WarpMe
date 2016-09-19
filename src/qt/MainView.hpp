@@ -59,7 +59,7 @@ private:
 
 protected:
 	void initializeGL();
-	void paintEvent(QPaintEvent *e);
+	void paintGL();
 
 #ifdef WIN32
 	void resizeGL(int width, int height)
@@ -73,8 +73,13 @@ private:
 	QOpenGLShaderProgram _shader;
 	Grid _grid;
 	GLuint _vao, _vbo, _ibo;
+	// QOpenGLVertexArrayObject *_vao;
+	// QOpenGLBuffer *_vbo, *_ibo;
+
 	GLuint _posLoc, _textureLoc;
 	QOpenGLTexture *_texture;
+
+
 	
 	std::vector<QVector2D> _sourcePoly;
 	std::vector<QVector2D> _boundayPoly;

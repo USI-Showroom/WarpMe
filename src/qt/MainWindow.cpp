@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_image_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), "/home/jana", tr("Image Files (*.png *.jpg)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), "/home", tr("Image Files (*.png *.jpg)"));
 	_ui->mainView->setTexture(fileName);
 }
 

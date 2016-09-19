@@ -128,9 +128,9 @@ vec2 computePosition(vec2 point)
 void main()
 {
 	if(nVertices<3)
-	gl_Position = vec4(posIn,0,1);
+		gl_Position = vec4(posIn,0,1);
 	else
-	gl_Position = vec4(computePosition(posIn),0,1);
+		gl_Position = vec4(computePosition(posIn),0,1);
 
 	txtCoord = textureIn;
 }

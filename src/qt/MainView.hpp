@@ -44,10 +44,13 @@ public:
 	void mouseReleaseEvent(QMouseEvent *e);
 
 	void setTexture(const QString &path);
+	void setTexture(const QImage &imgIn);
 
 	void toggleMorphMode();
 	void togglePreseveBounday();
 	inline void clear() { _targetPoly.clear(); _sourcePoly.clear(); update(); }
+
+	inline bool morphMode() const { return _morphMode; }
 
 private:
 	void checkGLError(const std::string &msg);
@@ -70,14 +73,14 @@ protected:
 
 
 private:
-	QOpenGLShaderProgram _shader;
+	QOpenGLShaderProgram _shader, _colorShader, _circleShader;
 	Grid _grid;
 	GLuint _vao, _vbo, _ibo;
 	// QOpenGLVertexArrayObject *_vao;
 	// QOpenGLBuffer *_vbo, *_ibo;
 
 	GLuint _posLoc, _textureLoc;
-	QOpenGLTexture *_texture;
+	QOpenGLTexture *_texture, *_circleTexture;
 
 
 	

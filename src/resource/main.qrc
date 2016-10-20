@@ -3,9 +3,16 @@
     <qresource prefix="/shaders">
         <file alias="shader.vert">shaders/shader.vert</file>
         <file alias="shader.frag">shaders/shader.frag</file>
+
+        <file alias="circle.vert">shaders/circle.vert</file>
+        <file alias="circle.frag">shaders/circle.frag</file>
+
+        <file alias="color.vert">shaders/color.vert</file>
+        <file alias="color.frag">shaders/color.frag</file>
     </qresource>
 
     <qresource prefix="/img">
         <file alias="default">img/default.jpg</file>
+        <file alias="circle">img/circle.png</file>
     </qresource>
 </RCC>

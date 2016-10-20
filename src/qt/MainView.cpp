@@ -24,7 +24,9 @@
 #include <cassert>
 
 MainView::MainView(QWidget *parent)
-: super(parent), _shader(this), _grid(100,100), _texture(NULL), _morphMode(false), _preserveBounday(false), _currentIndex(-1)
+: super(parent), 
+_shader(this), _colorShader(this), _circleShader(this),
+_grid(100,100), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
 { 
     _boundayPoly.resize(4);
 }
@@ -56,6 +58,9 @@ MainView::~MainView()
         _texture->destroy();
         delete _texture;
     }
+
+    _circleTexture->destroy();
+    delete _circleTexture;
 }
 
 void MainView::toggleMorphMode()
@@ -66,6 +71,34 @@ void MainView::toggleMorphMode()
 
     if(_morphMode)
     {
+        const int nEdges=_sourcePoly.size();
+        QVector2D prev,tmp;
+
+        float totalAngle=0;
+
+        for(int i=0;i<nEdges;++i)
+        {
+            const int ip1=(i+1)%nEdges;
+            prev=_sourcePoly[(i-1+nEdges)%nEdges];
+
+            const QVector2D &current=_sourcePoly[i];
+            const QVector2D &next=_sourcePoly[ip1];
+
+            const QVector2D &prevE=current-prev;
+            const QVector2D &nextE=next-current;
+
+            const float alpha=atan2(prevE.x()*nextE.y()-prevE.y()*nextE.x(), QVector2D::dotProduct(nextE,prevE));
+
+            totalAngle+=alpha;
+        }
+
+        if(totalAngle>0)
+        {
+            std::reverse(_sourcePoly.begin(), _sourcePoly.end());
+        }
+
+
+
         _targetPoly.insert(_targetPoly.begin(),_sourcePoly.begin(), _sourcePoly.end());
     }
 
@@ -107,6 +140,12 @@ void MainView::setUniforms()
 
 void MainView::setTexture(const QString &path)
 {
+    const QFileInfo textureFile(path);
+    setTexture(QImage(textureFile.absoluteFilePath()));
+}
+
+void MainView::setTexture(const QImage &imgIn)
+{
     checkGLError("begin_setTexture");
 
     if(_texture)
@@ -118,8 +157,7 @@ void MainView::setTexture(const QString &path)
     _targetPoly.clear();
     _sourcePoly.clear();
 
-    const QFileInfo textureFile(path);
-    const QImage img = QImage(textureFile.absoluteFilePath()).mirrored();
+    const QImage img = imgIn.mirrored();
     _texture = new QOpenGLTexture(img);
     _texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     _texture->setMagnificationFilter(QOpenGLTexture::Linear);
@@ -127,9 +165,8 @@ void MainView::setTexture(const QString &path)
     _grid.generate(img.width(),img.height(),this->width(),this->height(),_boundayPoly);
 
     updateVBO();
-
     update();
-    update();
+    repaint();
 }
 
 void MainView::updateVBO()
@@ -170,29 +207,67 @@ void MainView::initializeGL() {
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    glEnable(GL_BLEND);
+    // glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+    // glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
+    // glEnable(GL_LINE_SMOOTH);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glClearColor(0.8, 0.8, 0.8, 1);
 
     checkGLError("begin_shaders");
 
-    QOpenGLShader vertShader(QOpenGLShader::Vertex);
-    QFileInfo vertFile(":/shaders/shader.vert");
-    vertShader.compileSourceFile(vertFile.absoluteFilePath());
+    {
+        QOpenGLShader vertShader(QOpenGLShader::Vertex);
+        QFileInfo vertFile(":/shaders/shader.vert");
+        vertShader.compileSourceFile(vertFile.absoluteFilePath());
 
 
-    QOpenGLShader fragShader(QOpenGLShader::Fragment);
-    QFileInfo fragFile(":/shaders/shader.frag");
-    fragShader.compileSourceFile(fragFile.absoluteFilePath());
+        QOpenGLShader fragShader(QOpenGLShader::Fragment);
+        QFileInfo fragFile(":/shaders/shader.frag");
+        fragShader.compileSourceFile(fragFile.absoluteFilePath());
 
-    _shader.addShader(&vertShader);
-    _shader.addShader(&fragShader);
+        _shader.addShader(&vertShader);
+        _shader.addShader(&fragShader);
 
-    _shader.link();
+        _shader.link();
 
 
-    _posLoc     = _shader.attributeLocation("posIn");
-    _textureLoc = _shader.attributeLocation("textureIn");
+        _posLoc     = _shader.attributeLocation("posIn");
+        _textureLoc = _shader.attributeLocation("textureIn");
+    }
+
+    {
+        QOpenGLShader vertShader(QOpenGLShader::Vertex);
+        QFileInfo vertFile(":/shaders/circle.vert");
+        vertShader.compileSourceFile(vertFile.absoluteFilePath());
+
+
+        QOpenGLShader fragShader(QOpenGLShader::Fragment);
+        QFileInfo fragFile(":/shaders/circle.frag");
+        fragShader.compileSourceFile(fragFile.absoluteFilePath());
+
+        _circleShader.addShader(&vertShader);
+        _circleShader.addShader(&fragShader);
+
+        _circleShader.link();
+    }
+
+    {
+        QOpenGLShader vertShader(QOpenGLShader::Vertex);
+        QFileInfo vertFile(":/shaders/color.vert");
+        vertShader.compileSourceFile(vertFile.absoluteFilePath());
+
+
+        QOpenGLShader fragShader(QOpenGLShader::Fragment);
+        QFileInfo fragFile(":/shaders/color.frag");
+        fragShader.compileSourceFile(fragFile.absoluteFilePath());
+
+        _colorShader.addShader(&vertShader);
+        _colorShader.addShader(&fragShader);
+
+        _colorShader.link();
+    }
 
     checkGLError("end_shaders");
 
@@ -216,6 +291,17 @@ void MainView::initializeGL() {
 
 
     setTexture(":/img/default");
+
+    {
+        const QFileInfo textureFile(":/img/circle");
+        const QImage img = QImage(textureFile.absoluteFilePath()).mirrored();
+        _circleTexture = new QOpenGLTexture(img);
+        _circleTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        _circleTexture->setMagnificationFilter(QOpenGLTexture::Linear);
+    }
+
+
+
 
     checkGLError("begin_ibufferdata_1");
 
@@ -328,7 +414,10 @@ void MainView::paintGL()
     _shader.release();
 
 
-    glColor3f(0.1f,0.1f,0.1f);
+    _colorShader.bind();
+
+
+    glColor3f(0.5f,0.5f,0.5f);
     glLineWidth(_morphMode?2:10);
     if(currentPoly.size()>=3)
     {
@@ -338,18 +427,10 @@ void MainView::paintGL()
             glVertex2f(currentPoly[i].x(),currentPoly[i].y());
         }
         glEnd();
-
-        if(_morphMode)
-        {
-            glPointSize(20);
-            glBegin(GL_POINTS);
-            for(int i=0;i<currentPoly.size();++i)
-            {
-                glVertex2f(currentPoly[i].x(),currentPoly[i].y());
-            }
-            glEnd();  
-        }
     }
+
+
+
 
     if(_preserveBounday)
     {
@@ -362,6 +443,28 @@ void MainView::paintGL()
         }
         glEnd();
     }
+    _colorShader.release();
+
+
+    glEnable(GL_POINT_SPRITE);
+    _circleShader.bind();
+
+    GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
+    _circleShader.setUniformValue(circleLoc,0);
+    _circleTexture->bind(0);
+
+    {
+        glPointSize(20);
+        glColor3f(1.0f,0.0f,0.0f);
+        glBegin(GL_POINTS);
+        for(int i=0;i<currentPoly.size();++i)
+        {
+            glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+        }
+        glEnd();  
+    }
+    _circleShader.release();
+
 
     glPopMatrix();
 

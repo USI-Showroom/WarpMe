@@ -51,6 +51,7 @@ public:
 	inline void clear() { _targetPoly.clear(); _sourcePoly.clear(); update(); }
 
 	inline bool morphMode() const { return _morphMode; }
+	inline void setDrawForPrinting(const bool val) { _drawForPrinting = val; }
 
 private:
 	void checkGLError(const std::string &msg);
@@ -88,7 +89,7 @@ private:
 	std::vector<QVector2D> _boundayPoly;
 	std::vector<QVector2D> _targetPoly;
 
-	bool _morphMode, _preserveBounday;
+	bool _morphMode, _preserveBounday, _drawForPrinting;
 	int _currentIndex;
 	QVector2D _currentPosition;
 

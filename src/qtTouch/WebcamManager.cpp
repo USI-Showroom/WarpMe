@@ -6,8 +6,6 @@
 #include <QCloseEvent>
 #include <iostream>
 
-#include <QPrinter>
-#include <QPainter>
 
 
 WebcamManager::WebcamManager(QWidget *parent)
@@ -43,19 +41,6 @@ _isCapturingImage(false), _applicationExiting(false)
 
     _camera->setCaptureMode(QCamera::CaptureStillImage);
     _camera->start();
-
-
-// 	QPrinter printer(QPrinter::HighResolution); //create your QPrinter (don't need to be high resolution, anyway)
-// printer.setPageSize(QPrinter::A4);
-// printer.setOrientation(QPrinter::Portrait);
-// printer.setPageMargins (15,15,15,15,QPrinter::Millimeter);
-// printer.setFullPage(false);
-// printer.setOutputFileName("output.pdf");
-// printer.setOutputFormat(QPrinter::PdfFormat); //you can use native format of system usin QPrinter::NativeFormat
-// QPainter painter(&printer); // create a painter which will paint 'on printer'.
-// painter.setFont(QFont("Tahoma",8));
-// painter.drawText(200,200,"Test");
-// painter.end();
 }
 
 

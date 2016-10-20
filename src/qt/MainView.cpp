@@ -213,7 +213,11 @@ void MainView::initializeGL() {
     // glEnable(GL_LINE_SMOOTH);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+#ifdef TOUCH_SCREEN_MODE
+    glClearColor(1, 1, 1, 1);
+#else
     glClearColor(0.8, 0.8, 0.8, 1);
+#endif
 
     checkGLError("begin_shaders");
 
@@ -414,56 +418,59 @@ void MainView::paintGL()
     _shader.release();
 
 
-    _colorShader.bind();
-
-
-    glColor3f(0.5f,0.5f,0.5f);
-    glLineWidth(_morphMode?2:10);
-    if(currentPoly.size()>=3)
+    if(!_drawForPrinting)
     {
-        glBegin(GL_LINE_LOOP);
-        for(int i=0;i<currentPoly.size();++i)
+        _colorShader.bind();
+
+
+        glColor3f(0.5f,0.5f,0.5f);
+        glLineWidth(_morphMode?2:10);
+        if(currentPoly.size()>=3)
         {
-            glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+            glBegin(GL_LINE_LOOP);
+            for(int i=0;i<currentPoly.size();++i)
+            {
+                glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+            }
+            glEnd();
         }
-        glEnd();
-    }
 
 
 
 
-    if(_preserveBounday)
-    {
-        glColor3f(1.0f,0.0f,0.0f);
-        glLineWidth(5);
-        glBegin(GL_LINE_LOOP);
-        for(int i=0;i<_boundayPoly.size();++i)
+        if(_preserveBounday)
         {
-            glVertex2f(_boundayPoly[i].x(),_boundayPoly[i].y());
+            glColor3f(1.0f,0.0f,0.0f);
+            glLineWidth(5);
+            glBegin(GL_LINE_LOOP);
+            for(int i=0;i<_boundayPoly.size();++i)
+            {
+                glVertex2f(_boundayPoly[i].x(),_boundayPoly[i].y());
+            }
+            glEnd();
         }
-        glEnd();
-    }
-    _colorShader.release();
+        _colorShader.release();
 
 
-    glEnable(GL_POINT_SPRITE);
-    _circleShader.bind();
+        glEnable(GL_POINT_SPRITE);
+        _circleShader.bind();
 
-    GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
-    _circleShader.setUniformValue(circleLoc,0);
-    _circleTexture->bind(0);
+        GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
+        _circleShader.setUniformValue(circleLoc,0);
+        _circleTexture->bind(0);
 
-    {
-        glPointSize(20);
-        glColor3f(1.0f,0.0f,0.0f);
-        glBegin(GL_POINTS);
-        for(int i=0;i<currentPoly.size();++i)
         {
-            glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+            glPointSize(20);
+            glColor3f(1.0f,0.0f,0.0f);
+            glBegin(GL_POINTS);
+            for(int i=0;i<currentPoly.size();++i)
+            {
+                glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+            }
+            glEnd();  
         }
-        glEnd();  
+        _circleShader.release();
     }
-    _circleShader.release();
 
 
     glPopMatrix();

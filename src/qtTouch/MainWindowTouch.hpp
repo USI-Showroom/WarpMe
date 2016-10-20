@@ -11,6 +11,7 @@
 #include <vector>
 #include <QMainWindow>
 
+#include <QPrinter>
 
 namespace Ui {
     class MainWindowTouch;
@@ -37,6 +38,8 @@ private slots:
 
 private:
     Ui::MainWindowTouch* _ui;
+    QPrinter _printer;
+    QImage *_logo;
 };
 
 

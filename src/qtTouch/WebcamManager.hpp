@@ -42,7 +42,7 @@ private slots:
 
 protected:
 	void closeEvent(QCloseEvent *event);
-
+	void resizeEvent(QResizeEvent *event);
 private:
 	Ui::WebcamManager* _ui;
 

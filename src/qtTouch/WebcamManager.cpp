@@ -1,5 +1,6 @@
 #include "WebcamManager.hpp"
 #include "ui_WebcamManager.h"
+#include "MainWindowTouch.hpp"
 
 #include <QCameraInfo>
 #include <QMessageBox>
@@ -41,6 +42,23 @@ _isCapturingImage(false), _applicationExiting(false)
 
     _camera->setCaptureMode(QCamera::CaptureStillImage);
     _camera->start();
+
+}
+
+void WebcamManager::resizeEvent(QResizeEvent *event)
+{
+    const float w=_ui->preview->width();
+    const float h=_ui->preview->height();
+
+    const float scaleW=w/MainWindowTouch::PAGE_WIDTH;
+    const float scaleH=h/MainWindowTouch::PAGE_HEIGHT;
+
+    const float scale=std::min(scaleW,scaleH);
+    
+    const float frameW=MainWindowTouch::PAGE_WIDTH*scale;
+    const float frameH=MainWindowTouch::PAGE_HEIGHT*scale;
+
+    _ui->frame->setGeometry((w-frameW)/2,(h-frameH)/2,frameW,frameH);
 }
 
 
@@ -79,14 +97,9 @@ void WebcamManager::displayCaptureError(int id, const QCameraImageCapture::Error
 
 void WebcamManager::processCapturedImage(int requestId, const QImage& img)
 {
-    _img=img;
-// Q_UNUSED(requestId);
-// img.save("asd.png");
-// ui->lastImagePreviewLabel->setPixmap(QPixmap::fromImage(scaledImage));
-
-// // Display captured image for 4 seconds.
-// displayCapturedImage();
-// QTimer::singleShot(4000, this, SLOT(displayViewfinder()));
+    const float scale=img.width()/float(_ui->preview->width());
+    const QRect area=_ui->frame->geometry();
+    _img=img.copy(QRect(area.x()*scale,area.y()*scale,area.width()*scale,area.height()*scale));
 }
 
 void WebcamManager::takeImage()

@@ -438,7 +438,7 @@ void MainView::paintGL()
 
 
 
-        if(_preserveBounday)
+        // if(_preserveBounday)
         {
             glColor3f(1.0f,0.0f,0.0f);
             glLineWidth(5);

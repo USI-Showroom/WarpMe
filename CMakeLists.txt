@@ -28,9 +28,16 @@ IF(TOUCH_SCREEN_MODE)
     LIST(APPEND BARY_MAPPING_HEADERS ${BARY_MAPPING_HEADERS_TMP})
 
 
-    file(GLOB_RECURSE BARY_MAPPING_QT_SRC_HEADERS "src/qtTouch/*.hpp" "src/qt/*.hpp")
+    file(GLOB_RECURSE BARY_MAPPING_SOURCES_TMP "src/mail/*.cpp")
+    LIST(APPEND BARY_MAPPING_SOURCES ${BARY_MAPPING_SOURCES_TMP})
+
+    # file(GLOB_RECURSE BARY_MAPPING_HEADERS_TMP "src/mail/*.h")
+    # LIST(APPEND BARY_MAPPING_HEADERS ${BARY_MAPPING_HEADERS_TMP})
+
+
+    file(GLOB_RECURSE BARY_MAPPING_QT_SRC_HEADERS "src/qtTouch/*.hpp" "src/qt/*.hpp" "src/mail/*.h")
     file(GLOB_RECURSE BARY_MAPPING_UIS "src/qtTouch/*.ui" "src/qt/*.ui")
-    SET(BARY_MAPPING_INCLUDE "src" "src/qt" "src/geom" "src/qtTouch")
+    SET(BARY_MAPPING_INCLUDE "src" "src/qt" "src/geom" "src/qtTouch" "src/mail")
 ELSE()
     file(GLOB_RECURSE BARY_MAPPING_QT_SRC_HEADERS "src/qt/*.hpp")
     file(GLOB_RECURSE BARY_MAPPING_UIS "src/qt/*.ui")

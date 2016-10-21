@@ -11,6 +11,8 @@
 #include "ui_MainWindowTouch.h"
 
 #include "WebcamManager.hpp"
+#include "MailManager.hpp"
+#include "FacebookManager.hpp"
 
 #include <QPainter>
 
@@ -36,11 +38,11 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	_printer.setPageMargins (0,0,0,0,QPrinter::Millimeter);
 	_printer.setFullPage(true);
 
-	_printer.setOutputFileName("test.pdf");
-	_printer.setOutputFormat(QPrinter::PdfFormat);
+	// _printer.setOutputFileName("test.pdf");
+	// _printer.setOutputFormat(QPrinter::PdfFormat);
 
-	// _printer.setOutputFileName("");
-	// _printer.setOutputFormat(QPrinter::NativeFormat);
+	_printer.setOutputFileName("");
+	_printer.setOutputFormat(QPrinter::NativeFormat);
 }
 
 
@@ -60,17 +62,17 @@ MainWindowTouch::~MainWindowTouch()
 	delete _logo;
 }
 
-void MainWindowTouch::print()
+void MainWindowTouch::getImage(QImage &img)
 {
 	QImage imgTmp(_ui->mainView->size(), QImage::Format_RGB32);
 
-	{
-		_ui->mainView->setDrawForPrinting(true);
-		QPainter painter(&imgTmp);
-		_ui->mainView->render(&painter);
-		_ui->mainView->setDrawForPrinting(false);
-		_ui->mainView->update();
-	}
+	
+	_ui->mainView->setDrawForPrinting(true);
+	QPainter painter(&imgTmp);
+	_ui->mainView->render(&painter);
+	_ui->mainView->setDrawForPrinting(false);
+	_ui->mainView->update();
+	
 
 	const float w=_ui->mainView->width();
 	const float h=_ui->mainView->height();
@@ -83,7 +85,13 @@ void MainWindowTouch::print()
 	const float frameW=PAGE_WIDTH*scale;
 	const float frameH=PAGE_HEIGHT*scale;
 
-	QImage img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+	img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+}
+
+void MainWindowTouch::print()
+{
+	QImage img;
+	getImage(img);
 
 
 	QPainter painter(&_printer);
@@ -96,21 +104,31 @@ void MainWindowTouch::print()
 		_logo = new QImage(img.scaled(painter.device()->width(),painter.device()->height(),Qt::KeepAspectRatio));
 	}
 	
-	{
-		const int w=painter.device()->width();
-		const int h=painter.device()->height();
+	const int w=painter.device()->width();
+	const int h=painter.device()->height();
 
-		imgTmp=img.scaled(w,h,Qt::KeepAspectRatio);
+	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio);
 
-		painter.drawImage(QPoint((w-imgTmp.width())/2,(h-imgTmp.height())/2),imgTmp);
-		painter.drawImage(QPoint(0,0),*_logo);
-		painter.end();
-	}
+	painter.drawImage(QPoint((w-imgTmp.width())/2,(h-imgTmp.height())/2),imgTmp);
+	painter.drawImage(QPoint(0,0),*_logo);
+	painter.end();
+	
 }
 
-void MainWindowTouch::getImgFromPhone()
+void MainWindowTouch::sendMail()
 {
+	QImage img;
+	getImage(img);
+	MailManager mm(img,this);
+	mm.exec();
+}
 
+void MainWindowTouch::facebookShare()
+{
+	QImage img;
+	getImage(img);
+	FacebookManager fbm(img,this);
+	fbm.exec();
 }
 
 void MainWindowTouch::selectImg()

@@ -8,7 +8,6 @@
 #ifndef __WEBCAM_MANAGER_HPP__
 #define __WEBCAM_MANAGER_HPP__
 
-#include <vector>
 #include <QObject>
 #include <QCamera>
 #include <QDialog>

@@ -154,6 +154,8 @@ void MainView::setTexture(const QImage &imgIn)
         delete _texture;
     }
 
+    _morphMode=false;
+
     _targetPoly.clear();
     _sourcePoly.clear();
 
@@ -167,6 +169,8 @@ void MainView::setTexture(const QImage &imgIn)
     updateVBO();
     update();
     repaint();
+
+    QTimer::singleShot(200, this, SLOT(update()));
 }
 
 void MainView::updateVBO()

@@ -20,6 +20,9 @@ file(GLOB_RECURSE BARY_MAPPING_HEADERS_TMP "src/qt/*.hpp")
 LIST(APPEND BARY_MAPPING_HEADERS ${BARY_MAPPING_HEADERS_TMP})
 
 
+file(GLOB_RECURSE BARY_MAPPING_RESOURCES "src/resource/main.qrc")
+
+
 IF(TOUCH_SCREEN_MODE)
     file(GLOB_RECURSE BARY_MAPPING_SOURCES_TMP "src/qtTouch/*.cpp")
     LIST(APPEND BARY_MAPPING_SOURCES ${BARY_MAPPING_SOURCES_TMP})
@@ -35,6 +38,9 @@ IF(TOUCH_SCREEN_MODE)
     # LIST(APPEND BARY_MAPPING_HEADERS ${BARY_MAPPING_HEADERS_TMP})
 
 
+    LIST(APPEND BARY_MAPPING_RESOURCES "src/resource/pics.qrc")
+
+
     file(GLOB_RECURSE BARY_MAPPING_QT_SRC_HEADERS "src/qtTouch/*.hpp" "src/qt/*.hpp" "src/mail/*.h")
     file(GLOB_RECURSE BARY_MAPPING_UIS "src/qtTouch/*.ui" "src/qt/*.ui")
     SET(BARY_MAPPING_INCLUDE "src" "src/qt" "src/geom" "src/qtTouch" "src/mail")
@@ -44,7 +50,6 @@ ELSE()
     SET(BARY_MAPPING_INCLUDE "src" "src/qt" "src/geom")
 ENDIF()
 
-file(GLOB_RECURSE BARY_MAPPING_RESOURCES "src/resource/*.qrc")
 
 SET(BARY_MAPPING_MAIN "src/main.cpp")
 

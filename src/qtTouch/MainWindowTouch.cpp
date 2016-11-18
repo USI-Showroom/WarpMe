@@ -13,6 +13,7 @@
 #include "WebcamManager.hpp"
 #include "MailManager.hpp"
 #include "FacebookManager.hpp"
+#include "NewPicture.hpp"
 
 #include <QPainter>
 
@@ -52,6 +53,7 @@ void MainWindowTouch::openWebcamPreview()
 	if(wbm.exec())
 	{
 		_ui->mainView->setTexture(wbm.image());
+		_ui->morph->setText("Morph");
 	}
 }
 
@@ -133,10 +135,13 @@ void MainWindowTouch::facebookShare()
 
 void MainWindowTouch::selectImg()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image"), "/home", tr("Image Files (*.png *.jpg)"));
+	NewPicture np(this);
 
-	if(!fileName.isNull())
-		_ui->mainView->setTexture(fileName);
+	if(np.exec())
+	{
+		_ui->mainView->setTexture(np.image());
+		_ui->morph->setText("Morph");
+	}
 }
 
 void MainWindowTouch::clear()

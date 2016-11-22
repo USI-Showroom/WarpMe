@@ -7,6 +7,7 @@
 
 #include "Grid.hpp"
 #include <cassert>
+#include <iostream>
 
 Grid::Grid(const int stepX, const int stepY)
 :_stepX(stepX), _stepY(stepY)
@@ -34,9 +35,11 @@ void Grid::generateVertices(const float width, const float height, const float t
 	}
 	else
 	{
+        std::cout<<"here"<<std::endl;
 		w = 2/height*width/targetW*targetH;
 	}
 
+    std::cout<<w<<" "<<h<<std::endl; 
 	
 
 	const float offsetX = -1.0f + (2.0f-w)/2.0f;

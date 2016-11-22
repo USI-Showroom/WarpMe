@@ -31,6 +31,9 @@ public:
     explicit MainWindowTouch(QWidget *parent = 0);
     ~MainWindowTouch();
 
+protected:
+    void resizeEvent(QResizeEvent * event);
+
 private:
     void getImage(QImage &img);
 

@@ -442,7 +442,8 @@ void MainView::paintGL()
 
 
 
-        // if(_preserveBounday)
+#ifndef TOUCH_SCREEN_MODE
+        if(_preserveBounday)
         {
             glColor3f(1.0f,0.0f,0.0f);
             glLineWidth(5);
@@ -453,6 +454,7 @@ void MainView::paintGL()
             }
             glEnd();
         }
+#endif
         _colorShader.release();
 
 
@@ -471,11 +473,11 @@ void MainView::paintGL()
             {
                 glVertex2f(currentPoly[i].x(),currentPoly[i].y());
             }
+
             glEnd();  
         }
         _circleShader.release();
     }
-
 
     glPopMatrix();
 

@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/icons">
+        <file alias="camera">icons/camera.png</file>
+        <file alias="facebook">icons/facebook.png</file>
+        <file alias="mail">icons/mail.png</file>
+        <file alias="print">icons/print.png</file>
+    </qresource>
+</RCC>

@@ -26,9 +26,6 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 // 	showFullScreen();
 // #endif
 
-	_ui->morph->setText(_ui->mainView->morphMode()?"Draw":"Morph");
-
-
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
 
 	_printer.setPageSize(QPageSize(QSizeF(PAGE_WIDTH,PAGE_HEIGHT),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
@@ -44,6 +41,37 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_printer.setOutputFileName("");
 	_printer.setOutputFormat(QPrinter::NativeFormat);
+
+
+	_ui->mainView->move(0,0);
+}
+
+void MainWindowTouch::resizeEvent(QResizeEvent * event)
+{
+	const QSize &size = this->size();
+	_ui->mainView->resize(size);
+
+	{
+		const QSize &btnSize=_ui->webcamImg->size();
+		_ui->webcamImg->move(size.width()/2-btnSize.width()/2,size.height()-btnSize.height());
+	}
+
+	{
+		const QSize &btnSize=_ui->print->size();
+		_ui->print->move(size.width()-btnSize.width()*3,size.height()-btnSize.height());
+	}
+
+	{
+		const QSize &btnSize=_ui->sendEmail->size();
+		_ui->sendEmail->move(size.width()-btnSize.width()*2,size.height()-btnSize.height());
+	}
+
+	{
+		const QSize &btnSize=_ui->facebookShare->size();
+		_ui->facebookShare->move(size.width()-btnSize.width(),size.height()-btnSize.height());
+	}
+
+	QWidget::resizeEvent(event);
 }
 
 
@@ -53,7 +81,6 @@ void MainWindowTouch::openWebcamPreview()
 	if(wbm.exec())
 	{
 		_ui->mainView->setTexture(wbm.image());
-		_ui->morph->setText("Morph");
 	}
 }
 
@@ -140,7 +167,6 @@ void MainWindowTouch::selectImg()
 	if(np.exec())
 	{
 		_ui->mainView->setTexture(np.image());
-		_ui->morph->setText("Morph");
 	}
 }
 
@@ -153,7 +179,6 @@ void MainWindowTouch::morph()
 {
 	
 	_ui->mainView->toggleMorphMode();
-	_ui->morph->setText(_ui->mainView->morphMode()?"Draw":"Morph");
 }
 
 void MainWindowTouch::preserveBoundayToggled(int)

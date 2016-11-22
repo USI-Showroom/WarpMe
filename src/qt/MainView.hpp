@@ -22,6 +22,7 @@
 #endif
 
 #include <QImage>
+#include <iostream>
 
 #include "Grid.hpp"
 
@@ -71,6 +72,15 @@ protected:
 		glViewport(0, 0, (GLint)width, (GLint)height);
 	}
 #endif
+
+// #ifdef TOUCH_SCREEN_MODE
+// 	void resizeEvent(QResizeEvent * event)
+// 	{
+// 		// makeCurrent();
+// 		// glViewport(0, 0, (GLint)event->size().width(), (GLint)event->size().height());
+// 		QWidget::resizeEvent(event);
+// 	}
+// #endif
 
 
 private:

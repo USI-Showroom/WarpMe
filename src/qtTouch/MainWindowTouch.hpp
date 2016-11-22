@@ -38,9 +38,6 @@ private:
     void getImage(QImage &img);
 
 private slots:
-    void selectImg();
-    void clear();
-    void morph();
     void openWebcamPreview();
     void sendMail();
     void print();

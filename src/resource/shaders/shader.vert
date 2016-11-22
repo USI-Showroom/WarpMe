@@ -8,7 +8,7 @@
 #version 120
 
 #define MAX_VERTICES 50
-#define EPSILON 1e-4
+#define EPSILON 1e-3
 
 uniform int nVertices;
 uniform vec2 source[MAX_VERTICES];

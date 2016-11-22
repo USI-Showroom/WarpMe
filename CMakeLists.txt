@@ -38,7 +38,7 @@ IF(TOUCH_SCREEN_MODE)
     # LIST(APPEND BARY_MAPPING_HEADERS ${BARY_MAPPING_HEADERS_TMP})
 
 
-    LIST(APPEND BARY_MAPPING_RESOURCES "src/resource/pics.qrc" "src/resource/icons.qrc")
+    LIST(APPEND BARY_MAPPING_RESOURCES "src/resource/icons.qrc")
 
 
     file(GLOB_RECURSE BARY_MAPPING_QT_SRC_HEADERS "src/qtTouch/*.hpp" "src/qt/*.hpp" "src/mail/*.h")

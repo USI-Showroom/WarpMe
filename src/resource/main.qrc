@@ -13,6 +13,7 @@
 
     <qresource prefix="/img">
         <file alias="default">img/default.jpg</file>
+        <file alias="face">img/face23.png</file>
         <file alias="circle">img/circle.png</file>
         <file alias="logo">img/logo.png</file>
     </qresource>

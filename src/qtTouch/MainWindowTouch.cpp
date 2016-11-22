@@ -18,6 +18,11 @@
 #include <QPainter>
 
 
+static const int SMALL_BTN_SIZE = 40; //150
+static const int LARGE_BTN_SIZE = 50; //190
+static const int BTN_OFFSET = 10; //40
+
+
 MainWindowTouch::MainWindowTouch(QWidget *parent) :
 QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL)
 {
@@ -44,6 +49,20 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 
 	_ui->mainView->move(0,0);
+
+
+	_ui->webcamImg->resize(LARGE_BTN_SIZE,LARGE_BTN_SIZE);
+	_ui->webcamImg->setIconSize(QSize(LARGE_BTN_SIZE,LARGE_BTN_SIZE));
+
+	_ui->print->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
+	_ui->print->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+
+	_ui->sendEmail->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
+	_ui->sendEmail->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+
+	_ui->facebookShare->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
+	_ui->facebookShare->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+
 }
 
 void MainWindowTouch::resizeEvent(QResizeEvent * event)
@@ -58,12 +77,12 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 
 	{
 		const QSize &btnSize=_ui->print->size();
-		_ui->print->move(size.width()-btnSize.width()*3,size.height()-btnSize.height());
+		_ui->print->move(size.width()-btnSize.width()*3-2*BTN_OFFSET,size.height()-btnSize.height());
 	}
 
 	{
 		const QSize &btnSize=_ui->sendEmail->size();
-		_ui->sendEmail->move(size.width()-btnSize.width()*2,size.height()-btnSize.height());
+		_ui->sendEmail->move(size.width()-btnSize.width()*2-BTN_OFFSET,size.height()-btnSize.height());
 	}
 
 	{
@@ -160,26 +179,7 @@ void MainWindowTouch::facebookShare()
 	fbm.exec();
 }
 
-void MainWindowTouch::selectImg()
-{
-	NewPicture np(this);
 
-	if(np.exec())
-	{
-		_ui->mainView->setTexture(np.image());
-	}
-}
-
-void MainWindowTouch::clear()
-{
-	_ui->mainView->clear();
-}
-
-void MainWindowTouch::morph()
-{
-	
-	_ui->mainView->toggleMorphMode();
-}
 
 void MainWindowTouch::preserveBoundayToggled(int)
 {

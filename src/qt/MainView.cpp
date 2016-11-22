@@ -31,6 +31,24 @@ _grid(100,100), _texture(NULL), _morphMode(false), _preserveBounday(true), _curr
     _boundayPoly.resize(4);
 }
 
+#ifdef TOUCH_SCREEN_MODE
+void MainView::resetEllipse()
+{
+    const int nPieces=10;
+    _sourcePoly.clear();
+
+    for(int i=nPieces-1;i>=0;--i)
+    {
+        const double t=2*M_PI/(nPieces)*i;
+
+        _sourcePoly.push_back(QVector2D(0.95*cos(t),0.15+0.75*sin(t)));
+    }
+
+
+    _targetPoly.insert(_targetPoly.begin(),_sourcePoly.begin(), _sourcePoly.end());
+}
+#endif
+
 MainView::~MainView()
 {
 #ifdef WIN32
@@ -166,6 +184,11 @@ void MainView::setTexture(const QImage &imgIn)
 
     _grid.generate(img.width(),img.height(),this->width(),this->height(),_boundayPoly);
 
+#ifdef TOUCH_SCREEN_MODE
+    resetEllipse();
+    toggleMorphMode();
+#endif
+
     updateVBO();
     update();
     repaint();
@@ -218,7 +241,7 @@ void MainView::initializeGL() {
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 #ifdef TOUCH_SCREEN_MODE
-    glClearColor(1, 1, 1, 1);
+    glClearColor(0, 0, 0, 1);
 #else
     glClearColor(0.8, 0.8, 0.8, 1);
 #endif
@@ -283,8 +306,11 @@ void MainView::initializeGL() {
     funs.glGenVertexArrays(1, &_vao);
     funs.glGenBuffers(1, &_vbo);
 
+#ifdef TOUCH_SCREEN_MODE
+    setTexture(":/img/face");
+#else
     setTexture(":/img/default");
-
+#endif
     funs.glBindVertexArray(_vao);
     funs.glGenBuffers(1, &_ibo);
     funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
@@ -298,7 +324,11 @@ void MainView::initializeGL() {
     checkGLError("end_ibufferdata");
 
 
+#ifdef TOUCH_SCREEN_MODE
+    setTexture(":/img/face");
+#else
     setTexture(":/img/default");
+#endif
 
     {
         const QFileInfo textureFile(":/img/circle");
@@ -428,7 +458,11 @@ void MainView::paintGL()
 
 
         glColor3f(0.5f,0.5f,0.5f);
+#ifdef TOUCH_SCREEN_MODE
+        glLineWidth(5);
+#else
         glLineWidth(_morphMode?2:10);
+#endif
         if(currentPoly.size()>=3)
         {
             glBegin(GL_LINE_LOOP);
@@ -466,7 +500,11 @@ void MainView::paintGL()
         _circleTexture->bind(0);
 
         {
+#ifdef TOUCH_SCREEN_MODE
+            glPointSize(30);
+#else
             glPointSize(20);
+#endif
             glColor3f(1.0f,0.0f,0.0f);
             glBegin(GL_POINTS);
             for(int i=0;i<currentPoly.size();++i)

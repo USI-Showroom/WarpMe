@@ -62,6 +62,10 @@ private:
 
 	QVector2D mouseToOpenGl(QMouseEvent *e) const;
 
+#ifdef TOUCH_SCREEN_MODE
+	void resetEllipse();
+#endif
+
 protected:
 	void initializeGL();
 	void paintGL();

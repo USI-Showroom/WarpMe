@@ -12,11 +12,15 @@
 #include <QCamera>
 #include <QDialog>
 #include <QCameraImageCapture>
-
+#include <QTimer>
+#include <QElapsedTimer>
+#include <QSoundEffect>
 
 namespace Ui {
 	class WebcamManager;
 }
+
+class QCameraViewfinder;
 
 class WebcamManager : public QDialog
 {
@@ -44,6 +48,7 @@ private slots:
 protected:
 	void closeEvent(QCloseEvent *event);
 	void resizeEvent(QResizeEvent *event);
+	void paintEvent(QPaintEvent * event);
 private:
 	Ui::WebcamManager* _ui;
 
@@ -53,6 +58,11 @@ private:
 	bool _isCapturingImage, _applicationExiting;
 	
 	QImage _img;
+	QCameraViewfinder *_preview;
+	QTimer _updateTimer;
+	QElapsedTimer _elapsed;
+	bool _started, _soundPlayed;
+	QSoundEffect _clickSound;
 };
 
 

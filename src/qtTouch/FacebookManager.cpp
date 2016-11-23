@@ -27,6 +27,10 @@ FacebookManager::FacebookManager(const QImage &img, QWidget *parent)
     _ui->setupUi(this);
 
     _ui->caption->setFocus();
+
+    if(parent && parent->isFullScreen())
+        showFullScreen();
+    
 }
 
 

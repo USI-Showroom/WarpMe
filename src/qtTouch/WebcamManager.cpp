@@ -51,6 +51,10 @@ _isCapturingImage(false), _applicationExiting(false)
     _camera->setCaptureMode(QCamera::CaptureStillImage);
     _camera->start();
 
+    if(parent && parent->isFullScreen())
+        showFullScreen();
+    
+
     // _camera->exposure();
 }
 

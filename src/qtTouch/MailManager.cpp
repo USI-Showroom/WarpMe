@@ -27,6 +27,10 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
     _client->setPassword("Aa1235678");
 
     _ui->email->setFocus();
+
+    if(parent && parent->isFullScreen())
+        showFullScreen();
+    
 }
 
 void MailManager::sendMail()

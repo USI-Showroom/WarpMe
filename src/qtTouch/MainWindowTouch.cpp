@@ -28,7 +28,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 {
 	_ui->setupUi(this);
 // #ifndef DEBUG
-// 	showFullScreen();
+	// showFullScreen();
 // #endif
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
@@ -62,6 +62,9 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_ui->facebookShare->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
 	_ui->facebookShare->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+
+
+	//TODO: hide poly btn
 
 }
 

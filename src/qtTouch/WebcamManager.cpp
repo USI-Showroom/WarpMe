@@ -28,6 +28,7 @@ _isCapturingImage(false), _applicationExiting(false)
     QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
     foreach (const QCameraInfo &cameraInfo, cameras) {
         _camera = new QCamera(cameraInfo);
+        std::cout<<cameraInfo.description().toStdString()<<std::endl;
     }
 
     if(!_camera) return;
@@ -35,9 +36,9 @@ _isCapturingImage(false), _applicationExiting(false)
 
     _camera->setViewfinder(_ui->preview);
 
-    // connect(_camera, SIGNAL(stateChanged(QCamera::State)), this, SLOT(updateCameraState(QCamera::State)));
+    connect(_camera, SIGNAL(statusChanged(QCamera::Status)), this, SLOT(updateCameraStatus(QCamera::Status)));
     // connect(_camera, SIGNAL(error(QCamera::Error)), this, SLOT(displayCameraError()));
-    // connect(_camera, SIGNAL(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)),this, SLOT(updateLockStatus(QCamera::LockStatus,QCamera::LockChangeReason)));
+    connect(_camera, SIGNAL(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)),this, SLOT(updateLockStatus(QCamera::LockStatus,QCamera::LockChangeReason)));
 
     _imageCapture = new QCameraImageCapture(_camera);
 
@@ -50,6 +51,7 @@ _isCapturingImage(false), _applicationExiting(false)
     _camera->setCaptureMode(QCamera::CaptureStillImage);
     _camera->start();
 
+    // _camera->exposure();
 }
 
 void WebcamManager::resizeEvent(QResizeEvent *event)
@@ -78,6 +80,16 @@ WebcamManager::~WebcamManager()
     delete _imageCapture;
 }
 
+void WebcamManager::updateCameraStatus(QCamera::Status state)
+{
+    // std::cout<<"here"<<state<<std::endl;
+}
+
+void WebcamManager::updateLockStatus(QCamera::LockStatus ls,QCamera::LockChangeReason lcr)
+{
+    // std::cout<<"there"<<ls<<" "<<lcr<<std::endl;
+}
+
 
 void WebcamManager::readyForCapture(bool ready)
 {
@@ -104,7 +116,7 @@ void WebcamManager::displayCaptureError(int id, const QCameraImageCapture::Error
 
 void WebcamManager::processCapturedImage(int requestId, const QImage& img)
 {
-    const float scale=img.width()/float(_ui->preview->width());
+    const float scale=std::max(img.width()/float(_ui->preview->width()),img.height()/float(_ui->preview->height()));
     const QRect area=_ui->frame->geometry();
     _img=img.copy(QRect(area.x()*scale,area.y()*scale,area.width()*scale,area.height()*scale));
 }

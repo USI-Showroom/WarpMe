@@ -48,7 +48,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	_printer.setOutputFormat(QPrinter::NativeFormat);
 
 
-	_ui->mainView->move(0,0);
+	
 
 
 	_ui->webcamImg->resize(LARGE_BTN_SIZE,LARGE_BTN_SIZE);
@@ -68,7 +68,11 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 void MainWindowTouch::resizeEvent(QResizeEvent * event)
 {
 	const QSize &size = this->size();
-	_ui->mainView->resize(size);
+
+	
+	const float h=float(size.width())/float(PAGE_WIDTH)*PAGE_HEIGHT;
+	_ui->mainView->resize(size.width(),h);
+	_ui->mainView->move(0,size.height()-h+1);
 
 	{
 		const QSize &btnSize=_ui->webcamImg->size();
@@ -88,6 +92,12 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	{
 		const QSize &btnSize=_ui->facebookShare->size();
 		_ui->facebookShare->move(size.width()-btnSize.width(),size.height()-btnSize.height());
+	}
+
+	{
+		_ui->usi_logo->resize(size.width(),size.width()/1242.0f*200.0f);
+		_ui->usi_logo->move(0,0);
+
 	}
 
 	QWidget::resizeEvent(event);

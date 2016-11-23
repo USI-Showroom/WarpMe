@@ -28,6 +28,8 @@ public:
 
 	inline const QImage &image() const { return _img; }
 private slots:
+	void updateCameraStatus(QCamera::Status state);
+	void updateLockStatus(QCamera::LockStatus ls,QCamera::LockChangeReason lcr);
 	void takeImage();
 	void displayCaptureError(int, QCameraImageCapture::Error, const QString &errorString);
 	void readyForCapture(bool ready);

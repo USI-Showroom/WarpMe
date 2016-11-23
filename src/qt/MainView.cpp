@@ -41,7 +41,7 @@ void MainView::resetEllipse()
     {
         const double t=2*M_PI/(nPieces)*i;
 
-        _sourcePoly.push_back(QVector2D(0.95*cos(t),0.15+0.75*sin(t)));
+        _sourcePoly.push_back(QVector2D(0.7*cos(t),0.2+0.7*sin(t)));
     }
 
 
@@ -457,10 +457,12 @@ void MainView::paintGL()
         _colorShader.bind();
 
 
-        glColor3f(0.5f,0.5f,0.5f);
+        
 #ifdef TOUCH_SCREEN_MODE
+        glColor3f(245.0f/255.0f,128.0f/255.0f,37.0f/255.0f);
         glLineWidth(5);
 #else
+        glColor3f(0.5f,0.5f,0.5f);
         glLineWidth(_morphMode?2:10);
 #endif
         if(currentPoly.size()>=3)

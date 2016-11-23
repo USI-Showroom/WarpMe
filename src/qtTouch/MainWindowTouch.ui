@@ -178,6 +178,39 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="showHidePoly">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>10</y>
+      <width>80</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>80</width>
+      <height>80</height>
+     </size>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0,0,0,0);
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resource/icons.qrc">
+      <normaloff>:/icons/hide</normaloff>:/icons/hide</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>75</width>
+      <height>75</height>
+     </size>
+    </property>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
@@ -253,6 +286,38 @@
     <hint type="destinationlabel">
      <x>406</x>
      <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showHidePoly</sender>
+   <signal>pressed()</signal>
+   <receiver>MainWindowTouch</receiver>
+   <slot>showHidePolyPressed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showHidePoly</sender>
+   <signal>released()</signal>
+   <receiver>MainWindowTouch</receiver>
+   <slot>showHidePolyReleased()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>399</y>
     </hint>
    </hints>
   </connection>

@@ -44,6 +44,9 @@ private slots:
     void facebookShare();
     void preserveBoundayToggled(int);
 
+    void showHidePolyPressed();
+    void showHidePolyReleased();
+
 
 private:
     Ui::MainWindowTouch* _ui;

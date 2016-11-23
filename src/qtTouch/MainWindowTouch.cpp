@@ -63,9 +63,8 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	_ui->facebookShare->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
 	_ui->facebookShare->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
 
-
-	//TODO: hide poly btn
-
+	_ui->showHidePoly->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
+	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
 }
 
 void MainWindowTouch::resizeEvent(QResizeEvent * event)
@@ -98,12 +97,31 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	}
 
 	{
+		const QSize &btnSize=_ui->showHidePoly->size();
+		_ui->showHidePoly->move(0,size.height()-btnSize.height());
+	}
+
+	{
 		_ui->usi_logo->resize(size.width(),size.width()/1242.0f*200.0f);
 		_ui->usi_logo->move(0,0);
-
 	}
 
 	QWidget::resizeEvent(event);
+}
+
+
+void MainWindowTouch::showHidePolyPressed()
+{
+    _ui->showHidePoly->setIcon(QIcon(":/icons/show"));
+    _ui->mainView->setDrawForPrinting(true);
+    _ui->mainView->update();
+}
+
+void MainWindowTouch::showHidePolyReleased()
+{
+	_ui->showHidePoly->setIcon(QIcon(":/icons/hide"));
+	_ui->mainView->setDrawForPrinting(false);
+	_ui->mainView->update();
 }
 
 

@@ -5,5 +5,7 @@
         <file alias="facebook">icons/facebook.png</file>
         <file alias="mail">icons/mail.png</file>
         <file alias="print">icons/print.png</file>
+        <file alias="show">icons/show.png</file>
+        <file alias="hide">icons/hide.png</file>
     </qresource>
 </RCC>

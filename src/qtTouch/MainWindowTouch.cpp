@@ -14,6 +14,7 @@
 #include "MailManager.hpp"
 #include "FacebookManager.hpp"
 #include "NewPicture.hpp"
+#include "PaperConstants.hpp"
 
 #include <QPainter>
 
@@ -33,8 +34,8 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
 
-	_printer.setPageSize(QPageSize(QSizeF(PAGE_WIDTH,PAGE_HEIGHT),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
-	_printer.setResolution(PAGE_DPI);
+	_printer.setPageSize(QPageSize(QSizeF(PaperConstants::PAGE_WIDTH,PaperConstants::PAGE_HEIGHT),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
+	_printer.setResolution(PaperConstants::PAGE_DPI);
 	_printer.setCreator("Teseo Schneider @ USI");
 	_printer.setDocName("Image morphi @ USI");
 	_printer.setOrientation(QPrinter::Portrait);
@@ -72,9 +73,10 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	const QSize &size = this->size();
 
 	
-	const float h=float(size.width())/float(PAGE_WIDTH)*PAGE_HEIGHT;
+	const int h=float(size.width())/float(PaperConstants::PAGE_WIDTH)*PaperConstants::PAGE_HEIGHT;
+	const int editH = size.height()-h;
 	_ui->mainView->resize(size.width(),h);
-	_ui->mainView->move(0,size.height()-h+1);
+	_ui->mainView->move(0,editH);
 
 	{
 		const QSize &btnSize=_ui->webcamImg->size();
@@ -102,8 +104,9 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	}
 
 	{
-		_ui->usi_logo->resize(size.width(),size.width()/1242.0f*200.0f);
-		_ui->usi_logo->move(0,0);
+		const int logoH = size.width()/1242.0f*200.0f;
+		_ui->usi_logo->resize(size.width(),logoH);
+		_ui->usi_logo->move(0,editH-logoH);
 	}
 
 	QWidget::resizeEvent(event);
@@ -156,13 +159,8 @@ void MainWindowTouch::getImage(QImage &img)
 	const float w=_ui->mainView->width();
 	const float h=_ui->mainView->height();
 
-	const float scaleW=w/PAGE_WIDTH;
-	const float scaleH=h/PAGE_HEIGHT;
-
-	const float scale=std::min(scaleW,scaleH);
-
-	const float frameW=PAGE_WIDTH*scale;
-	const float frameH=PAGE_HEIGHT*scale;
+	float frameW, frameH;
+	PaperConstants::Scale(w, h, frameW, frameH);
 
 	img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
 }

@@ -7,7 +7,7 @@
 
 #include "NewPicture.hpp"
 #include "ui_NewPicture.h"
-#include "MainWindowTouch.hpp"
+#include "PaperConstants.hpp"
 
 #include <QMessageBox>
 #include <iostream>
@@ -51,13 +51,8 @@ void NewPicture::resizeEvent(QResizeEvent *event)
     const float w=_ui->scrollPanel->width();
     const float h=_ui->scrollPanel->height()-30;
 
-    const float scaleW=w/MainWindowTouch::PAGE_WIDTH;
-    const float scaleH=h/MainWindowTouch::PAGE_HEIGHT;
-
-    const float scale=std::min(scaleW,scaleH);
-
-    const float frameW=MainWindowTouch::PAGE_WIDTH*scale;
-    const float frameH=MainWindowTouch::PAGE_HEIGHT*scale;
+    float frameW, frameH;
+    PaperConstants::Scale(w, h, frameW, frameH);
 
 
     QLayout *layout = _ui->scrollPanelLayout;

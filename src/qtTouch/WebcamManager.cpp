@@ -7,7 +7,7 @@
 
 #include "WebcamManager.hpp"
 #include "ui_WebcamManager.h"
-#include "MainWindowTouch.hpp"
+#include "PaperConstants.hpp"
 
 #include <QCameraInfo>
 #include <QMessageBox>
@@ -74,13 +74,8 @@ void WebcamManager::resizeEvent(QResizeEvent *event)
 
     _preview->resize(w,h);
 
-    const float scaleW=w/MainWindowTouch::PAGE_WIDTH;
-    const float scaleH=h/MainWindowTouch::PAGE_HEIGHT;
-
-    const float scale=std::min(scaleW,scaleH);
-    
-    const float frameW=MainWindowTouch::PAGE_WIDTH*scale;
-    const float frameH=MainWindowTouch::PAGE_HEIGHT*scale;
+    float frameW, frameH;
+    PaperConstants::Scale(w, h, frameW, frameH);
 
     _ui->frame->setGeometry((w-frameW)/2,(h-frameH)/2,frameW,frameH);
 }
@@ -139,13 +134,8 @@ void WebcamManager::processCapturedImage(int requestId, const QImage& img)
     const float w=img.width();
     const float h=img.height();
 
-    const float scaleW=w/MainWindowTouch::PAGE_WIDTH;
-    const float scaleH=h/MainWindowTouch::PAGE_HEIGHT;
-
-    const float scale=std::min(scaleW,scaleH);
-    
-    const float frameW=MainWindowTouch::PAGE_WIDTH*scale;
-    const float frameH=MainWindowTouch::PAGE_HEIGHT*scale;
+    float frameW, frameH;
+    PaperConstants::Scale(w, h, frameW, frameH);
 
     _img=img.mirrored(true,false).copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
 }

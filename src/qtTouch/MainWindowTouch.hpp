@@ -23,11 +23,6 @@ class MainWindowTouch : public QMainWindow
     Q_OBJECT
 
 public:
-    constexpr static const int PAGE_DPI = 300;
-    constexpr static const float PAGE_WIDTH = 2.1f; //inches
-    constexpr static const float PAGE_HEIGHT = 3.4f; //inches
-    constexpr static const float ASPECT_RATIO = PAGE_WIDTH/PAGE_HEIGHT;
-
     explicit MainWindowTouch(QWidget *parent = 0);
     ~MainWindowTouch();
 

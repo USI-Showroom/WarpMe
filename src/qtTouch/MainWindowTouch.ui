@@ -20,6 +20,9 @@
    <string>Image morphing</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: black;</string>
+   </property>
    <widget class="MainView" name="mainView" native="true">
     <property name="geometry">
      <rect>

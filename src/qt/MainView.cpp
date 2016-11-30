@@ -22,6 +22,7 @@
 #include <fstream>
 #include <qopengl.h>
 #include <cassert>
+#include "PaperConstants.hpp"
 
 MainView::MainView(QWidget *parent)
 : super(parent), 
@@ -307,7 +308,7 @@ void MainView::initializeGL() {
     funs.glGenBuffers(1, &_vbo);
 
 #ifdef TOUCH_SCREEN_MODE
-    setTexture(":/img/face");
+    setTexture(PaperConstants::FACE_IMAGE);
 #else
     setTexture(":/img/default");
 #endif
@@ -325,7 +326,7 @@ void MainView::initializeGL() {
 
 
 #ifdef TOUCH_SCREEN_MODE
-    setTexture(":/img/face");
+    setTexture(PaperConstants::FACE_IMAGE);
 #else
     setTexture(":/img/default");
 #endif

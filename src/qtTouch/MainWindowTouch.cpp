@@ -19,9 +19,14 @@
 #include <QPainter>
 
 
-static const int SMALL_BTN_SIZE = 40; //150
-static const int LARGE_BTN_SIZE = 50; //190
-static const int BTN_OFFSET = 10; //40
+//static const int SMALL_BTN_SIZE = 40; //150
+//static const int LARGE_BTN_SIZE = 50; //190
+//static const int BTN_OFFSET = 10; //40
+
+
+static const int SMALL_BTN_SIZE = 80;
+static const int LARGE_BTN_SIZE = 100;
+static const int BTN_OFFSET = 20;
 
 
 MainWindowTouch::MainWindowTouch(QWidget *parent) :
@@ -72,41 +77,25 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 {
 	const QSize &size = this->size();
 
-	
-	const int h=float(size.width())/float(PaperConstants::PAGE_WIDTH)*PaperConstants::PAGE_HEIGHT;
-	const int editH = size.height()-h;
-	_ui->mainView->resize(size.width(),h);
-	_ui->mainView->move(0,editH);
+
+	const int h = float(size.width()) / float(PaperConstants::PAGE_WIDTH)*PaperConstants::PAGE_HEIGHT;
+	const int editH = size.height() - h;
+	_ui->mainView->resize(size.width(), h);
+	_ui->mainView->move(0, editH);
+
+	_ui->webcamImg->move(size.width() / 2 - LARGE_BTN_SIZE / 2, size.height() - LARGE_BTN_SIZE);
+
+	_ui->print->move(size.width() - SMALL_BTN_SIZE * 3 - 2 * BTN_OFFSET, size.height() - SMALL_BTN_SIZE);
+	_ui->sendEmail->move(size.width() - SMALL_BTN_SIZE * 2 - BTN_OFFSET, size.height() - SMALL_BTN_SIZE);
+	_ui->facebookShare->move(size.width() - SMALL_BTN_SIZE, size.height() - SMALL_BTN_SIZE);
+
+
+	_ui->showHidePoly->move(0, size.height() - SMALL_BTN_SIZE);
 
 	{
-		const QSize &btnSize=_ui->webcamImg->size();
-		_ui->webcamImg->move(size.width()/2-btnSize.width()/2,size.height()-btnSize.height());
-	}
-
-	{
-		const QSize &btnSize=_ui->print->size();
-		_ui->print->move(size.width()-btnSize.width()*3-2*BTN_OFFSET,size.height()-btnSize.height());
-	}
-
-	{
-		const QSize &btnSize=_ui->sendEmail->size();
-		_ui->sendEmail->move(size.width()-btnSize.width()*2-BTN_OFFSET,size.height()-btnSize.height());
-	}
-
-	{
-		const QSize &btnSize=_ui->facebookShare->size();
-		_ui->facebookShare->move(size.width()-btnSize.width(),size.height()-btnSize.height());
-	}
-
-	{
-		const QSize &btnSize=_ui->showHidePoly->size();
-		_ui->showHidePoly->move(0,size.height()-btnSize.height());
-	}
-
-	{
-		const int logoH = size.width()/1242.0f*200.0f;
-		_ui->usi_logo->resize(size.width(),logoH);
-		_ui->usi_logo->move(0,editH-logoH);
+		const int logoH = size.width() / 1242.0f*200.0f;
+		_ui->usi_logo->resize(size.width(), logoH);
+		_ui->usi_logo->move(0, editH - logoH);
 	}
 
 	QWidget::resizeEvent(event);

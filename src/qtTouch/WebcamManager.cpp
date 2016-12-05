@@ -125,7 +125,7 @@ void WebcamManager::displayCaptureError(int id, const QCameraImageCapture::Error
 {
     Q_UNUSED(id);
     Q_UNUSED(error);
-    QMessageBox::warning(this, tr("Image Capture Error"), errorString);
+    //QMessageBox::warning(this, tr("Image Capture Error"), errorString);
     _isCapturingImage = false;
 }
 

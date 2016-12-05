@@ -30,6 +30,7 @@ _shader(this), _colorShader(this), _circleShader(this),
 _grid(100,100), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
 { 
     _boundayPoly.resize(4);
+	_drawForPrinting = false;
 }
 
 #ifdef TOUCH_SCREEN_MODE
@@ -52,6 +53,7 @@ void MainView::resetEllipse()
 
 MainView::~MainView()
 {
+	makeCurrent();
 #ifdef WIN32
     funs.glBindVertexArray(0);
     funs.glDeleteVertexArrays(1, &_vao);
@@ -312,6 +314,14 @@ void MainView::initializeGL() {
 #else
     setTexture(":/img/default");
 #endif
+	{
+		const QFileInfo textureFile(":/img/circle");
+		const QImage img = QImage(textureFile.absoluteFilePath()).mirrored();
+		_circleTexture = new QOpenGLTexture(img);
+		_circleTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+		_circleTexture->setMagnificationFilter(QOpenGLTexture::Linear);
+	}
+
     funs.glBindVertexArray(_vao);
     funs.glGenBuffers(1, &_ibo);
     funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
@@ -500,7 +510,7 @@ void MainView::paintGL()
 
         GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
         _circleShader.setUniformValue(circleLoc,0);
-        _circleTexture->bind(0);
+       _circleTexture->bind(0);
 
         {
 #ifdef TOUCH_SCREEN_MODE

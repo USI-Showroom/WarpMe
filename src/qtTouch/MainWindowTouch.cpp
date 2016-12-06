@@ -34,7 +34,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 {
 	_ui->setupUi(this);
 // #ifndef DEBUG
-	// showFullScreen();
+	 showFullScreen();
 // #endif
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
@@ -77,20 +77,20 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 {
 	const QSize &size = this->size();
 
-
+	const int voffset = 20;
 	const int h = float(size.width()) / float(PaperConstants::PAGE_WIDTH)*PaperConstants::PAGE_HEIGHT;
 	const int editH = size.height() - h;
 	_ui->mainView->resize(size.width(), h);
 	_ui->mainView->move(0, editH);
 
-	_ui->webcamImg->move(size.width() / 2 - LARGE_BTN_SIZE / 2, size.height() - LARGE_BTN_SIZE);
+	_ui->webcamImg->move(size.width() / 2 - LARGE_BTN_SIZE / 2, size.height() - LARGE_BTN_SIZE-voffset);
 
-	_ui->print->move(size.width() - SMALL_BTN_SIZE * 3 - 2 * BTN_OFFSET, size.height() - SMALL_BTN_SIZE);
-	_ui->sendEmail->move(size.width() - SMALL_BTN_SIZE * 2 - BTN_OFFSET, size.height() - SMALL_BTN_SIZE);
-	_ui->facebookShare->move(size.width() - SMALL_BTN_SIZE, size.height() - SMALL_BTN_SIZE);
+	_ui->print->move(size.width() - SMALL_BTN_SIZE * 3 - 2 * BTN_OFFSET, size.height() - SMALL_BTN_SIZE-voffset);
+	_ui->sendEmail->move(size.width() - SMALL_BTN_SIZE * 2 - BTN_OFFSET, size.height() - SMALL_BTN_SIZE-voffset);
+	_ui->facebookShare->move(size.width() - SMALL_BTN_SIZE, size.height() - SMALL_BTN_SIZE-voffset);
 
 
-	_ui->showHidePoly->move(0, size.height() - SMALL_BTN_SIZE);
+	_ui->showHidePoly->move(0, size.height() - SMALL_BTN_SIZE-voffset);
 
 	{
 		const int logoH = size.width() / 1242.0f*200.0f;

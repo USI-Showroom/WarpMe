@@ -39,7 +39,7 @@ KeyboardButton::KeyboardButton(const int letter, QWidget *parent)
 		_size=1;
 	}
 
-	setStyleSheet("background-color: #f58025; color: white; border: none;");
+	setStyleSheet("background-color: #f58025; color: white; border: none; font-size: 20pt;");
 
 	connect(this, SIGNAL(clicked(bool)),this, SLOT(btnClicked(bool)));
 }

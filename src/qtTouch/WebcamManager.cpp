@@ -36,16 +36,13 @@ _preview(new QCameraViewfinder()), _updateTimer(this), _started(false), _soundPl
 
     if(!_camera) return;
 
-
-    _camera->setViewfinder(_preview);
-
+	_camera->setViewfinder(_preview);
     connect(_camera, SIGNAL(statusChanged(QCamera::Status)), this, SLOT(updateCameraStatus(QCamera::Status)));
     // connect(_camera, SIGNAL(error(QCamera::Error)), this, SLOT(displayCameraError()));
     connect(_camera, SIGNAL(lockStatusChanged(QCamera::LockStatus,QCamera::LockChangeReason)),this, SLOT(updateLockStatus(QCamera::LockStatus,QCamera::LockChangeReason)));
 
     _imageCapture = new QCameraImageCapture(_camera);
-
-
+	_imageCapture->setCaptureDestination(QCameraImageCapture::CaptureToBuffer);
     // connect(_imageCapture, SIGNAL(readyForCaptureChanged(bool)), this, SLOT(readyForCapture(bool)));
     connect(_imageCapture, SIGNAL(imageCaptured(int,QImage)), this, SLOT(processCapturedImage(int,QImage)));
     connect(_imageCapture, SIGNAL(imageSaved(int,QString)), this, SLOT(imageSaved(int,QString)));
@@ -69,15 +66,16 @@ _preview(new QCameraViewfinder()), _updateTimer(this), _started(false), _soundPl
 
 void WebcamManager::resizeEvent(QResizeEvent *event)
 {
-    const float w=_ui->preview->width();
-    const float h=_ui->preview->height();
+    _preview->resize(640,480);
 
-    _preview->resize(w,h);
+	const float scaleW = float(_preview->width()) / _ui->preview->height();
+	const float scaleH = float(_preview->height()) / _ui->preview->width();
+	const float scaling = 1.0f / std::max(scaleW, scaleH);
 
-    float frameW, frameH;
-    PaperConstants::Scale(w, h, frameW, frameH);
-
-    _ui->frame->setGeometry((w-frameW)/2,(h-frameH)/2,frameW,frameH);
+	const float frameH = _preview->width()*scaling;
+	const float frameW = frameH/PaperConstants::PAGE_HEIGHT*PaperConstants::PAGE_WIDTH;
+    
+    _ui->frame->setGeometry((_ui->preview->width() - frameW) / 2.0,(_ui->preview->height()-frameH)/2.0,frameW,frameH);
 }
 
 
@@ -94,9 +92,19 @@ WebcamManager::~WebcamManager()
 void WebcamManager::updateCameraStatus(QCamera::Status state)
 {
     if(state==QCamera::ActiveStatus){
+		
         _elapsed.start();
         _started=true;
     }
+	else if (state == QCamera::LoadedStatus)
+	{
+		QImageEncoderSettings settings = _imageCapture->encodingSettings();
+		settings.setCodec("image/jpeg");
+		settings.setQuality(QMultimedia::VeryHighQuality);
+		//settings.setResolution(2304, 1296); //1536
+		settings.setResolution(_camera->supportedViewfinderResolutions().back());
+		_imageCapture->setEncodingSettings(settings);
+	}
     // std::cout<<"here"<<state<<std::endl;
 }
 
@@ -131,13 +139,15 @@ void WebcamManager::displayCaptureError(int id, const QCameraImageCapture::Error
 
 void WebcamManager::processCapturedImage(int requestId, const QImage& img)
 {
-    const float w=img.width();
-    const float h=img.height();
+    const float h=img.width();
+    const float w=img.height();
 
     float frameW, frameH;
     PaperConstants::Scale(w, h, frameW, frameH);
-
-    _img=img.mirrored(true,false).copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+	
+	QTransform rot;
+	rot.rotate(90);
+    _img=img.mirrored(true,false).transformed(rot).copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
 }
 
 void WebcamManager::takeImage()
@@ -163,9 +173,13 @@ void WebcamManager::closeEvent(QCloseEvent *event)
 
 void WebcamManager::paintEvent(QPaintEvent * event)
 {
-    QPixmap pixmap(_ui->preview->size());
-    _preview->render(&pixmap);
+	const float scaleW = float(_preview->width()) / _ui->preview->height();
+	const float scaleH = float(_preview->height()) / _ui->preview->width();
+	const float scaling = 1.0f / std::max(scaleW, scaleH);
 
+    QPixmap pixmap(QSize(_preview->height()*scaling,_preview->width()*scaling));
+    _preview->render(&pixmap);
+	
     QPainter painter(this);
 
     QTransform transform;
@@ -195,16 +209,24 @@ void WebcamManager::paintEvent(QPaintEvent * event)
     transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 
 
-    if(portrait)
+    //if(portrait)
     {
-        transform.translate(pixmap.width()/2, pixmap.height()/2);
-        transform.rotate(90);
-        transform.translate(-pixmap.width()/2, -pixmap.height()/2);
+        //transform.translate(pixmap.height()/2, pixmap.width()/2);
+        transform.rotate(-90);
+		//transform.translate(-pixmap.width(), pixmap.height()/3.0f);
     }
+
+	{
+
+		transform.scale(scaling, scaling);
+		transform.translate(-_preview->width()/2.0f, 0);
+	}
+
     painter.save();
     painter.setTransform(transform);
-    painter.drawPixmap(0,0,pixmap);
-    painter.restore();
+	//painter.drawPixmap(-_ui->preview->height() / 2 / scaling, (_ui->preview->height() - pixmap.height()) / 2, pixmap);
+	painter.drawPixmap(-_ui->preview->height() / 2 / scaling,0, pixmap);
+	painter.restore();
 
     painter.setPen(QColor(245, 128, 37));
     painter.setFont(QFont("Arial", 60));
@@ -216,7 +238,7 @@ void WebcamManager::paintEvent(QPaintEvent * event)
     }
 
     if(time>0)
-        painter.drawText(QRect(0,pixmap.height()/2-30,pixmap.width(),60),Qt::AlignCenter,QString::number(time));
+        painter.drawText(QRect(0,_ui->preview->height()/2-30, _ui->preview->width(),60),Qt::AlignCenter,QString::number(time));
     else
         takeImage();
 

@@ -30,6 +30,15 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
 
     if(parent && parent->isFullScreen())
         showFullScreen();
+    else
+        resize(parent->size());
+
+
+    connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
+    connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
+    connect(_ui->keyboard,SIGNAL(shiftPressed()),this,SLOT(shiftPressed()));
+
+    _nextUpper=false;
     
 }
 
@@ -68,4 +77,36 @@ void MailManager::sendMail()
 MailManager::~MailManager()
 {
     delete _client;
+}
+
+
+void MailManager::keyPressed(QString key)
+{
+    if(_nextUpper)
+        key=key.toUpper();
+    
+
+    const int pos=_ui->email->cursorPosition();
+    QString tmp=_ui->email->text();
+    tmp.insert(pos,key);
+    _ui->email->setText(tmp);
+    _ui->email->setCursorPosition(pos+1);
+
+    _nextUpper=false;
+}
+
+void MailManager::deletePressed()
+{
+    const int pos=_ui->email->cursorPosition();
+    QString tmp=_ui->email->text();
+    tmp.remove(pos-1,1);
+    _ui->email->setText(tmp);
+    _ui->email->setCursorPosition(pos-1);
+
+    _nextUpper=false;
+}
+
+void MailManager::shiftPressed()
+{
+    _nextUpper=true;
 }

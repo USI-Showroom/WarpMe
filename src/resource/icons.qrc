@@ -1,6 +1,8 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/icons">
+        <file alias="ok">icons/ok.png</file>
+        <file alias="cancel">icons/cancel.png</file>
         <file alias="camera">icons/camera.png</file>
         <file alias="facebook">icons/facebook.png</file>
         <file alias="mail">icons/mail.png</file>

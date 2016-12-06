@@ -47,6 +47,9 @@ private:
     Ui::MainWindowTouch* _ui;
     QPrinter _printer;
     QImage *_logo;
+
+protected:
+    void keyReleaseEvent(QKeyEvent * event);
 };
 
 

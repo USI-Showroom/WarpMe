@@ -30,7 +30,16 @@ FacebookManager::FacebookManager(const QImage &img, QWidget *parent)
 
     if(parent && parent->isFullScreen())
         showFullScreen();
+    else
+        resize(parent->size());
     
+
+
+    connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
+    connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
+    connect(_ui->keyboard,SIGNAL(shiftPressed()),this,SLOT(shiftPressed()));
+
+    _nextUpper=false;
 }
 
 
@@ -88,4 +97,45 @@ void FacebookManager::postPicture()
 
 FacebookManager::~FacebookManager()
 {
+}
+
+
+
+
+void FacebookManager::keyPressed(QString key)
+{
+    if(_nextUpper)
+        key=key.toUpper();
+    
+
+    const int pos=_ui->caption->textCursor().position();
+    QString tmp=_ui->caption->toPlainText();
+    tmp.insert(pos,key);
+    _ui->caption->setPlainText(tmp);
+
+    QTextCursor cursor = _ui->caption->textCursor();
+    cursor.setPosition(pos+1);
+    _ui->caption->setTextCursor(cursor);
+
+    _nextUpper=false;
+}
+
+void FacebookManager::deletePressed()
+{
+    const int pos=_ui->caption->textCursor().position();
+    QString tmp=_ui->caption->toPlainText();
+    tmp.remove(pos-1,1);
+    _ui->caption->setPlainText(tmp);
+
+    QTextCursor cursor = _ui->caption->textCursor();
+    cursor.setPosition(pos-1);
+    _ui->caption->setTextCursor(cursor);
+
+
+    _nextUpper=false;
+}
+
+void FacebookManager::shiftPressed()
+{
+    _nextUpper=true;
 }

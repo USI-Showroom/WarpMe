@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>556</width>
-    <height>260</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>20</number>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -30,31 +30,41 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QLabel" name="label">
+     <property name="styleSheet">
+      <string notr="true">font-size: 30pt;</string>
+     </property>
+     <property name="text">
+      <string>Comment</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPlainTextEdit" name="caption">
+     <property name="styleSheet">
+      <string notr="true">font-size: 20pt;</string>
+     </property>
      <property name="placeholderText">
       <string>Write your comment here!</string>
      </property>
     </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
+    <widget class="Keyboard" name="keyboard" native="true">
+     <property name="minimumSize">
       <size>
-       <width>20</width>
+       <width>0</width>
        <height>40</height>
       </size>
      </property>
-    </spacer>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>50</height>
+       <height>75</height>
       </size>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -70,6 +80,39 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
+      <item>
+       <widget class="QPushButton" name="cancelBtn">
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>75</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>75</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0,0,0,0);
+</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource/icons.qrc">
+          <normaloff>:/icons/cancel</normaloff>:/icons/cancel</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>65</width>
+          <height>65</height>
+         </size>
+        </property>
+       </widget>
+      </item>
       <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
@@ -87,53 +130,51 @@
        <widget class="QPushButton" name="postPictureBtn">
         <property name="minimumSize">
          <size>
-          <width>150</width>
-          <height>50</height>
+          <width>75</width>
+          <height>75</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>150</width>
-          <height>50</height>
+          <width>75</width>
+          <height>75</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgba(0,0,0,0);
+</string>
         </property>
         <property name="text">
-         <string>Post</string>
+         <string/>
         </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+        <property name="icon">
+         <iconset resource="../resource/icons.qrc">
+          <normaloff>:/icons/ok</normaloff>:/icons/ok</iconset>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="iconSize">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>65</width>
+          <height>65</height>
          </size>
         </property>
-       </spacer>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>Keyboard</class>
+   <extends>QWidget</extends>
+   <header>keyboard.hpp</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resource/icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>postPictureBtn</sender>
@@ -144,6 +185,22 @@
     <hint type="sourcelabel">
      <x>277</x>
      <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>129</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancelBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>FacebookManager</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
      <x>277</x>

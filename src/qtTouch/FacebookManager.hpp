@@ -31,9 +31,15 @@ private slots:
 	void postPicture();
 	void replyFinished(QNetworkReply *reply);
 
+	void keyPressed(QString key);
+	void deletePressed();
+	void shiftPressed();
+
 private:
 	Ui::FacebookManager* _ui;
 	const QImage &_img;
+
+	bool _nextUpper;
 };
 
 

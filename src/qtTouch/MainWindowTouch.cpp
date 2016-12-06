@@ -203,3 +203,11 @@ void MainWindowTouch::preserveBoundayToggled(int)
 {
 	_ui->mainView->togglePreseveBounday();
 }
+
+void MainWindowTouch::keyReleaseEvent(QKeyEvent * event)
+{
+	if(event->key()==Qt::Key_Escape)
+		QApplication::quit();
+	else
+		QWidget::keyReleaseEvent(event);
+}

@@ -29,10 +29,15 @@ public:
 private slots:
 	void sendMail();
 
+	void keyPressed(QString key);
+	void deletePressed();
+	void shiftPressed();
+
 private:
 	Ui::MailManager* _ui;
 	SmtpClient *_client;
 	const QImage &_img;
+	bool _nextUpper;
 };
 
 

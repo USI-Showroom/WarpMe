@@ -28,6 +28,10 @@ private:
 	int _size;
 	QString _char;
 
+protected:
+	void mousePressEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent *e);
+
 };
 
 #endif //KEYBOARD_BUTTON_HPP__

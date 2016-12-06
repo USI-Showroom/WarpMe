@@ -60,6 +60,20 @@ void KeyboardButton::btnClicked(bool checked)
 }
 
 
+void KeyboardButton::mousePressEvent(QMouseEvent *e)
+{
+	setStyleSheet("background-color: #fcd4b6; color: white; border: none; font-size: 20pt;");
+	QPushButton::mousePressEvent(e);
+}
+
+void KeyboardButton::mouseReleaseEvent(QMouseEvent *e)
+{
+	setStyleSheet("background-color: #f58025; color: white; border: none; font-size: 20pt;");
+	QPushButton::mouseReleaseEvent(e);
+}
+
+
+
 void KeyboardButton::resize(const int size)
 {
 	QAbstractButton::resize(size*_size,size);

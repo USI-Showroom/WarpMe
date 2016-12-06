@@ -13,6 +13,8 @@
 
 #include <QPrinter>
 
+#include "WebcamManager.hpp"
+
 namespace Ui {
     class MainWindowTouch;
 }
@@ -48,6 +50,7 @@ private:
     QPrinter _printer;
     QImage *_logo;
 
+	WebcamManager *_wbm;
 protected:
     void keyReleaseEvent(QKeyEvent * event);
 };

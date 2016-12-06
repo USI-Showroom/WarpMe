@@ -92,7 +92,7 @@ WebcamManager::~WebcamManager()
 void WebcamManager::updateCameraStatus(QCamera::Status state)
 {
     if(state==QCamera::ActiveStatus){
-		
+		_elapsed.restart();
         _elapsed.start();
         _started=true;
     }
@@ -148,6 +148,10 @@ void WebcamManager::processCapturedImage(int requestId, const QImage& img)
 	QTransform rot;
 	rot.rotate(90);
     _img=img.mirrored(true,false).transformed(rot).copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+
+	_elapsed.restart();
+	_elapsed.start();
+
 }
 
 void WebcamManager::takeImage()

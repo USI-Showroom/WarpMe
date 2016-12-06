@@ -71,6 +71,8 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_ui->showHidePoly->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
 	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+
+	_wbm = NULL;
 }
 
 void MainWindowTouch::resizeEvent(QResizeEvent * event)
@@ -119,10 +121,12 @@ void MainWindowTouch::showHidePolyReleased()
 
 void MainWindowTouch::openWebcamPreview()
 {
-	WebcamManager wbm(this);
-	if(wbm.exec())
+	if(!_wbm)
+		_wbm = new WebcamManager(this);
+
+	if(_wbm->exec())
 	{
-		_ui->mainView->setTexture(wbm.image());
+		_ui->mainView->setTexture(_wbm->image());
 	}
 }
 
@@ -131,6 +135,7 @@ MainWindowTouch::~MainWindowTouch()
 {
 	delete _ui;
 	delete _logo;
+	delete _wbm;
 }
 
 void MainWindowTouch::getImage(QImage &img)

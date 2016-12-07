@@ -75,6 +75,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	_wbm = NULL;
 }
 
+
 void MainWindowTouch::resizeEvent(QResizeEvent * event)
 {
 	const QSize &size = this->size();

@@ -114,6 +114,18 @@ IF(OPENGL_FOUND)
 ELSE()
     message(FATAL_ERROR "OpenGl not found!")
 ENDIF()
+
+
+IF(TOUCH_SCREEN_MODE)
+    FIND_PACKAGE(OpenCV) 
+
+    IF(OpenCV_FOUND)
+        INCLUDE_DIRECTORIES(OpenCV_INCLUDE_DIR)
+        SET(BARY_MAPPING_LINK_LIBRARIES ${BARY_MAPPING_LINK_LIBRARIES}; ${OpenCV_LIBS})
+    ELSE()
+        message(FATAL_ERROR "unable to find OpenCV")
+    ENDIF()
+ENDIF()
 #########################
 
 #########################

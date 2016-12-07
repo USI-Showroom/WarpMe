@@ -15,6 +15,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QSoundEffect>
+#include <QProcess>
 
 namespace Ui {
 	class WebcamManager;
@@ -31,6 +32,13 @@ public:
 	~WebcamManager();
 
 	inline const QImage &image() const { return _img; }
+
+	inline void startCounter()
+	{
+		if (!_started) return;
+
+		_elapsed.restart();
+	}
 private slots:
 	void updateCameraStatus(QCamera::Status state);
 	void updateLockStatus(QCamera::LockStatus ls,QCamera::LockChangeReason lcr);
@@ -43,7 +51,7 @@ private slots:
 
 	void imageSaved(int id, const QString &fileName);
 
-
+	void execFinished(int exitCode, QProcess::ExitStatus exitStatus);
 
 protected:
 	void closeEvent(QCloseEvent *event);
@@ -63,6 +71,7 @@ private:
 	QElapsedTimer _elapsed;
 	bool _started, _soundPlayed;
 	QSoundEffect _clickSound;
+	QProcess _process;
 };
 
 

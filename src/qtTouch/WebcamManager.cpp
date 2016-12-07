@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <iostream>
 #include <math.h>
+#include <QProcess>
 
 static const bool portrait=false;
 
@@ -23,7 +24,8 @@ WebcamManager::WebcamManager(QWidget *parent)
 :QDialog(parent), _ui(new Ui::WebcamManager),
 _camera(NULL), _imageCapture(NULL), 
 _isCapturingImage(false), _applicationExiting(false),
-_preview(new QCameraViewfinder()), _updateTimer(this), _started(false), _soundPlayed(false)
+_preview(new QCameraViewfinder()), _updateTimer(this), _started(false), _soundPlayed(false),
+_process(this)
 {
     _ui->setupUi(this);
     setModal(true);
@@ -54,6 +56,7 @@ _preview(new QCameraViewfinder()), _updateTimer(this), _started(false), _soundPl
     if(parent && parent->isFullScreen())
         showFullScreen();
     
+	//connect(&_process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(execFinished(int, QProcess::ExitStatus)));
 
     // _camera->exposure();
     _updateTimer.setInterval(30); // ms
@@ -92,8 +95,8 @@ WebcamManager::~WebcamManager()
 void WebcamManager::updateCameraStatus(QCamera::Status state)
 {
     if(state==QCamera::ActiveStatus){
-		_elapsed.restart();
-        _elapsed.start();
+		if (!_elapsed.isValid())
+			_elapsed.start();
         _started=true;
     }
 	else if (state == QCamera::LoadedStatus)
@@ -148,16 +151,33 @@ void WebcamManager::processCapturedImage(int requestId, const QImage& img)
 	QTransform rot;
 	rot.rotate(90);
     _img=img.mirrored(true,false).transformed(rot).copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
-
-	_elapsed.restart();
-	_elapsed.start();
-
 }
 
 void WebcamManager::takeImage()
 {
     _isCapturingImage = true;
-    _imageCapture->capture();
+#ifdef WIN32
+	if (_isCapturingImage) return;
+
+	_process.start("C:\\users\\warpme\\Desktop\\webcamGrabber.bat");
+	while (!_process.waitForFinished(-1));
+
+
+	QString msg = _process.readAll();
+	std::cout << msg.toStdString() << std::endl;
+
+	processCapturedImage(-1, QImage("C:\\users\\warpme\\Desktop\\image.png"));
+	accept();
+
+#else
+	_imageCapture->capture();
+#endif
+}
+
+void WebcamManager::execFinished(int exitCode, QProcess::ExitStatus exitStatus)
+ {
+	processCapturedImage(-1, QImage("C:\\users\\warpme\\Desktop\\image.png"));
+	accept();
 }
 
 

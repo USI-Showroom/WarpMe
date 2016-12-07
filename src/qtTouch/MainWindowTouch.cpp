@@ -124,6 +124,8 @@ void MainWindowTouch::openWebcamPreview()
 	if(!_wbm)
 		_wbm = new WebcamManager(this);
 
+
+	_wbm->startCounter();
 	if(_wbm->exec())
 	{
 		_ui->mainView->setTexture(_wbm->image());

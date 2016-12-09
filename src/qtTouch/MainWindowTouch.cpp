@@ -34,7 +34,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 {
 	_ui->setupUi(this);
 // #ifndef DEBUG
-	 showFullScreen();
+	 // showFullScreen();
 // #endif
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;

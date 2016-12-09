@@ -9,19 +9,36 @@
 #define __WEBCAM_MANAGER_HPP__
 
 #include <QObject>
-#include <QCamera>
 #include <QDialog>
-#include <QCameraImageCapture>
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QSoundEffect>
-#include <QProcess>
+#include <QThread>
+
+#include "opencv2/opencv.hpp"
 
 namespace Ui {
 	class WebcamManager;
 }
 
 class QCameraViewfinder;
+
+
+class CameraCapture : public QThread
+{
+	Q_OBJECT
+public:
+	CameraCapture(QObject *parent=NULL);
+
+	void run();
+signals:
+	void imageReady(const QImage &img);
+private:
+	bool _started;
+	cv::VideoCapture _videoCapture;
+
+};
+
 
 class WebcamManager : public QDialog
 {
@@ -35,43 +52,30 @@ public:
 
 	inline void startCounter()
 	{
-		if (!_started) return;
-
+		_caputure.start();
 		_elapsed.restart();
+		_updateTimer.start();
 	}
+
 private slots:
-	void updateCameraStatus(QCamera::Status state);
-	void updateLockStatus(QCamera::LockStatus ls,QCamera::LockChangeReason lcr);
-	void takeImage();
-	void displayCaptureError(int, QCameraImageCapture::Error, const QString &errorString);
-	void readyForCapture(bool ready);
-
-
-	void processCapturedImage(int requestId, const QImage &img);
-
-	void imageSaved(int id, const QString &fileName);
-
-	void execFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	void newImage(const QImage &img);
 
 protected:
-	void closeEvent(QCloseEvent *event);
-	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent * event);
 private:
 	Ui::WebcamManager* _ui;
-
-	QCamera *_camera;
-	QCameraImageCapture *_imageCapture;
-	
-	bool _isCapturingImage, _applicationExiting;
 	
 	QImage _img;
-	QCameraViewfinder *_preview;
+
 	QTimer _updateTimer;
 	QElapsedTimer _elapsed;
-	bool _started, _soundPlayed;
+
+	bool _soundPlayed;
 	QSoundEffect _clickSound;
-	QProcess _process;
+
+	CameraCapture _caputure;
+
+	void processCapturedImage(const QImage &img);
 };
 
 

@@ -32,10 +32,17 @@ public:
 
 	void run();
 signals:
-	void imageReady(const QImage &img);
+	void imageReady(const QImage &img, const QRect &face);
 private:
 	bool _started;
 	cv::VideoCapture _videoCapture;
+	cv::CascadeClassifier _faceCascade, _eyesCascade;
+	cv::Point _center;
+
+
+	QRect detectFace(cv::Mat &frame);
+	cv::Point faceFromEyes(cv::Point &priorCenter, const cv::Mat &face);
+    
 
 };
 
@@ -58,7 +65,7 @@ public:
 	}
 
 private slots:
-	void newImage(const QImage &img);
+	void newImage(const QImage &img, const QRect &face);
 
 protected:
 	void paintEvent(QPaintEvent * event);
@@ -66,6 +73,7 @@ private:
 	Ui::WebcamManager* _ui;
 	
 	QImage _img;
+	QRect _face;
 
 	QTimer _updateTimer;
 	QElapsedTimer _elapsed;

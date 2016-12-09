@@ -102,7 +102,7 @@ void WebcamManager::resizeEvent(QResizeEvent *event)
     const float scaling = 1.0f / std::max(scaleW, scaleH);
 
     const float frameH = _preview->width()*scaling;
-    const float frameW = frameH/PaperConstants::PAGE_HEIGHT*PaperConstants::PAGE_WIDTH;
+    const float frameW = frameH/PaperConstants::PAGE_HEIGHT()*PaperConstants::PAGE_WIDTH();
     
     _ui->frame->setGeometry((_ui->preview->width() - frameW) / 2.0,(_ui->preview->height()-frameH)/2.0,frameW,frameH);
 }

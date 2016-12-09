@@ -310,7 +310,7 @@ void MainView::initializeGL() {
     funs.glGenBuffers(1, &_vbo);
 
 #ifdef TOUCH_SCREEN_MODE
-    setTexture(PaperConstants::FACE_IMAGE);
+    setTexture(QString::fromStdString(PaperConstants::FACE_IMAGE()));
 #else
     setTexture(":/img/default");
 #endif
@@ -336,7 +336,7 @@ void MainView::initializeGL() {
 
 
 #ifdef TOUCH_SCREEN_MODE
-    setTexture(PaperConstants::FACE_IMAGE);
+    setTexture(QString::fromStdString(PaperConstants::FACE_IMAGE()));
 #else
     setTexture(":/img/default");
 #endif

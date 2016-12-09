@@ -7,29 +7,29 @@
 class PaperConstants
 {
 public:
-	constexpr static const int PAGE_DPI = 300;
+	static const int PAGE_DPI = 300;
 #if PAPER_SIZE == 23
-    constexpr static const float PAGE_WIDTH  = 2.1f; //inches
-    constexpr static const float PAGE_HEIGHT = 3.4f; //inches
-    constexpr static const char* FACE_IMAGE  = ":/img/face23";
+	static inline float PAGE_WIDTH() { return 2.1f; }//inches
+	static inline float PAGE_HEIGHT() { return  3.4f; } //inches
+	static inline std::string FACE_IMAGE() { return ":/img/face23"; }
 #elif PAPER_SIZE == 46
-    constexpr static const float PAGE_WIDTH  = 4.0f; //inches
-    constexpr static const float PAGE_HEIGHT = 6.0f; //inches
-    constexpr static const char* FACE_IMAGE  = ":/img/face46";
+    static const float PAGE_WIDTH  = 4.0f; //inches
+    static const float PAGE_HEIGHT = 6.0f; //inches
+    static const char* FACE_IMAGE  = ":/img/face46";
 #else
     #error undefined paper size
 #endif
-    constexpr static const float ASPECT_RATIO = PAGE_WIDTH/PAGE_HEIGHT;
+	static inline float ASPECT_RATIO() { return PAGE_WIDTH() / PAGE_HEIGHT(); }
 
     inline static void Scale(const float w, const float h, float &frameW, float &frameH)
     {
-    	const float scaleW=w/PAGE_WIDTH;
-    	const float scaleH=h/PAGE_HEIGHT;
+    	const float scaleW=w/PAGE_WIDTH();
+    	const float scaleH=h/PAGE_HEIGHT();
 
     	const float scale = std::min(scaleW,scaleH);
 
-    	frameW=PAGE_WIDTH*scale;
-    	frameH=PAGE_HEIGHT*scale;
+    	frameW=PAGE_WIDTH()*scale;
+    	frameH=PAGE_HEIGHT()*scale;
     }
 };
 

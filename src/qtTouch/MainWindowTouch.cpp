@@ -39,7 +39,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
 
-	_printer.setPageSize(QPageSize(QSizeF(PaperConstants::PAGE_WIDTH,PaperConstants::PAGE_HEIGHT),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
+	_printer.setPageSize(QPageSize(QSizeF(PaperConstants::PAGE_WIDTH(),PaperConstants::PAGE_HEIGHT()),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
 	_printer.setResolution(PaperConstants::PAGE_DPI);
 	_printer.setCreator("Teseo Schneider @ USI");
 	_printer.setDocName("Image morphi @ USI");
@@ -81,7 +81,7 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	const QSize &size = this->size();
 
 	const int voffset = 20;
-	const int h = float(size.width()) / float(PaperConstants::PAGE_WIDTH)*PaperConstants::PAGE_HEIGHT;
+	const int h = float(size.width()) / PaperConstants::PAGE_WIDTH()*PaperConstants::PAGE_HEIGHT();
 	const int editH = size.height() - h;
 	_ui->mainView->resize(size.width(), h);
 	_ui->mainView->move(0, editH);

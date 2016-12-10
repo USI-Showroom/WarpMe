@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/opencv">
+    	<file alias="haarcascade_frontalface_alt">opencv/haarcascade_frontalface_alt.xml</file>
+        <file alias="haarcascade_eye_tree_eyeglasses">opencv/haarcascade_eye_tree_eyeglasses.xml</file>
+    </qresource>
+    
+</RCC>

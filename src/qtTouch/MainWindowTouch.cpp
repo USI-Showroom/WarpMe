@@ -41,8 +41,8 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_printer.setPageSize(QPageSize(QSizeF(PaperConstants::PAGE_WIDTH(),PaperConstants::PAGE_HEIGHT()),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
 	_printer.setResolution(PaperConstants::PAGE_DPI);
-	_printer.setCreator("Teseo Schneider @ USI");
-	_printer.setDocName("Image morphi @ USI");
+	_printer.setCreator("WarpMe @ USI");
+	_printer.setDocName("WarpMe @ USI");
 	_printer.setOrientation(QPrinter::Portrait);
 	_printer.setPageMargins (0,0,0,0,QPrinter::Millimeter);
 	_printer.setFullPage(true);

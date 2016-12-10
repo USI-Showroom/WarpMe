@@ -106,7 +106,6 @@ void Keyboard::buildLayout()
 		_layout.push_back(std::vector<int>());
 		std::vector<int> &tmp=_layout.back();
 		tmp.push_back('!');
-		tmp.push_back('@');
 		tmp.push_back('#');
 		tmp.push_back('$');
 		tmp.push_back('%');
@@ -120,7 +119,7 @@ void Keyboard::buildLayout()
 	{
 		_layout.push_back(std::vector<int>());
 		std::vector<int> &tmp=_layout.back();
-		tmp.push_back('.');
+		
 		tmp.push_back(',');
 		tmp.push_back(':');
 		tmp.push_back(';');
@@ -195,6 +194,7 @@ void Keyboard::buildLayout()
 		_layout.push_back(std::vector<int>());
 		std::vector<int> &tmp=_layout.back();
 		tmp.push_back('@');
+		tmp.push_back('.');
 		tmp.push_back('<');
 		tmp.push_back('>');
 		tmp.push_back(-1);

@@ -63,7 +63,7 @@ Point CameraCapture::faceFromEyes(Point &priorCenter, const Mat &face) {
     return priorCenter;
 }
 
-QRect CameraCapture::detectFace(Mat &frame) {
+QRectF CameraCapture::detectFace(Mat &frame) {
     cv::Point priorCenter = _center;
 
     std::vector<Rect> faces;
@@ -118,7 +118,14 @@ QRect CameraCapture::detectFace(Mat &frame) {
         }
     }
 
-    // if(!faceFound) {
+    QRectF res;
+
+
+    const float fw = frame.cols;
+    const float fh = frame.rows;
+
+    if(faceFound)
+        res=QRectF((priorCenter.x-w/2.0f)/fw, (priorCenter.y-h/2.0f)/fh,w/fw,h/fh);
     //     // Findface from eyes
     //     Rect r(priorCenter.x, priorCenter.y, w, h);
 
@@ -128,8 +135,6 @@ QRect CameraCapture::detectFace(Mat &frame) {
     //     }    
     // }
 
-
-    QRect res(priorCenter.x-w/2, priorCenter.y-h/2,w,h);
     // if(output.size().width > 2)
     // {
     //     ellipse(frame, priorCenter, Size(w/2, h/2),
@@ -180,7 +185,7 @@ void CameraCapture::run()
 
         if( frame.empty() ) continue;
 
-        QRect rect = detectFace(frame);
+        QRectF rect = detectFace(frame);
 
         emit imageReady(QImage((uchar*) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888),rect);
     }
@@ -193,7 +198,7 @@ _updateTimer(this), _soundPlayed(false), _caputure(this)
     _ui->setupUi(this);
     setModal(true);
 
-    connect(&_caputure,SIGNAL(imageReady(const QImage &, const QRect &)),this,SLOT(newImage(const QImage &, const QRect &)));
+    connect(&_caputure,SIGNAL(imageReady(const QImage &, const QRectF &)),this,SLOT(newImage(const QImage &, const QRectF &)));
 
 // _caputure.start();
 
@@ -211,10 +216,11 @@ else
 
 }
 
-void WebcamManager::newImage(const QImage &img, const QRect &face) 
+void WebcamManager::newImage(const QImage &img, const QRectF &face) 
 {
-    _img = img; 
-    _face = face;
+    _img = img;
+    if(!_face.isNull())
+        _face = face;
 }
 
 
@@ -258,23 +264,23 @@ void WebcamManager::paintEvent(QPaintEvent * event)
     QPainter painter(this);
 
     QTransform transform;
-qreal m11 = transform.m11();    // Horizontal scaling
-qreal m12 = transform.m12();    // Vertical shearing
-qreal m13 = transform.m13();    // Horizontal Projection
-qreal m21 = transform.m21();    // Horizontal shearing
-qreal m22 = transform.m22();    // vertical scaling
-qreal m23 = transform.m23();    // Vertical Projection
-qreal m31 = transform.m31();    // Horizontal Position (DX)
-qreal m32 = transform.m32();    // Vertical Position (DY)
-qreal m33 = transform.m33();    // Addtional Projection Factor
+    qreal m11 = transform.m11();    // Horizontal scaling
+    qreal m12 = transform.m12();    // Vertical shearing
+    qreal m13 = transform.m13();    // Horizontal Projection
+    qreal m21 = transform.m21();    // Horizontal shearing
+    qreal m22 = transform.m22();    // vertical scaling
+    qreal m23 = transform.m23();    // Vertical Projection
+    qreal m31 = transform.m31();    // Horizontal Position (DX)
+    qreal m32 = transform.m32();    // Vertical Position (DY)
+    qreal m33 = transform.m33();    // Addtional Projection Factor
 
-qreal scale = m11;
-m11 = -m11;
-if(m31 > 0)
-    m31 = 0;
-else
-    m31 = _img.width() * scale;
-transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+    qreal scale = m11;
+    m11 = -m11;
+    if(m31 > 0)
+        m31 = 0;
+    else
+        m31 = _img.width() * scale;
+    transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 
 //     transform.rotate(-90);
 
@@ -287,37 +293,41 @@ transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
 // // painter.drawPixmap(-_ui->preview->height() / 2 / scaling,0, pixmap);
 
 
-const int w=this->width();
-const int h=this->height();
-QImage tmp=_img.scaled(w,h,Qt::KeepAspectRatio);
-painter.drawImage(QPoint((w-tmp.width())/2,(h-tmp.height())/2),tmp);
-painter.drawEllipse(_face);
+    const int w=this->width();
+    const int h=this->height();
+    QImage tmp=_img.scaled(w,h,Qt::KeepAspectRatio);
+    QPoint offset((w-tmp.width())/2,(h-tmp.height())/2);
+    painter.drawImage(offset,tmp);
+
+    QRect ellipse(_face.x()*tmp.height()+offset.x(),_face.y()*tmp.width()+offset.y(),_face.width()*tmp.height(),_face.height()*tmp.width());
+    std::cout<<ellipse.x()<<" "<<ellipse.y()<<" "<<ellipse.width()<<" "<<ellipse.height()<<std::endl;
+    painter.drawEllipse(ellipse);
 
 //     painter.restore();
 
-painter.setPen(QColor(245, 128, 37));
-painter.setFont(QFont("Arial", 60));
-const int time=ceil((3000-_elapsed.elapsed())/1000.0);
+    painter.setPen(QColor(245, 128, 37));
+    painter.setFont(QFont("Arial", 60));
+    const int time=ceil((3000-_elapsed.elapsed())/1000.0);
 
-if(_elapsed.elapsed()>  2650 && !_soundPlayed){
-    _clickSound.play();
-    _soundPlayed=true;
-}
+    if(_elapsed.elapsed()>  2650 && !_soundPlayed){
+        _clickSound.play();
+        _soundPlayed=true;
+    }
 
-if(time>0){
-    painter.drawText(QRect(0,_ui->preview->height()/2-30, _ui->preview->width(),60),Qt::AlignCenter,QString::number(time));
+    if(time>0){
+        painter.drawText(QRect(0,_ui->preview->height()/2-30, _ui->preview->width(),60),Qt::AlignCenter,QString::number(time));
 
-    painter.end();
-}
-else{
-    painter.end();
+        painter.end();
+    }
+    else{
+        painter.end();
 
-    _caputure.quit();
-    _updateTimer.stop();
-    processCapturedImage(_img);
+        _caputure.quit();
+        _updateTimer.stop();
+        processCapturedImage(_img);
 
-    accept();
-}
+        accept();
+    }
 
 
 }

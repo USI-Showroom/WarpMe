@@ -36,14 +36,14 @@ _grid(1000,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _cu
 #ifdef TOUCH_SCREEN_MODE
 void MainView::resetEllipse()
 {
-    const int nPieces=10;
+    const int nPieces=20;
     _sourcePoly.clear();
 
     for(int i=nPieces-1;i>=0;--i)
     {
         const double t=2*M_PI/(nPieces)*i;
 
-        _sourcePoly.push_back(QVector2D(0.7*cos(t),0.2+0.7*sin(t)));
+        _sourcePoly.push_back(QVector2D(0.5*cos(t),0.4+0.5*sin(t)));
     }
 
 

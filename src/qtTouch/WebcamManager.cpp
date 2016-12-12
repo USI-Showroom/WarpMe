@@ -158,8 +158,8 @@ CameraCapture::CameraCapture(QObject *parent)
         if(!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
             std::cerr<<"unable to load eyes cascade"<<std::endl; // load eye classifiers
 
-        _videoCapture.set(CV_CAP_PROP_FRAME_WIDTH,2304/2);
-        _videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT,1296/2);
+        _videoCapture.set(CV_CAP_PROP_FRAME_WIDTH,2304/1.1);
+        _videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT,1296/1.1);
 
 // _videoCapture.set(CV_CAP_PROP_FPS,1);
 // _videoCapture.set(CV_CAP_PROP_BRIGHTNESS,1296);
@@ -368,8 +368,8 @@ void WebcamManager::paintEvent(QPaintEvent * event)
         _caputure.terminate();
 		while (!_caputure.isFinished());
 
-		_caputure.capture(_img);
-		_img.save("test.png");
+		//_caputure.capture(_img);
+		//_img.save("test.png");
         _updateTimer.stop();
         processCapturedImage(_img);
 

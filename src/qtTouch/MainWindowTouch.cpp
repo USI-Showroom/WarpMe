@@ -34,10 +34,10 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 {
 	_ui->setupUi(this);
 // #ifndef DEBUG
-	 // showFullScreen();
+	  showFullScreen();
 // #endif
 
-	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
+	//std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
 
 	_printer.setPageSize(QPageSize(QSizeF(PaperConstants::PAGE_WIDTH(),PaperConstants::PAGE_HEIGHT()),QPageSize::Inch,"photo",QPageSize::ExactMatch));//QPrinter::A4);
 	_printer.setResolution(PaperConstants::PAGE_DPI);

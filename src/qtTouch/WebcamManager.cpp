@@ -158,8 +158,8 @@ CameraCapture::CameraCapture(QObject *parent)
         if(!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
             std::cerr<<"unable to load eyes cascade"<<std::endl; // load eye classifiers
 
-        _videoCapture.set(CV_CAP_PROP_FRAME_WIDTH,2304);
-        _videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT,1296);
+        _videoCapture.set(CV_CAP_PROP_FRAME_WIDTH,2304/2);
+        _videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT,1296/2);
 
 // _videoCapture.set(CV_CAP_PROP_FPS,1);
 // _videoCapture.set(CV_CAP_PROP_BRIGHTNESS,1296);
@@ -185,10 +185,50 @@ void CameraCapture::run()
 
         if( frame.empty() ) continue;
 
-        QRectF rect = detectFace(frame);
+		QRectF rect;// = detectFace(frame);
 
         emit imageReady(QImage((uchar*) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888),rect);
     }
+}
+void CameraCapture::capture(QImage &out)
+{
+	cv::Mat frame;
+
+
+	_videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 2304);
+	_videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 1296);
+
+	while(frame.empty())
+		_videoCapture >> frame;
+
+
+	_videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 2304 / 2);
+	_videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 1296 / 2);
+
+	QImage img((uchar*)frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
+	
+	QTransform transform;
+	qreal m11 = transform.m11();    // Horizontal scaling
+	qreal m12 = transform.m12();    // Vertical shearing
+	qreal m13 = transform.m13();    // Horizontal Projection
+	qreal m21 = transform.m21();    // Horizontal shearing
+	qreal m22 = transform.m22();    // vertical scaling
+	qreal m23 = transform.m23();    // Vertical Projection
+	qreal m31 = transform.m31();    // Horizontal Position (DX)
+	qreal m32 = transform.m32();    // Vertical Position (DY)
+	qreal m33 = transform.m33();    // Addtional Projection Factor
+
+	qreal scale = m11;
+	m11 = -m11;
+	if (m31 > 0)
+		m31 = 0;
+	else
+		m31 = img.width() * scale;
+	transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+
+	transform.rotate(-90);
+	
+	out = img.transformed(transform);
 }
 
 WebcamManager::WebcamManager(QWidget *parent)
@@ -218,7 +258,28 @@ else
 
 void WebcamManager::newImage(const QImage &img, const QRectF &face) 
 {
-    _img = img;
+	QTransform transform;
+	qreal m11 = transform.m11();    // Horizontal scaling
+	qreal m12 = transform.m12();    // Vertical shearing
+	qreal m13 = transform.m13();    // Horizontal Projection
+	qreal m21 = transform.m21();    // Horizontal shearing
+	qreal m22 = transform.m22();    // vertical scaling
+	qreal m23 = transform.m23();    // Vertical Projection
+	qreal m31 = transform.m31();    // Horizontal Position (DX)
+	qreal m32 = transform.m32();    // Vertical Position (DY)
+	qreal m33 = transform.m33();    // Addtional Projection Factor
+
+	qreal scale = m11;
+	m11 = -m11;
+	if (m31 > 0)
+		m31 = 0;
+	else
+		m31 = img.width() * scale;
+	transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
+
+	transform.rotate(-90);
+
+	_img = img.transformed(transform);
     if(!_face.isNull())
         _face = face;
 }
@@ -246,7 +307,7 @@ void WebcamManager::processCapturedImage(const QImage& img)
 // img.mirrored(false,true).save("asd0.png");
 
     _img=img.copy(QRect((h-frameH)/2, (w-frameW)/2,frameH,frameW));
-    _img.save("asd.png");
+    //_img.save("asd.png");
 }
 
 
@@ -263,25 +324,7 @@ void WebcamManager::paintEvent(QPaintEvent * event)
 
     QPainter painter(this);
 
-    QTransform transform;
-    qreal m11 = transform.m11();    // Horizontal scaling
-    qreal m12 = transform.m12();    // Vertical shearing
-    qreal m13 = transform.m13();    // Horizontal Projection
-    qreal m21 = transform.m21();    // Horizontal shearing
-    qreal m22 = transform.m22();    // vertical scaling
-    qreal m23 = transform.m23();    // Vertical Projection
-    qreal m31 = transform.m31();    // Horizontal Position (DX)
-    qreal m32 = transform.m32();    // Vertical Position (DY)
-    qreal m33 = transform.m33();    // Addtional Projection Factor
-
-    qreal scale = m11;
-    m11 = -m11;
-    if(m31 > 0)
-        m31 = 0;
-    else
-        m31 = _img.width() * scale;
-    transform.setMatrix(m11, m12, m13, m21, m22, m23, m31, m32, m33);
-
+    
 //     transform.rotate(-90);
 
 //     // transform.scale(scaling, scaling);
@@ -299,9 +342,9 @@ void WebcamManager::paintEvent(QPaintEvent * event)
     QPoint offset((w-tmp.width())/2,(h-tmp.height())/2);
     painter.drawImage(offset,tmp);
 
-    QRect ellipse(_face.x()*tmp.height()+offset.x(),_face.y()*tmp.width()+offset.y(),_face.width()*tmp.height(),_face.height()*tmp.width());
-    std::cout<<ellipse.x()<<" "<<ellipse.y()<<" "<<ellipse.width()<<" "<<ellipse.height()<<std::endl;
-    painter.drawEllipse(ellipse);
+    //QRect ellipse(_face.x()*tmp.height()+offset.x(),_face.y()*tmp.width()+offset.y(),_face.width()*tmp.height(),_face.height()*tmp.width());
+    //std::cout<<ellipse.x()<<" "<<ellipse.y()<<" "<<ellipse.width()<<" "<<ellipse.height()<<std::endl;
+    //painter.drawEllipse(ellipse);
 
 //     painter.restore();
 
@@ -322,7 +365,11 @@ void WebcamManager::paintEvent(QPaintEvent * event)
     else{
         painter.end();
 
-        _caputure.quit();
+        _caputure.terminate();
+		while (!_caputure.isFinished());
+
+		_caputure.capture(_img);
+		_img.save("test.png");
         _updateTimer.stop();
         processCapturedImage(_img);
 

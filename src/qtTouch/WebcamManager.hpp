@@ -31,6 +31,7 @@ public:
 	CameraCapture(QObject *parent=NULL);
 
 	void run();
+	void capture(QImage & out);
 signals:
 	void imageReady(const QImage &img, const QRectF &face);
 private:

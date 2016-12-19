@@ -20,6 +20,10 @@
         <file alias="face46">img/face46.png</file>
         
         <file alias="circle">img/circle.png</file>
-        <file alias="logo">img/logo.png</file>
+    </qresource>
+
+    <qresource prefix="/print">
+        <file alias="layer23">print/layer23.png</file>
+        <file alias="layer46">print/layer46.png</file>
     </qresource>
 </RCC>

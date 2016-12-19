@@ -52,15 +52,22 @@ void FacebookManager::replyFinished(QNetworkReply *reply)
 
 void FacebookManager::postPicture()
 {
-    //https://developers.facebook.com/tools/explorer/
-    //select the app in Application 
-    //click get user access token
-    //select publish_action AND user_photos
-    //click on the blue i
-    //open access token tool
-    //click extend access token
+    //https://developers.facebook.com/apps
+    // add other accounts
+
+    // https://developers.facebook.com/tools/explorer/
+    // select the app in Application 
+    // click "get user access token"
+    // select publish_action AND user_photos
+    // click on the blue i
+    // open access token tool
+    // click extend access token
+
+    //Put the access token and use
+    // /v2.8/me/albums to get album id
+
     static const QString accessToken = "EAAOFZCzlH70gBAMUZCpXW6MHjMfE6rZAwOKpuFY4GGG9X3bJMzdseK2AgjlobuzNPHZAogrEvFLIExDWgmxsJfPXEnJG65AXbKooMjYoqI6RLDDLOTrMOF9xF1lTWXaxV6qlrA8ZBwM1XZBWAznlfqp9QyOhDorEwZD";
-    static const QString albumId = "1880749552144710"; //GET /v2.8/me/albums
+    static const QString albumId = "1880749552144710"; 
 
     const QUuid uuid;
     const QString boundary="Boundary-"+uuid.toString();
@@ -68,7 +75,7 @@ void FacebookManager::postPicture()
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
-    QUrl url("https://graph.facebook.com/v2.8/"+albumId+"/photos"); //maybe change to post to album
+    QUrl url("https://graph.facebook.com/v2.8/"+albumId+"/photos");
     QNetworkRequest request(url);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary="+boundary);

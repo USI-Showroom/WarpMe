@@ -12,7 +12,7 @@
 #include <QDialog>
 #include <QTimer>
 #include <QElapsedTimer>
-#include <QSoundEffect>
+#include <QMediaPlayer>
 #include <QThread>
 
 #include "opencv2/opencv.hpp"
@@ -60,6 +60,8 @@ public:
 
 	inline void startCounter()
 	{
+		_soundPlayed = false;
+
 		_caputure.start();
 		_elapsed.restart();
 		_updateTimer.start();
@@ -80,7 +82,7 @@ private:
 	QElapsedTimer _elapsed;
 
 	bool _soundPlayed;
-	QSoundEffect _clickSound;
+	QMediaPlayer _clickSound;
 
 	CameraCapture _caputure;
 

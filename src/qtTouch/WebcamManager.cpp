@@ -175,7 +175,8 @@ CameraCapture::CameraCapture(QObject *parent)
 
 void CameraCapture::run()
 {
-    cv::Mat frame;
+	cv::Mat frame;
+	cv::Mat rgbFrame;
 
     while(true)
     {
@@ -187,7 +188,8 @@ void CameraCapture::run()
 
 		QRectF rect;// = detectFace(frame);
 
-        emit imageReady(QImage((uchar*) frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888),rect);
+		cv::cvtColor(frame, rgbFrame, CV_BGR2RGB);
+        emit imageReady(QImage((uchar*)rgbFrame.data, rgbFrame.cols, rgbFrame.rows, rgbFrame.step, QImage::Format_RGB888),rect);
     }
 }
 void CameraCapture::capture(QImage &out)
@@ -232,27 +234,27 @@ void CameraCapture::capture(QImage &out)
 }
 
 WebcamManager::WebcamManager(QWidget *parent)
-:QDialog(parent), _ui(new Ui::WebcamManager),
-_updateTimer(this), _soundPlayed(false), _caputure(this)
+	:QDialog(parent), _ui(new Ui::WebcamManager),
+	_updateTimer(this), _soundPlayed(false), _clickSound(this), _caputure(this)
 {
-    _ui->setupUi(this);
-    setModal(true);
+	_ui->setupUi(this);
+	setModal(true);
 
-    connect(&_caputure,SIGNAL(imageReady(const QImage &, const QRectF &)),this,SLOT(newImage(const QImage &, const QRectF &)));
+	connect(&_caputure, SIGNAL(imageReady(const QImage &, const QRectF &)), this, SLOT(newImage(const QImage &, const QRectF &)));
 
-// _caputure.start();
+	// _caputure.start();
 
-    _clickSound.setSource(QUrl::fromLocalFile(":/sounds/camera"));
+	_clickSound.setMedia(QUrl("qrc:/sounds/camera"));
 
-_updateTimer.setInterval(30); // ms
-connect(&_updateTimer, SIGNAL(timeout()), this, SLOT(update())); 
-// _updateTimer.start();
+	_updateTimer.setInterval(30); // ms
+	connect(&_updateTimer, SIGNAL(timeout()), this, SLOT(update()));
+	// _updateTimer.start();
 
 
-if(parent && parent->isFullScreen())
-    showFullScreen();
-else
-    resize(parent->size());
+	if (parent && parent->isFullScreen())
+		showFullScreen();
+	else
+		resize(parent->size());
 
 }
 
@@ -313,68 +315,71 @@ void WebcamManager::processCapturedImage(const QImage& img)
 
 void WebcamManager::paintEvent(QPaintEvent * event)
 {
-    if(_img.isNull()) return;
+	if (_img.isNull()) return;
 
 
 
 
-//     // const float scaleW = float(_preview->width()) / _ui->preview->height();
-//     // const float scaleH = float(_preview->height()) / _ui->preview->width();
-//     // const float scaling = 1.0f / std::max(scaleW, scaleH);
+	//     // const float scaleW = float(_preview->width()) / _ui->preview->height();
+	//     // const float scaleH = float(_preview->height()) / _ui->preview->width();
+	//     // const float scaling = 1.0f / std::max(scaleW, scaleH);
 
-    QPainter painter(this);
-
-    
-//     transform.rotate(-90);
-
-//     // transform.scale(scaling, scaling);
-//     // transform.translate(-_preview->width()/2.0f, 0);
-
-//     painter.save();
-//     painter.setTransform(transform);
-// //painter.drawPixmap(-_ui->preview->height() / 2 / scaling, (_ui->preview->height() - pixmap.height()) / 2, pixmap);
-// // painter.drawPixmap(-_ui->preview->height() / 2 / scaling,0, pixmap);
+	QPainter painter(this);
 
 
-    const int w=this->width();
-    const int h=this->height();
-    QImage tmp=_img.scaled(w,h,Qt::KeepAspectRatio);
-    QPoint offset((w-tmp.width())/2,(h-tmp.height())/2);
-    painter.drawImage(offset,tmp);
+	//     transform.rotate(-90);
 
-    //QRect ellipse(_face.x()*tmp.height()+offset.x(),_face.y()*tmp.width()+offset.y(),_face.width()*tmp.height(),_face.height()*tmp.width());
-    //std::cout<<ellipse.x()<<" "<<ellipse.y()<<" "<<ellipse.width()<<" "<<ellipse.height()<<std::endl;
-    //painter.drawEllipse(ellipse);
+	//     // transform.scale(scaling, scaling);
+	//     // transform.translate(-_preview->width()/2.0f, 0);
+
+	//     painter.save();
+	//     painter.setTransform(transform);
+	// //painter.drawPixmap(-_ui->preview->height() / 2 / scaling, (_ui->preview->height() - pixmap.height()) / 2, pixmap);
+	// // painter.drawPixmap(-_ui->preview->height() / 2 / scaling,0, pixmap);
+
+
+	const int w = this->width();
+	const int h = this->height();
+	QImage tmp = _img.scaled(w, h, Qt::KeepAspectRatio);
+	QPoint offset((w - tmp.width()) / 2, (h - tmp.height()) / 2);
+	painter.drawImage(offset, tmp);
+
+	//QRect ellipse(_face.x()*tmp.height()+offset.x(),_face.y()*tmp.width()+offset.y(),_face.width()*tmp.height(),_face.height()*tmp.width());
+	//std::cout<<ellipse.x()<<" "<<ellipse.y()<<" "<<ellipse.width()<<" "<<ellipse.height()<<std::endl;
+	//painter.drawEllipse(ellipse);
 
 //     painter.restore();
 
-    painter.setPen(QColor(245, 128, 37));
-    painter.setFont(QFont("Arial", 60));
-    const int time=ceil((3000-_elapsed.elapsed())/1000.0);
+	painter.setPen(QColor(245, 128, 37));
+	painter.setFont(QFont("Arial", 60));
+	const int time = ceil((3000 - _elapsed.elapsed()) / 1000.0);
 
-    if(_elapsed.elapsed()>  2650 && !_soundPlayed){
-        _clickSound.play();
-        _soundPlayed=true;
-    }
+	if (_elapsed.elapsed() > 2600 && !_soundPlayed) {
+		_clickSound.setPosition(0);
+		_clickSound.play();
+		_soundPlayed = true;
+	}
 
-    if(time>0){
-        painter.drawText(QRect(0,_ui->preview->height()/2-30, _ui->preview->width(),60),Qt::AlignCenter,QString::number(time));
+	if (time > 0) {
+		painter.drawText(QRect(0, _ui->preview->height() / 2 - 30, _ui->preview->width(), 60), Qt::AlignCenter, QString::number(time));
 
-        painter.end();
-    }
-    else{
-        painter.end();
+		painter.end();
+	}
+	else {
+		painter.end();
 
-        _caputure.terminate();
+		_caputure.terminate();
 		while (!_caputure.isFinished());
 
 		//_caputure.capture(_img);
 		//_img.save("test.png");
-        _updateTimer.stop();
-        processCapturedImage(_img);
-
-        accept();
-    }
+		_updateTimer.stop();
+		processCapturedImage(_img);
+		//_clickSound.stop();
+		//_clickSound.setMedia(QUrl("qrc:/sounds/camera"));
+		
+		accept();
+	}
 
 
 }

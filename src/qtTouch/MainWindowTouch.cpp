@@ -30,13 +30,13 @@ static const int BTN_OFFSET = 20;
 
 
 MainWindowTouch::MainWindowTouch(QWidget *parent) :
-QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL)
+QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL), _fbm(this)
 {
 
 
 	_ui->setupUi(this);
 // #ifndef DEBUG
-	   showFullScreen();
+	   // showFullScreen();
 // #endif
 
 	QList<QPrinterInfo> infos = QPrinterInfo::availablePrinters();
@@ -243,8 +243,8 @@ void MainWindowTouch::facebookShare()
 {
 	QImage img;
 	getImage(img);
-	FacebookManager fbm(img,this);
-	fbm.exec();
+	_fbm.setImage(&img);
+	_fbm.exec();
 }
 
 

@@ -21,8 +21,8 @@
 #include <QUuid>
 
 
-FacebookManager::FacebookManager(const QImage &img, QWidget *parent)
-:QDialog(parent), _ui(new Ui::FacebookManager), _img(img)
+FacebookManager::FacebookManager(QWidget *parent)
+:QDialog(parent), _ui(new Ui::FacebookManager)
 {
     _ui->setupUi(this);
 
@@ -48,12 +48,19 @@ void FacebookManager::replyFinished(QNetworkReply *reply)
     QString resp(reply->readAll());
     std::cout<<resp.toStdString()<<std::endl;
 
-    accept();
 }
 
 void FacebookManager::postPicture()
 {
-    static const QString accessToken = "EAACEdEose0cBAELj0UTdLIVj8S16SFAwyyteSr3Xgr6JPuRH0EMNWpZAeaNsylnJwX6V7bUmNL9rSVmUQADLZB7FUrfZAQIYC7ZBw94aodFw4x33tx2cgeulPcV7xVFZClpZCFCKlx3zB6ArHfgtN2O7KtWYxESiHcs4ZC05W6eVAZDZD";
+    //https://developers.facebook.com/tools/explorer/
+    //select the app in Application 
+    //click get user access token
+    //select publish_action AND user_photos
+    //click on the blue i
+    //open access token tool
+    //click extend access token
+    static const QString accessToken = "EAAOFZCzlH70gBAMUZCpXW6MHjMfE6rZAwOKpuFY4GGG9X3bJMzdseK2AgjlobuzNPHZAogrEvFLIExDWgmxsJfPXEnJG65AXbKooMjYoqI6RLDDLOTrMOF9xF1lTWXaxV6qlrA8ZBwM1XZBWAznlfqp9QyOhDorEwZD";
+    static const QString albumId = "1880749552144710"; //GET /v2.8/me/albums
 
     const QUuid uuid;
     const QString boundary="Boundary-"+uuid.toString();
@@ -61,7 +68,7 @@ void FacebookManager::postPicture()
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
-    QUrl url("https://graph.facebook.com/v2.4/me/photos"); //maybe change to post to album
+    QUrl url("https://graph.facebook.com/v2.8/"+albumId+"/photos"); //maybe change to post to album
     QNetworkRequest request(url);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data; boundary="+boundary);
@@ -80,7 +87,7 @@ void FacebookManager::postPicture()
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
-    _img.save(&buffer, "PNG");
+    _img->save(&buffer, "PNG");
 
 
     body.append("--"+boundary+"\r\n");
@@ -93,6 +100,8 @@ void FacebookManager::postPicture()
     connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(replyFinished(QNetworkReply *)));
 
     manager->post(request, body);
+    
+    accept();
 }
 
 FacebookManager::~FacebookManager()

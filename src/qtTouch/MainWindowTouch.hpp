@@ -14,6 +14,7 @@
 #include <QPrinter>
 
 #include "WebcamManager.hpp"
+#include "FacebookManager.hpp"
 
 namespace Ui {
     class MainWindowTouch;
@@ -51,6 +52,7 @@ private:
     QImage *_logo;
 
 	WebcamManager *_wbm;
+    FacebookManager _fbm;
 protected:
     void keyReleaseEvent(QKeyEvent * event);
 };

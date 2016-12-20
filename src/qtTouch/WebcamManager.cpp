@@ -364,12 +364,12 @@ void WebcamManager::paintEvent(QPaintEvent * event)
 
     {
         qreal offset = w - 30;
-        qreal height = centery - 0.4*0.5*h;
+        qreal height = centery - 0.2*0.5*h;
 
-        qreal tipLenght = 0.5*0.5*0.5*w;
-        qreal tipHeight = 0.5*0.5*0.5*w;
-        qreal bodyOffset = 0.6* 0.5*0.5*w;
-        qreal length = 0.5*0.5*w*1.25;
+        qreal tipLenght = 0.25*0.5*0.5*w;
+        qreal tipHeight = 0.25*0.5*0.5*w;
+        qreal bodyOffset = 0.35* 0.5*0.5*w;
+        qreal length = 0.5*0.5*w*0.6;
 
         qreal x = offset, y = height;
         QPainterPath arrow(QPointF(x,y));       //1
@@ -413,7 +413,7 @@ void WebcamManager::paintEvent(QPaintEvent * event)
 	}
 
 	if (time > 0) {
-		painter.drawText(QRect(0, _ui->preview->height() / 2 - 30, _ui->preview->width(), 60), Qt::AlignCenter, QString::number(time));
+		painter.drawText(QRect(0, h / 2 + 0.1*h, w, 60), Qt::AlignCenter, QString::number(time));
 
 		painter.end();
 	}

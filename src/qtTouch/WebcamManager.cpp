@@ -350,7 +350,59 @@ void WebcamManager::paintEvent(QPaintEvent * event)
 
 //     painter.restore();
 
-	painter.setPen(QColor(245, 128, 37));
+    const int centerx = w/2;
+    const int centery = h/2;
+
+    QRect ellipse(centerx-0.5*0.5*w,
+                  centery - 0.5*0.5*h - 0.4*0.5*h,
+                  0.5*w,
+                  0.5*h);
+
+    painter.setPen(QPen(QColor(245, 128, 37), 3, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
+    painter.drawEllipse(ellipse);
+
+
+    {
+        qreal offset = w - 30;
+        qreal height = centery - 0.4*0.5*h;
+
+        qreal tipLenght = 0.5*0.5*0.5*w;
+        qreal tipHeight = 0.5*0.5*0.5*w;
+        qreal bodyOffset = 0.6* 0.5*0.5*w;
+        qreal length = 0.5*0.5*w*1.25;
+
+        qreal x = offset, y = height;
+        QPainterPath arrow(QPointF(x,y));       //1
+
+        x -= tipLenght; y -=tipHeight;
+        arrow.lineTo(x,y);                      //2
+
+        y +=bodyOffset;
+        arrow.lineTo(x,y);                      //3
+
+        x -=length;
+        arrow.lineTo(x,y);                      //4
+
+        y = height;
+        arrow.lineTo(x,y);                      //5
+
+        y += tipHeight - bodyOffset;
+        arrow.lineTo(x,y);                      //6
+
+        x = offset-tipLenght;
+        arrow.lineTo(x,y);                      //7
+
+        y += bodyOffset;
+        arrow.lineTo(x,y);                      //8
+
+        x = offset; y = height;
+        arrow.lineTo(x,y);                      //9
+
+        // painter.setBrush();
+        painter.fillPath(arrow, QBrush(QColor(245, 128, 37)) );
+    }
+
+
 	painter.setFont(QFont("Arial", 60));
 	const int time = ceil((3000 - _elapsed.elapsed()) / 1000.0);
 

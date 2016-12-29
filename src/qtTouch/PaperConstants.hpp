@@ -1,8 +1,8 @@
 #ifndef _PAPER_CONSTANTS__
 #define _PAPER_CONSTANTS__
 
-// #define PAPER_SIZE 23
-#define PAPER_SIZE 46
+ #define PAPER_SIZE 23
+//#define PAPER_SIZE 46
 
 class PaperConstants
 {
@@ -10,7 +10,7 @@ public:
 	static const int PAGE_DPI = 300;
 #if PAPER_SIZE == 23
 	static inline float PAGE_WIDTH() { return 153.0f; }//inches
-	static inline float PAGE_HEIGHT() { return  243.0f; } //inches
+	static inline float PAGE_HEIGHT() { return  244.0f; } //inches
 	static inline std::string FACE_IMAGE() { return ":/img/face23"; }
     static inline std::string PRINT_LAYER() { return ":/print/layer23"; }
 #elif PAPER_SIZE == 46

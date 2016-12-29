@@ -36,19 +36,18 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_ui->setupUi(this);
 // #ifndef DEBUG
-	    showFullScreen();
+	   showFullScreen();
 // #endif
 
 	QList<QPrinterInfo> infos = QPrinterInfo::availablePrinters();
 
 	QPageSize size;
 	bool found = false;
-	// for (int i = 0; i < infos.size(); i++)
-
+	for (int i = 0; i < infos.size(); i++)
 	{
-		int i = 0;
+		//int i = 0;
 		const QPrinterInfo &info = infos.at(i);
-		// std::cout<<"printer name= "<<info.printerName().toStdString()<<std::endl;
+		//std::cout<<"printer name= "<<info.printerName().toStdString()<<std::endl;
 
 		QList<QPageSize> sizes = info.supportedPageSizes();
 		for (int j = 0; j < sizes.size(); j++)

@@ -15,7 +15,7 @@
 #include "mimeattachment.h"
 
 
-static const char* email="usi.at.cebit@gmail.com";
+static const char* email="usi.warpme@gmail.com";
 
 MailManager::MailManager(const QImage &img, QWidget *parent)
 :QDialog(parent), _ui(new Ui::MailManager), _img(img)

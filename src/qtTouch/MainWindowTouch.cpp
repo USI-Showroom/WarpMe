@@ -134,7 +134,7 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 
 
 	const int voffset = 10;
-	const float offset = size.height() /4.0f;
+	const float offset = size.height() / 6.0f;
 
 	_ui->webcamImg->move(size.width() - LARGE_BTN_SIZE - voffset, size.height() / 2 - offset);
 

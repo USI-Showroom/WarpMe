@@ -31,6 +31,11 @@ _grid(1000,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _cu
 { 
     _boundayPoly.resize(4);
 	_drawForPrinting = false;
+
+
+#ifdef TOUCH_SCREEN_MODE
+	setAttribute(Qt::WA_AcceptTouchEvents);
+#endif
 }
 
 #ifdef TOUCH_SCREEN_MODE
@@ -49,6 +54,38 @@ void MainView::resetEllipse()
 
     _targetPoly.insert(_targetPoly.begin(),_sourcePoly.begin(), _sourcePoly.end());
 }
+
+bool MainView::event(QEvent *e)
+{
+	switch (e->type())
+	{
+	case QEvent::TouchBegin:
+	case QEvent::TouchUpdate:
+	case QEvent::TouchEnd:
+	{
+		QTouchEvent *te = static_cast<QTouchEvent *>(e);
+
+		for (int i = 0; i < te->touchPoints().count(); ++i)
+		{
+			QTouchEvent::TouchPoint tp = te->touchPoints()[i];
+
+			switch (tp.state)
+			{
+			case Qt::TouchPointPressed:
+			{
+			}
+			default:
+				break;
+			}
+		}
+		std::cout << te->touchPoints().count() << std::endl;
+		return true;
+	}
+	default:
+		return QWidget::event(e);
+	}
+}
+
 #endif
 
 MainView::~MainView()
@@ -377,6 +414,7 @@ QVector2D MainView::mouseToOpenGl(QMouseEvent *e) const
 
 void MainView::mousePressEvent(QMouseEvent *e)
 {
+#ifndef TOUCH_SCREEN_MODE
     _currentPosition = mouseToOpenGl(e);
 
     for(int i=0;i<_targetPoly.size();++i)
@@ -390,6 +428,7 @@ void MainView::mousePressEvent(QMouseEvent *e)
     }
 
     _currentIndex = -1;
+#endif
 }
 
 void MainView::mouseMoveEvent(QMouseEvent *e)

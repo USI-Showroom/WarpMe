@@ -64,6 +64,7 @@ private:
 
 #ifdef TOUCH_SCREEN_MODE
 	void resetEllipse();
+	bool event(QEvent * e);
 #endif
 
 protected:

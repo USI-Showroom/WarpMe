@@ -30,11 +30,11 @@ _shader(this), _colorShader(this), _circleShader(this),
 _grid(1000,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
 { 
     _boundayPoly.resize(4);
-	_drawForPrinting = false;
+    _drawForPrinting = false;
 
 
 #ifdef TOUCH_SCREEN_MODE
-	setAttribute(Qt::WA_AcceptTouchEvents);
+    setAttribute(Qt::WA_AcceptTouchEvents);
 #endif
 }
 
@@ -57,40 +57,74 @@ void MainView::resetEllipse()
 
 bool MainView::event(QEvent *e)
 {
-	switch (e->type())
-	{
-	case QEvent::TouchBegin:
-	case QEvent::TouchUpdate:
-	case QEvent::TouchEnd:
-	{
-		QTouchEvent *te = static_cast<QTouchEvent *>(e);
+    switch (e->type())
+    {
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchEnd:
+        {
+            QTouchEvent *te = static_cast<QTouchEvent *>(e);
 
-		for (int i = 0; i < te->touchPoints().count(); ++i)
-		{
-			QTouchEvent::TouchPoint tp = te->touchPoints()[i];
+            for (int i = 0; i < te->touchPoints().count(); ++i)
+            {
+                QTouchEvent::TouchPoint tp = te->touchPoints()[i];
+                const QPointF qtpos = tp.pos();
+                const QVector2D pos = mouseToOpenGl(qtpos.x(),qtpos.y());
 
-			switch (tp.state)
-			{
-			case Qt::TouchPointPressed:
-			{
-			}
-			default:
-				break;
-			}
-		}
-		std::cout << te->touchPoints().count() << std::endl;
-		return true;
-	}
-	default:
-		return QWidget::event(e);
-	}
+                switch (tp.state())
+                {
+                    case Qt::TouchPointPressed:
+                    {
+                        _currentIndices[tp.id()]=getVertex(pos)+1;
+                        break;
+                    }
+                    case Qt::TouchPointReleased:
+                    {
+                        _currentIndices.erase(tp.id());
+                        break;
+                    }
+                    default:
+                    {
+                        const int index = _currentIndices[tp.id()]-1;
+                        if (index >= 0)
+                        {
+                            const QVector2D lastPos = mouseToOpenGl(tp.lastPos().x(),tp.lastPos().y());
+                            _targetPoly[index] += pos-lastPos;
+                        }
+
+                        update();
+
+                        break;
+                    }
+                }
+            }
+
+            return true;
+        }
+        default:
+        return QWidget::event(e);
+    }
+}
+
+int MainView::getVertex(const QVector2D &pos)
+{
+    for(int i=0;i<_targetPoly.size();++i)
+    {
+        const float dist = pos.distanceToPoint(_targetPoly[i]);
+        if(dist<0.05)
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 #endif
 
 MainView::~MainView()
 {
-	makeCurrent();
+    makeCurrent();
 #ifdef WIN32
     funs.glBindVertexArray(0);
     funs.glDeleteVertexArrays(1, &_vao);
@@ -275,9 +309,9 @@ void MainView::initializeGL() {
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-    // glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
-    // glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
-    // glEnable(GL_LINE_SMOOTH);
+// glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+// glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
+// glEnable(GL_LINE_SMOOTH);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 #ifdef TOUCH_SCREEN_MODE
@@ -351,13 +385,13 @@ void MainView::initializeGL() {
 #else
     setTexture(":/img/default");
 #endif
-	{
-		const QFileInfo textureFile(":/img/circle");
-		const QImage img = QImage(textureFile.absoluteFilePath()).mirrored();
-		_circleTexture = new QOpenGLTexture(img);
-		_circleTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
-		_circleTexture->setMagnificationFilter(QOpenGLTexture::Linear);
-	}
+    {
+        const QFileInfo textureFile(":/img/circle");
+        const QImage img = QImage(textureFile.absoluteFilePath()).mirrored();
+        _circleTexture = new QOpenGLTexture(img);
+        _circleTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+        _circleTexture->setMagnificationFilter(QOpenGLTexture::Linear);
+    }
 
     funs.glBindVertexArray(_vao);
     funs.glGenBuffers(1, &_ibo);
@@ -405,34 +439,29 @@ void MainView::initializeGL() {
 
 
 
+QVector2D MainView::mouseToOpenGl(const float xx, const float yy) const
+{
+    const float x = 2.0f*xx/this->width() -1;
+    const float y = 2.0f*(this->height()-yy)/this->height()-1;
+    return QVector2D(x,y);
+}
+
 QVector2D MainView::mouseToOpenGl(QMouseEvent *e) const
 {
-    const float x = 2*float(e->x())/this->width() -1;
-    const float y = 2*float(this->height()-e->y())/this->height()-1;
-    return QVector2D(x,y);
+    return mouseToOpenGl(e->x(),e->y());
 }
 
 void MainView::mousePressEvent(QMouseEvent *e)
 {
 #ifndef TOUCH_SCREEN_MODE
     _currentPosition = mouseToOpenGl(e);
-
-    for(int i=0;i<_targetPoly.size();++i)
-    {
-        const float dist = _currentPosition.distanceToPoint(_targetPoly[i]);
-        if(dist<0.05)
-        {
-            _currentIndex=i;
-            return;
-        }
-    }
-
-    _currentIndex = -1;
+    _currentIndex = getVertex(_currentPosition);
 #endif
 }
 
 void MainView::mouseMoveEvent(QMouseEvent *e)
 {
+#ifndef TOUCH_SCREEN_MODE
     if(!_morphMode) return;
     if(_currentIndex<0) return;
 
@@ -442,10 +471,12 @@ void MainView::mouseMoveEvent(QMouseEvent *e)
     _currentPosition = newPos;
 
     update();
+#endif
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *e)
 { 
+#ifndef TOUCH_SCREEN_MODE
     if(_morphMode)
     {
         _currentIndex = -1;
@@ -454,6 +485,7 @@ void MainView::mouseReleaseEvent(QMouseEvent *e)
 
     _sourcePoly.push_back(mouseToOpenGl(e));
     update();
+#endif
 }
 
 
@@ -464,7 +496,7 @@ void MainView::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glLineWidth(10);
 
 
@@ -507,7 +539,7 @@ void MainView::paintGL()
         _colorShader.bind();
 
 
-        
+
 #ifdef TOUCH_SCREEN_MODE
         glColor3f(245.0f/255.0f,128.0f/255.0f,37.0f/255.0f);
         glLineWidth(5);
@@ -549,7 +581,7 @@ void MainView::paintGL()
 
         GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
         _circleShader.setUniformValue(circleLoc,0);
-       _circleTexture->bind(0);
+        _circleTexture->bind(0);
 
         {
 #ifdef TOUCH_SCREEN_MODE

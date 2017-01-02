@@ -25,7 +25,7 @@
 #include <iostream>
 
 #include "Grid.hpp"
-
+#include <map>
 
 
 class MainView : public QOpenGLWidget
@@ -61,6 +61,9 @@ private:
 	void updateVBO();
 
 	QVector2D mouseToOpenGl(QMouseEvent *e) const;
+	QVector2D mouseToOpenGl(const float x, const float y) const;
+
+	int getVertex(const QVector2D &pos);
 
 #ifdef TOUCH_SCREEN_MODE
 	void resetEllipse();
@@ -106,6 +109,7 @@ private:
 
 	bool _morphMode, _preserveBounday, _drawForPrinting;
 	int _currentIndex;
+	std::map<int,int> _currentIndices;
 	QVector2D _currentPosition;
 
 #ifdef WIN32

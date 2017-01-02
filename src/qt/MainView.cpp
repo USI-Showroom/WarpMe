@@ -27,7 +27,7 @@
 MainView::MainView(QWidget *parent)
 : super(parent), 
 _shader(this), _colorShader(this), _circleShader(this),
-_grid(1000,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
+_grid(500,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
 { 
     _boundayPoly.resize(4);
     _drawForPrinting = false;

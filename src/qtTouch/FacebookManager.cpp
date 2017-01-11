@@ -42,12 +42,20 @@ FacebookManager::FacebookManager(QWidget *parent)
     _nextUpper=false;
 }
 
+int FacebookManager::exec()
+{
+	if (parentWidget() && parentWidget()->isFullScreen())
+		showFullScreen();
+	else if(parentWidget())
+		resize(parentWidget()->size());
+
+	return QDialog::exec();
+}
 
 void FacebookManager::replyFinished(QNetworkReply *reply)
 {
     QString resp(reply->readAll());
     std::cout<<resp.toStdString()<<std::endl;
-
 }
 
 void FacebookManager::postPicture()

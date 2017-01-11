@@ -28,6 +28,9 @@ public:
 	~FacebookManager();
 
 	inline void setImage(const QImage *img) { _img = img; }
+
+	int exec();
+
 private slots:
 	void postPicture();
 	void replyFinished(QNetworkReply *reply);

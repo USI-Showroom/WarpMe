@@ -340,7 +340,7 @@ void WebcamManager::paintEvent(QPaintEvent * event)
 
 	const int w = this->width();
 	const int h = this->height();
-	QImage tmp = _img.scaled(w, h, Qt::KeepAspectRatio);
+	QImage tmp = _img.scaled(w, h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	QPoint offset((w - tmp.width()) / 2, (h - tmp.height()) / 2);
 	painter.drawImage(offset, tmp);
 

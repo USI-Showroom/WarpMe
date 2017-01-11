@@ -191,8 +191,20 @@ MainWindowTouch::~MainWindowTouch()
 
 void MainWindowTouch::getImage(QImage &img)
 {
-	QImage imgTmp(_ui->mainView->size(), QImage::Format_RGB32);
+	const float w=_ui->mainView->width();
+	const float h=_ui->mainView->height();
 
+	float frameW, frameH;
+	PaperConstants::Scale(w, h, frameW, frameH);
+
+	if(!_logo)
+	{
+		const QFileInfo file(QString::fromStdString(PaperConstants::PRINT_LAYER()));
+		const QImage img = QImage(file.absoluteFilePath());
+		_logo = new QImage(img.scaled(frameW,frameH,Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	}
+
+	QImage imgTmp(_ui->mainView->size(), QImage::Format_RGB32);
 	
 	_ui->mainView->setDrawForPrinting(true);
 	QPainter painter(&imgTmp);
@@ -201,13 +213,13 @@ void MainWindowTouch::getImage(QImage &img)
 	_ui->mainView->update();
 	
 
-	const float w=_ui->mainView->width();
-	const float h=_ui->mainView->height();
 
-	float frameW, frameH;
-	PaperConstants::Scale(w, h, frameW, frameH);
 
 	img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+
+	QPainter p(&img);
+	p.drawImage(QPoint(0,0), *_logo);
+	p.end();
 }
 
 void MainWindowTouch::print()
@@ -219,12 +231,12 @@ void MainWindowTouch::print()
 	QPainter painter(&_printer);
 
 
-	if(!_logo)
-	{
-		const QFileInfo file(QString::fromStdString(PaperConstants::PRINT_LAYER()));
-		const QImage img = QImage(file.absoluteFilePath());
-		_logo = new QImage(img.scaled(painter.device()->width(),painter.device()->height(),Qt::KeepAspectRatio));
-	}
+	// if(!_logo)
+	// {
+	// 	const QFileInfo file(QString::fromStdString(PaperConstants::PRINT_LAYER()));
+	// 	const QImage img = QImage(file.absoluteFilePath());
+	// 	_logo = new QImage(img.scaled(painter.device()->width(),painter.device()->height(),Qt::KeepAspectRatio));
+	// }
 	
 	const int w=painter.device()->width();
 	const int h=painter.device()->height();
@@ -232,7 +244,7 @@ void MainWindowTouch::print()
 	std::cout<<w<<std::endl;
 	std::cout<<h<<std::endl;
 
-	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio);
+	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 	painter.drawImage(QPoint((w-imgTmp.width())/2,(h-imgTmp.height())/2),imgTmp);
 	painter.drawImage(QPoint(0,0),*_logo);

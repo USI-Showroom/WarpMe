@@ -12,6 +12,7 @@
 #include <QBuffer>
 #include "smtpclient.h"
 #include "mimetext.h"
+#include "mimehtml.h"
 #include "mimeattachment.h"
 
 
@@ -46,12 +47,15 @@ void MailManager::sendMail()
 {
     MimeMessage message;
 
-    message.setSender(new EmailAddress(email, "Usi @ CeBIT"));
+    message.setSender(new EmailAddress(email, "Orientati @ USI"));
     message.addRecipient(new EmailAddress(_ui->email->text(), _ui->email->text()));
-    message.setSubject("Nice deformed image");
+    message.setSubject("WarpMe - La tua foto ad Orientati 2017");
 
-    MimeText text;
-    text.setText("Hi,\nThis is your image from Usi @ CeBIT.\nVisit us at www.usi.ch.\n");
+    MimeHtml text;
+	text.setHtml("Wow, bella foto!</br>"
+		"Grazie per aver utilizzato l'applicazione WarpMe ad <a href=\"http://www.orientati.ch/\">Orientati 2017</a></br>"
+		"Tieniti informato sulle Scienze Informatiche all'USI - Universit&agrave; della Svizzera Italiana sul sito <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
+		"Speriamo di rivederti presto :)</br></br>");
     message.addPart(&text);
 
 

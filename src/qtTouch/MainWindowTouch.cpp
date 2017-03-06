@@ -248,7 +248,7 @@ void MainWindowTouch::print()
 	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 	painter.drawImage(QPoint((w-imgTmp.width())/2,(h-imgTmp.height())/2),imgTmp);
-	painter.drawImage(QPoint(0,0),*_logo);
+	//painter.drawImage(QPoint(0,0),*_logo);
 	painter.end();
 	
 }

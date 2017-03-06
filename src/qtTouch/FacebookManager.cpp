@@ -74,8 +74,8 @@ void FacebookManager::postPicture()
     //Put the access token and use
     // /v2.8/me/albums to get album id
 
-    static const QString accessToken = "EAAOFZCzlH70gBAMUZCpXW6MHjMfE6rZAwOKpuFY4GGG9X3bJMzdseK2AgjlobuzNPHZAogrEvFLIExDWgmxsJfPXEnJG65AXbKooMjYoqI6RLDDLOTrMOF9xF1lTWXaxV6qlrA8ZBwM1XZBWAznlfqp9QyOhDorEwZD";
-    static const QString albumId = "1880749552144710"; 
+    static const QString accessToken = "EAAOFZCzlH70gBAIT357HziaPUmnZCTJ0D3CF5WbSpL4mQKSUuZCZAA4794jCPDFAoYe6ne4knxZBGa7mvg7n3smX3TnVN2hNL9aVUuT8iqlTGpLOhgsE2RK6C2tvZCkiYQ8jCP0iaWVti61eH71joS6T9CLPt0MLJ0uAfIEqC6VwZDZD";
+    static const QString albumId = "114495892412591"; 
 
     const QUuid uuid;
     const QString boundary="Boundary-"+uuid.toString();

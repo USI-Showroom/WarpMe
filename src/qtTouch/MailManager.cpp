@@ -47,15 +47,25 @@ void MailManager::sendMail()
 {
     MimeMessage message;
 
-    message.setSender(new EmailAddress(email, "Orientati @ USI"));
+    message.setSender(new EmailAddress(email, "USI @ CeBIT"));
     message.addRecipient(new EmailAddress(_ui->email->text(), _ui->email->text()));
-    message.setSubject("WarpMe - La tua foto ad Orientati 2017");
+    message.setSubject("WarpMe – Your picture at CeBIT 2017");
 
     MimeHtml text;
-	text.setHtml("Wow, bella foto!</br>"
-		"Grazie per aver utilizzato l'applicazione WarpMe ad <a href=\"http://www.orientati.ch/\">Orientati 2017</a></br>"
-		"Tieniti informato sulle Scienze Informatiche all'USI - Universit&agrave; della Svizzera Italiana sul sito <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
-		"Speriamo di rivederti presto :)</br></br>");
+	text.setHtml("Wow, amazing picture!</br>"
+		"Thank you for using WarpMe at CeBIT 2017.</br>"
+		"Learn how to shape your future with Informtaics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
+		"We hope to see you soon :)</br></br></br>"
+
+        "Faculty of Informatics</br>"
+        "Universit&agrave; della Svizzera italiana</br>"
+        "Via Giuseppe Buffi 13</br>"
+        "CH-6900 Lugano</br>"
+        "Switzerland</br>"
+        "+41 58 666 46 90</br>"
+        "<a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a></br></br>"
+        "ONLINE APPLICATION: <a href=\"https://iscrizione.lu.usi.ch/intro.aspx?lng=en\">application.lu.usi.ch</a></br></br></br>"
+        );
     message.addPart(&text);
 
 
@@ -65,7 +75,7 @@ void MailManager::sendMail()
     _img.save(&buffer, "PNG");
 
 
-    MimeAttachment attachment(byteArray,"image.png");
+    MimeAttachment attachment(byteArray,"picture.png");
     attachment.setContentType("image/png");
     message.addPart(&attachment);
 

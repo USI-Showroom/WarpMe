@@ -60,7 +60,7 @@ void FacebookManager::replyFinished(QNetworkReply *reply)
 
 void FacebookManager::postPicture()
 {
-    //https://developers.facebook.com/apps
+    // https://developers.facebook.com/apps
     // add other accounts
 
     // https://developers.facebook.com/tools/explorer/
@@ -74,8 +74,8 @@ void FacebookManager::postPicture()
     //Put the access token and use
     // /v2.8/me/albums to get album id
 
-    static const QString accessToken = "EAAOFZCzlH70gBAIT357HziaPUmnZCTJ0D3CF5WbSpL4mQKSUuZCZAA4794jCPDFAoYe6ne4knxZBGa7mvg7n3smX3TnVN2hNL9aVUuT8iqlTGpLOhgsE2RK6C2tvZCkiYQ8jCP0iaWVti61eH71joS6T9CLPt0MLJ0uAfIEqC6VwZDZD";
-    static const QString albumId = "114495892412591"; 
+    static const QString accessToken = "EAAOFZCzlH70gBAFfczEZCte5na0ZCRhyk7K9EmYEEjaitv38J6tnGCCGjfXZA7CXQ6D9GYmV8AtI0bK1ImpZAfSx2RUd5XRqz4gQSvZAuQuGzy2j0OC9ZB8kBq3NEMwri4oIJVY8Lg0fA3ZA68J4aDPzetKYXTYsa07ZAPHIjDQTZAIwZDZD";
+    static const QString albumId = "1254221368001696"; 
 
     const QUuid uuid;
     const QString boundary="Boundary-"+uuid.toString();

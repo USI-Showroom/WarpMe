@@ -57,7 +57,7 @@
       </font>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Arial'; font-size:14pt; color:#808080;&quot;&gt;by clicking, I agree to the publication of this picture on the page fb.me/[nome pagina]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Arial'; font-size:14pt; color:#808080;&quot;&gt;by clicking, I agree to the publication of this picture on the page fb.me/usiwarpme&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>

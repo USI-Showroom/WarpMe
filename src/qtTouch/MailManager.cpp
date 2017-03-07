@@ -54,7 +54,7 @@ void MailManager::sendMail()
     MimeHtml text;
 	text.setHtml("Wow, amazing picture!</br>"
 		"Thank you for using WarpMe at CeBIT 2017.</br>"
-		"Learn how to shape your future with Informtaics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
+		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
 		"We hope to see you soon :)</br></br></br>"
 
         "Faculty of Informatics</br>"

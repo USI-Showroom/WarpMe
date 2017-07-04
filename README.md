@@ -50,3 +50,10 @@ Use cmake to generate make files (on unix), xcode project (on mac), or visual st
 * In Visual Studio right click on the project "barycentricMapping" within the solution, and select "set as startup project"
 * Press the play button to compile and run
 * If it complains about missing dll's, open the bin/Debug or bin/Release folder and copy all the necessary dll's from QT_PATH/bin (e.g., C:\\Qt\\5.7\\msvc2015\\bin).
+
+# Run @ USI #
+
+* Turn the screen in portrait mode (buttons on the bottom)
+* Attach the webcam on the velcro (right)
+* Plug the printer
+* Use the user warpme, and run the shortcut on desktop

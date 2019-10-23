@@ -22,13 +22,15 @@
 #include <fstream>
 #include <qopengl.h>
 #include <cassert>
+#ifdef TOUCH_SCREEN_MODE
 #include "PaperConstants.hpp"
+#endif
 
 MainView::MainView(QWidget *parent)
-: super(parent), 
+: super(parent),
 _shader(this), _colorShader(this), _circleShader(this),
 _grid(500,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
-{ 
+{
     _boundayPoly.resize(4);
     _drawForPrinting = false;
 
@@ -106,6 +108,8 @@ bool MainView::event(QEvent *e)
     }
 }
 
+#endif
+
 int MainView::getVertex(const QVector2D &pos)
 {
     for(int i=0;i<_targetPoly.size();++i)
@@ -120,7 +124,7 @@ int MainView::getVertex(const QVector2D &pos)
     return -1;
 }
 
-#endif
+
 
 MainView::~MainView()
 {
@@ -475,7 +479,7 @@ void MainView::mouseMoveEvent(QMouseEvent *e)
 }
 
 void MainView::mouseReleaseEvent(QMouseEvent *e)
-{ 
+{
 #ifndef TOUCH_SCREEN_MODE
     if(_morphMode)
     {
@@ -596,7 +600,7 @@ void MainView::paintGL()
                 glVertex2f(currentPoly[i].x(),currentPoly[i].y());
             }
 
-            glEnd();  
+            glEnd();
         }
         _circleShader.release();
     }

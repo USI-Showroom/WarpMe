@@ -9,6 +9,7 @@
 #define REGULAR_GRID_HPP__
 
 #include <vector>
+#include <QVector2D>
 #include <QtOpenGL>
 
 class Grid
@@ -37,6 +38,6 @@ private:
     int _stepX, _stepY;
     std::vector<float> _vertices;
     std::vector<GLuint> _indices;
-    
+
 };
 #endif //REGULAR_GRID_HPP__

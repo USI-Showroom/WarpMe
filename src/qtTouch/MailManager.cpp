@@ -16,16 +16,16 @@
 #include "mimeattachment.h"
 
 
-static const char* email="usi.warpme@gmail.com";
+static const char* email="warpme@usi.ch";
 
 MailManager::MailManager(const QImage &img, QWidget *parent)
 :QDialog(parent), _ui(new Ui::MailManager), _img(img)
 {
     _ui->setupUi(this);
 
-    _client = new SmtpClient("smtp.gmail.com", 465, SmtpClient::SslConnection);
+    _client = new SmtpClient("outlook.office365.com", 587, SmtpClient::TlsConnection);
     _client->setUser(email);
-    _client->setPassword("Aa1235678");
+    _client->setPassword("XXXXXXXXXX"); //TODO change with actual
 
     _ui->email->setFocus();
 
@@ -47,24 +47,22 @@ void MailManager::sendMail()
 {
     MimeMessage message;
 
-    message.setSender(new EmailAddress(email, "USI @ CeBIT"));
+    message.setSender(new EmailAddress(email, "WarpMe - USI"));
     message.addRecipient(new EmailAddress(_ui->email->text(), _ui->email->text()));
-    message.setSubject("WarpMe – Your picture at CeBIT 2017");
+    message.setSubject("WarpMe – Your picture");
 
     MimeHtml text;
 	text.setHtml("Wow, amazing picture!</br>"
-		"Thank you for using WarpMe at CeBIT 2017.</br>"
+		"Thank you for using WarpMe.</br>"
 		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
 		"We hope to see you soon :)</br></br></br>"
 
         "Faculty of Informatics</br>"
-        "Universit&agrave; della Svizzera italiana</br>"
+        "Universit&agrave; della Svizzera Italiana</br>"
         "Via Giuseppe Buffi 13</br>"
-        "CH-6900 Lugano</br>"
-        "Switzerland</br>"
-        "+41 58 666 46 90</br>"
-        "<a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a></br></br>"
-        "ONLINE APPLICATION: <a href=\"https://iscrizione.lu.usi.ch/intro.aspx?lng=en\">application.lu.usi.ch</a></br></br></br>"
+        "6900 Lugano, Switzerland</br>"
+        "tel +41 58 666 46 90</br>"
+        "email <a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a></br></br>"
         );
     message.addPart(&text);
 

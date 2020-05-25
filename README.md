@@ -22,10 +22,11 @@ Use your favorite package manager (e.g. yum, apt-get, etc) to install the three 
 * Add OpenCV to PATH: `echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc` (optional)
  
 ### Windows
-* Install Visual Studio (the express or community version are free) to obtain the C++ compiler. Use the advanced installation and, under languages, select visual C++
+* Install Visual Studio (the community version is free) to obtain the C++ compiler. Select "Desktop development"
 * Download and install cmake from its [official website](https://cmake.org/download/)
 * Download Qt5.* from the [official website](https://www.qt.io/download/) and install in C:\\. Careful: install the 32bit version compatible with your C++ compiler
 * Set the enviromement variable QT_PATH to the installation of Qt (e.g. C:\\Qt\\5.7\\msvc2015)
+* Download opencv from their [Sourceforge page](https://sourceforge.net/projects/opencvlibrary/)
 
 
 ## Compiling
@@ -42,8 +43,9 @@ Use cmake to generate a makefile (on Linux and Mac), or a visual studio project 
 * Open the cmake gui
 * Under "Where is the source code", select the root folder of the project
 * Under "Where to build the binaries" select the bin folder in the root directory
-* Click configure and choose you version of Visual Studio
-* Click generate to generate the Visual Studio Solution
+* Click "Configure" and choose your version of Visual Studio
+* Tick the `TOUCH_SCREEN_MODE` checkbox to enable touch mode
+* Click "Generate" to generate the Visual Studio Solution
 * In the bin folder open "barycentricMapping.sln"
 * In Visual Studio right click on the project "barycentricMapping" within the solution, and select "Set as startup project"
 * Press the play button to compile and run

@@ -158,8 +158,8 @@ CameraCapture::CameraCapture(QObject *parent)
         if(!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
             std::cerr<<"unable to load eyes cascade"<<std::endl; // load eye classifiers
 
-        _videoCapture.set(CV_CAP_PROP_FRAME_WIDTH,2304/1.1);
-        _videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT,1296/1.1);
+        _videoCapture.set(CAP_PROP_FRAME_WIDTH,2304/1.1);
+        _videoCapture.set(CAP_PROP_FRAME_HEIGHT,1296/1.1);
 
 // _videoCapture.set(CV_CAP_PROP_FPS,1);
 // _videoCapture.set(CV_CAP_PROP_BRIGHTNESS,1296);
@@ -188,7 +188,7 @@ void CameraCapture::run()
 
 		QRectF rect;// = detectFace(frame);
 
-		cv::cvtColor(frame, rgbFrame, CV_BGR2RGB);
+		cv::cvtColor(frame, rgbFrame, COLOR_BGR2RGB);
         emit imageReady(QImage((uchar*)rgbFrame.data, rgbFrame.cols, rgbFrame.rows, rgbFrame.step, QImage::Format_RGB888),rect);
     }
 }
@@ -197,15 +197,15 @@ void CameraCapture::capture(QImage &out)
 	cv::Mat frame;
 
 
-	_videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 2304);
-	_videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 1296);
+	_videoCapture.set(CAP_PROP_FRAME_WIDTH, 2304);
+	_videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1296);
 
 	while(frame.empty())
 		_videoCapture >> frame;
 
 
-	_videoCapture.set(CV_CAP_PROP_FRAME_WIDTH, 2304 / 2);
-	_videoCapture.set(CV_CAP_PROP_FRAME_HEIGHT, 1296 / 2);
+	_videoCapture.set(CAP_PROP_FRAME_WIDTH, 2304 / 2);
+	_videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1296 / 2);
 
 	QImage img((uchar*)frame.data, frame.cols, frame.rows, frame.step, QImage::Format_RGB888);
 	

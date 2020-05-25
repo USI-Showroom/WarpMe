@@ -1,2 +1,15 @@
+# Build output
 bin/
 *.sublime-workspace
+
+# LaTeX
+*.log
+*.synctex.gz
+*.aux
+*.toc
+*.out
+
+# System
+Thumbs.db
+desktop.ini
+.DS_Store

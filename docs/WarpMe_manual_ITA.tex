@@ -35,7 +35,7 @@
 		
 		- webcam Logitech HD Pro C920
 		
-		- stampante Canon Selphy\\
+		- stampante Canon Selphy CP1200\\
 		
 		e dai seguenti cavi:
 		
@@ -86,11 +86,11 @@
 	\subsection{Avvio}
 	
 	\begin{enumerate}		
-		\item Accendere l'interruttore principale dello schermo, posizionato vicino al connettore di alimentazione
+		\item Posizionare su 1 l'interruttore principale dello schermo, posizionato sul lato destro vicino al connettore di alimentazione
 		\item Premere il pulsante di accensione del NUC
-		\item Premere per qualche secondo il tasto di accensione della stampante
-		\item Quando si presenta la schermata di blocco di windows, trascinare l'immagine verso l'alto e inserire la password \texttt{usi-warpme} con l'aiuto della tastiera a schermo
-		\item Il software dovrebbe avviarsi automaticamente. Qualora non fosse il caso, toccare due volte l'icona \texttt{WarpMe} sul Desktop
+		\item Premere per qualche secondo il tasto \texttt{On} della stampante
+		\item Quando si presenta la schermata di blocco di Windows, trascinare l'immagine verso l'alto e inserire la password \texttt{usi-warpme} con l'aiuto della tastiera a schermo
+		\item Il software dovrebbe avviarsi automaticamente, mostrando un volto grigio. Qualora non fosse il caso, toccare due volte l'icona \texttt{WarpMe} sul Desktop
 	\end{enumerate}	
 		
 		
@@ -99,36 +99,51 @@
 
 	\subsection{Scattare una foto}
 
-		//TODO scattare foto e deformare
+		Dalla schermata principale del software, toccare l'icona della fotocamera \includegraphics[width=1cm]{../src/resource/icons/camera.png} e posizionare il volto all'interno dell'area arancione
+		
+		Una volta scattata la foto, deformarla a piacimento trascinando i punti arancioni sui bordi.        
 	
 	
 	\subsection{Esportazione}
 	
-		//TODO stampare o email
+		Per stampare la foto, toccare l'icona di stampa \includegraphics[width=1cm]{../src/resource/icons/print.png}.
+		
+		Per ricevere la foto per email, toccare l'icona email \includegraphics[width=1cm]{../src/resource/icons/mail.png}, inserire il proprio indirizzo email e toccare \includegraphics[width=1cm]{../src/resource/icons/ok.png} per inviare.
 		
 	
 	
 \section{Spegnimento}
 	
-		//TODO spegnimento
+		\begin{enumerate}
+			\item Premere brevemente il tasto di accensione del NUC
+			\item Attendere e verificare che si sia spento completamente
+			\item Posizionare su 0 l'interruttore dello schermo (lato destro)
+			\item Spegnere la stampante premendo il tasto \texttt{On}
+		\end{enumerate}
 	
 	
 	
 \section{Manutenzione}
 
-	\subsection{Carta stampante}
+	\subsection{Consumabili}
 	
-		//TODO refill carta stampante, ref per ricambi
+		Riferimento set carta e inchiostro: Canon KC-36IP.
+		
+
+	\subsection{Carta stampante}		
+		
+		Per ricaricare il vassoio della carta, estrarlo dalla stampante e inserire la carta con la faccia lucida in alto e i bordi rettangolari in fondo.
 		
 		
 	\subsection{Inchiostro stampante}
-	
-		//TODO cambio cartuccia stampante, ref per ricambi
+		
+		Per sostituire la cartuccia, aprire lo sportello collocato sul lato destro della stampante, estrarre la cartuccia usata sollevando il gancio marrone e inserire delicatamente quella nuova, con l'etichetta verso l'alto. Smaltire in maniera appropriata le vecchie cartuccie.
+		
 		
 		
 \section{Codice sorgente}
 
-	Il codice sorgente si trova qui: \url{https://bitbucket.org/teseoch/image-morphing/}.
+	Il codice sorgente dell'applicazione, assieme alle istruzioni per compilarla, si trova qui: \url{https://github.com/USI-Showroom/WarpMe}.
 		
 	
 \end{document}

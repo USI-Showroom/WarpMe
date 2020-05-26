@@ -1,6 +1,5 @@
 # Build output
 bin/
-*.sublime-workspace
 
 # LaTeX
 *.log
@@ -8,6 +7,12 @@ bin/
 *.aux
 *.toc
 *.out
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
 
 # System
 Thumbs.db

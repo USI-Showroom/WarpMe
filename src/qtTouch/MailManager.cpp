@@ -23,9 +23,9 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
 {
     _ui->setupUi(this);
 
-    _client = new SmtpClient("outlook.office365.com", 587, SmtpClient::TlsConnection);
+    _client = new SmtpClient("mail.usi.ch", 587, SmtpClient::TlsConnection);
     _client->setUser(email);
-    _client->setPassword("XXXXXXXXXX"); //TODO change with actual
+    _client->setPassword("tasagef4");
 
     _ui->email->setFocus();
 

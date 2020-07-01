@@ -8,31 +8,33 @@ You need:
 * C++ compiler
 * cmake
 * Qt5
-* OpenCV (optional)
+* OpenCV
 
 ### Linux
 * `sudo apt install cmake`
 * `sudo apt install qt5-default`
-* Download opencv from their [Sourceforge page](https://sourceforge.net/projects/opencvlibrary/)
+* Download OpenCV from their [Sourceforge page](https://sourceforge.net/projects/opencvlibrary/)
 
 ### Mac
 * Install XCode from the Apple Store
 * Install [homebrew](https://brew.sh/)
 * Install cmake with homebrew: `brew install cmake`
 * Install Qt5 with homebrew: `brew install qt`
-* Install opencv with homebrew: `brew install opencv` (optional)
-* Add OpenCV to PATH: `echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc` (optional)
+* Install OpenCV with homebrew: `brew install opencv`
+* Add Qt to PATH: `echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.bashrc` or `echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc` depending on your shell
  
 ### Windows x64
 * Install Visual Studio (the community version is free) to obtain the C++ compiler. Select "Desktop development"
 * Download and install cmake from its [official website](https://cmake.org/download/)
-* Download Qt5.* from the [official website](https://www.qt.io/download/) and install in `C:\`
-* Set the enviromement variable `QT_PATH` to the installation of Qt (e.g. `C:\Qt\5.7\msvc2015_64`)
-* Download opencv from their [Sourceforge page](https://sourceforge.net/projects/opencvlibrary/) and extract in `C:\`
+* Download Qt5 from the [official website](https://www.qt.io/download/). Choose the Open Source version, install it in `C:\` and be 
+sure to check the OpenSSL toolkit under "Developer and Designer Tools"
+* Download OpenCV from their [Sourceforge page](https://sourceforge.net/projects/opencvlibrary/) and extract in `C:\`
+* Set the enviromement variable `QT_PATH` to the installation of Qt (e.g. `C:\Qt\5.15.0\msvc2019_64`)
+* Add the Qt, OpenSSL and OpenCV bin folders (e.g. `C:\Qt\5.15.0\msvc2019_64\bin`, `C:\Qt\Tools\OpenSSL\Win_x64\bin` and `C:\opencv\build\x64\vc15\bin`) to PATH and reboot your machine
 
 
 ## Compiling
-Use cmake to generate a makefile (on Linux and Mac), or a visual studio project (on Windows).
+Use cmake to generate a makefile (on Linux and Mac), or a Visual Studio project (on Windows).
 
 ### Linux/Mac
 * `mkdir bin`
@@ -47,13 +49,13 @@ Use cmake to generate a makefile (on Linux and Mac), or a visual studio project 
 * Under "Where to build the binaries" select the bin folder in the root directory
 * Click "Configure" and choose your version of Visual Studio
 * Tick the `TOUCH_SCREEN_MODE` checkbox to enable touch mode
-* Click "Generate" to generate the Visual Studio Solution
+* Click "Generate" until there are no more red lines to generate the Visual Studio Solution
 * Click "Open Project" to open it
 * In Visual Studio, choose "Release" instead of "Debug"
 * Press F7 to compile
 * Run `bin\Release\BarycentricMapping.exe` or click the green play button
 
-Note: if it complains about missing DLLs, open the `bin\Release` folder and copy all the necessary DLLs from `QT_PATH\bin` (e.g. `C:\Qt\5.7\msvc2015_64\bin`)
+Note: if it complains about missing DLLs, check that you added the correct folders to PATH
 
 
 ## Run @ USI

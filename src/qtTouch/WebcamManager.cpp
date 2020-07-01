@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 #include <QPainter>
+#include <QPainterPath>
 #include <iostream>
 #include <math.h>
 #include <QProcess>

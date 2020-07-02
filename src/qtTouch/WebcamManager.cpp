@@ -150,17 +150,20 @@ QRectF CameraCapture::detectFace(Mat &frame) {
 CameraCapture::CameraCapture(QObject *parent)
 :QThread(parent), _started(false), _center(0,0)
 {
+    _videoCapture = VideoCapture(0);
+    
+    if (!_videoCapture.isOpened()) {
+        std::cerr<<"unable to open video stream"<<std::endl;
+        std::exit(EXIT_FAILURE);
+    }
 
+    if(!_faceCascade.load("../src/resource/opencv/haarcascade_frontalface_alt.xml"))
+        std::cerr<<"unable to load face cascade"<<std::endl; // load face classifiers
+    if(!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
+        std::cerr<<"unable to load eyes cascade"<<std::endl; // load eye classifiers
 
-    if(_videoCapture.open(0))
-    {
-        if(!_faceCascade.load("../src/resource/opencv/haarcascade_frontalface_alt.xml"))
-            std::cerr<<"unable to load face cascade"<<std::endl; // load face classifiers
-        if(!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
-            std::cerr<<"unable to load eyes cascade"<<std::endl; // load eye classifiers
-
-        _videoCapture.set(CAP_PROP_FRAME_WIDTH,2304/1.1);
-        _videoCapture.set(CAP_PROP_FRAME_HEIGHT,1296/1.1);
+    _videoCapture.set(CAP_PROP_FRAME_WIDTH,2304/1.1);
+    _videoCapture.set(CAP_PROP_FRAME_HEIGHT,1296/1.1);
 
 // _videoCapture.set(CV_CAP_PROP_FPS,1);
 // _videoCapture.set(CV_CAP_PROP_BRIGHTNESS,1296);
@@ -170,8 +173,7 @@ CameraCapture::CameraCapture(QObject *parent)
 // _videoCapture.set(CV_CAP_PROP_GAIN,1296);
 // _videoCapture.set(CV_CAP_PROP_EXPOSURE,2);
 
-        _started = true;
-    }
+    _started = true;
 }
 
 void CameraCapture::run()

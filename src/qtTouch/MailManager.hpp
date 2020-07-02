@@ -35,7 +35,6 @@ private slots:
 
 private:
 	Ui::MailManager* _ui;
-	SmtpClient *_client;
 	const QImage &_img;
 	bool _nextUpper;
 };

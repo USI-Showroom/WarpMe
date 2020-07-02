@@ -17,15 +17,16 @@
 
 
 static const char* email="warpme@usi.ch";
+SmtpClient client("mail.usi.ch", 587, SmtpClient::TlsConnection);
 
 MailManager::MailManager(const QImage &img, QWidget *parent)
 :QDialog(parent), _ui(new Ui::MailManager), _img(img)
 {
     _ui->setupUi(this);
 
-    _client = new SmtpClient("mail.usi.ch", 587, SmtpClient::TlsConnection);
-    _client->setUser(email);
-    _client->setPassword("tasagef4");
+    client.setUser(email);
+    client.setPassword("tasagef4");
+    client.setAuthMethod(SmtpClient::AuthLogin);
 
     _ui->email->setFocus();
 
@@ -52,17 +53,17 @@ void MailManager::sendMail()
     message.setSubject("WarpMe – Your picture");
 
     MimeHtml text;
-	text.setHtml("Wow, amazing picture!</br>"
-		"Thank you for using WarpMe.</br>"
-		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a></br></br>"
-		"We hope to see you soon :)</br></br></br>"
+	text.setHtml("Wow, amazing picture!<br>"
+		"Thank you for using WarpMe.<br>"
+		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a><br><br>"
+		"We hope to see you soon :)<br><br><br>"
 
-        "Faculty of Informatics</br>"
-        "Universit&agrave; della Svizzera Italiana</br>"
-        "Via Giuseppe Buffi 13</br>"
-        "6900 Lugano, Switzerland</br>"
-        "tel +41 58 666 46 90</br>"
-        "email <a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a></br></br>"
+        "Faculty of Informatics<br>"
+        "Universit&agrave; della Svizzera Italiana<br>"
+        "Via Giuseppe Buffi 13<br>"
+        "6900 Lugano, Switzerland<br>"
+        "tel +41 58 666 46 90<br>"
+        "email <a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a><br><br>"
         );
     message.addPart(&text);
 
@@ -78,17 +79,29 @@ void MailManager::sendMail()
     message.addPart(&attachment);
 
 
-    _client->connectToHost();
-    _client->login();
-    _client->sendMail(message);
-    _client->quit();
+    if (!client.connectToHost()) {
+        std::cerr<<"unable to connect to host"<<std::endl;
+        accept();
+        return;
+    }
+    if (!client.login()) {
+        std::cerr<<"unable to login to mailserver"<<std::endl;
+        accept();
+        return;
+    }
+    if (!client.sendMail(message)) {
+        std::cerr<<"unable to send message"<<std::endl;
+        accept();
+        return;
+    }
+    client.quit();
 
     accept();
 }
 
 MailManager::~MailManager()
 {
-    delete _client;
+    //asd
 }
 
 

@@ -22,6 +22,7 @@ signals:
 	void keyPressed(QString key);
 	void deletePressed();
 	void shiftPressed();
+	void enterPressed();
 
 private:
 	int _letter;

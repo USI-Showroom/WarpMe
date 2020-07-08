@@ -110,6 +110,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_ui->showHidePoly->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
 	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+	_ui->showHidePoly->setHidden(true);
 
 	_wbm = NULL;
 }

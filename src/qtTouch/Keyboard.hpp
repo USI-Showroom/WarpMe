@@ -19,7 +19,7 @@ signals:
 	void keyPressed(QString key);
 	void deletePressed();
 	void shiftPressed();
-
+	void enterPressed();
 
 private:
 	std::vector<std::vector<KeyboardButton *> > _buttons;

@@ -48,7 +48,7 @@
       <string notr="true">font-size: 30pt;</string>
      </property>
      <property name="text">
-      <string>E-Mail</string>
+      <string>Send by email</string>
      </property>
     </widget>
    </item>
@@ -76,7 +76,7 @@
       <set>Qt::AlignCenter</set>
      </property>
      <property name="placeholderText">
-      <string>insert your email here</string>
+      <string>Insert your email address</string>
      </property>
     </widget>
    </item>

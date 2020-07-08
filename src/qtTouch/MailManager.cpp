@@ -39,6 +39,8 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
     connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
     connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
     connect(_ui->keyboard,SIGNAL(shiftPressed()),this,SLOT(shiftPressed()));
+    connect(_ui->keyboard,SIGNAL(enterPressed()),this,SLOT(enterPressed()));
+    connect(_ui->email,SIGNAL(returnPressed()),this,SLOT(enterPressed()));
 
     _nextUpper=false;
     
@@ -80,17 +82,17 @@ void MailManager::sendMail()
 
 
     if (!client.connectToHost()) {
-        std::cerr<<"unable to connect to host"<<std::endl;
+        std::cerr<<"Unable to connect to host. Check connection or mail settings"<<std::endl;
         accept();
         return;
     }
     if (!client.login()) {
-        std::cerr<<"unable to login to mailserver"<<std::endl;
+        std::cerr<<"Unable to login to mailserver. Check connection or mail settings"<<std::endl;
         accept();
         return;
     }
     if (!client.sendMail(message)) {
-        std::cerr<<"unable to send message"<<std::endl;
+        std::cerr<<"Unable to send message. Invalid address?"<<std::endl;
         accept();
         return;
     }
@@ -101,7 +103,7 @@ void MailManager::sendMail()
 
 MailManager::~MailManager()
 {
-    //asd
+    
 }
 
 
@@ -134,4 +136,11 @@ void MailManager::deletePressed()
 void MailManager::shiftPressed()
 {
     _nextUpper=true;
+}
+
+void MailManager::enterPressed()
+{
+    sendMail();
+
+    _nextUpper=false;
 }

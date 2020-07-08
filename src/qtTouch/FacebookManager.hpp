@@ -38,6 +38,8 @@ private slots:
 	void keyPressed(QString key);
 	void deletePressed();
 	void shiftPressed();
+	void enterPressed();
+
 private:
 	Ui::FacebookManager* _ui;
 	const QImage *_img;

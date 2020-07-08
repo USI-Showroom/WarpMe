@@ -38,6 +38,7 @@ FacebookManager::FacebookManager(QWidget *parent)
     connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
     connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
     connect(_ui->keyboard,SIGNAL(shiftPressed()),this,SLOT(shiftPressed()));
+    connect(_ui->keyboard,SIGNAL(enterPressed()),this,SLOT(enterPressed()));
 
     _nextUpper=false;
 }
@@ -162,4 +163,9 @@ void FacebookManager::deletePressed()
 void FacebookManager::shiftPressed()
 {
     _nextUpper=true;
+}
+
+void FacebookManager::enterPressed()
+{
+    postPicture();
 }

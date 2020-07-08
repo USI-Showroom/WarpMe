@@ -26,7 +26,7 @@ KeyboardButton::KeyboardButton(const int letter, QWidget *parent)
 	}
 	else if(letter==-4) //new line
 	{
-		_char = "\n";
+		_char = "";
 		setText("return");
 		_size = 2;
 	}
@@ -51,12 +51,14 @@ KeyboardButton::~KeyboardButton()
 
 void KeyboardButton::btnClicked(bool checked)
 {
-	if(_letter>=0 || _letter==-1 || _letter==-4) //space or new line
+	if(_letter>=0 || _letter==-1) //letter or space
 		emit keyPressed(_char);
 	else if(_letter==-3)
 		emit deletePressed();
 	else if(_letter==-2)
 		emit shiftPressed();
+	else if(_letter==-4)
+		emit deletePressed();
 }
 
 

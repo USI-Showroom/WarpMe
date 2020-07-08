@@ -28,6 +28,7 @@ Keyboard::Keyboard(QWidget *parent)
 			connect(btn,SIGNAL(keyPressed(QString)),this,SIGNAL(keyPressed(QString)));
 			connect(btn,SIGNAL(deletePressed()),this,SIGNAL(deletePressed()));
 			connect(btn,SIGNAL(shiftPressed()),this,SIGNAL(shiftPressed()));
+			connect(btn,SIGNAL(enterPressed()),this,SIGNAL(enterPressed()));
 
 			_buttons[i][j]=btn;
 			count+=_buttons[i][j]->size();

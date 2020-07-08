@@ -73,8 +73,8 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_printer.setPageSize(size);//QPrinter::A4);
 	_printer.setResolution(PaperConstants::PAGE_DPI);
-	_printer.setCreator("WarpMe @ USI");
-	_printer.setDocName("WarpMe @ USI");
+	_printer.setCreator("WarpMe - USI");
+	_printer.setDocName("WarpMe - USI");
 	_printer.setOrientation(QPrinter::Portrait);
 	_printer.setPageMargins (0,0,0,0,QPrinter::Millimeter);
 	_printer.setFullPage(true);

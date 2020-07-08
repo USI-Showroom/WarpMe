@@ -57,15 +57,14 @@ void MailManager::sendMail()
     MimeHtml text;
 	text.setHtml("Wow, amazing picture!<br>"
 		"Thank you for using WarpMe.<br>"
-		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera Italiana at <a href=\"http://www.inf.usi.ch/\">www.inf.usi.ch</a><br><br>"
+		"Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera italiana at <a href=\"http://inf.usi.ch/\">inf.usi.ch</a><br><br>"
 		"We hope to see you soon :)<br><br><br>"
 
-        "Faculty of Informatics<br>"
-        "Universit&agrave; della Svizzera Italiana<br>"
+        "Study Advisory and Promotion Service<br>"
+        "Universit&agrave; della Svizzera italiana<br>"
         "Via Giuseppe Buffi 13<br>"
-        "6900 Lugano, Switzerland<br>"
-        "tel +41 58 666 46 90<br>"
-        "email <a href=\"mailto:decanato.inf@usi.ch\">decanato.inf@usi.ch</a><br><br>"
+        "Tel. +41 58 666 47 95<br>"
+        "<a href=\"mailto:studyadvisor@usi.ch\">studyadvisor@usi.ch</a><br><br>"
         );
     message.addPart(&text);
 

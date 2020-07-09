@@ -150,7 +150,7 @@ QRectF CameraCapture::detectFace(Mat &frame) {
 CameraCapture::CameraCapture(QObject *parent)
 :QThread(parent), _started(false), _center(0,0)
 {
-    _videoCapture = VideoCapture(0);
+    _videoCapture = VideoCapture(0, cv::CAP_DSHOW);
     
     if (!_videoCapture.isOpened()) {
         std::cerr<<"unable to open video stream"<<std::endl;

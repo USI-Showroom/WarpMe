@@ -71,19 +71,19 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
 
-	_printer.setPageSize(size);//QPrinter::A4);
-	_printer.setResolution(PaperConstants::PAGE_DPI);
+	//_printer.setPageSize(size);//QPrinter::A4);
+	//_printer.setResolution(PaperConstants::PAGE_DPI);
 	_printer.setCreator("WarpMe - USI");
 	_printer.setDocName("WarpMe - USI");
 	_printer.setOrientation(QPrinter::Portrait);
-	_printer.setPageMargins (0,0,0,0,QPrinter::Millimeter);
-	_printer.setFullPage(true);
+	_printer.setPageMargins (1,1,1,1,QPrinter::Millimeter);
+	//_printer.setFullPage(true);
 
 	// _printer.setOutputFileName("test.pdf");
 	// _printer.setOutputFormat(QPrinter::PdfFormat);
 
-	_printer.setOutputFileName("");
-	_printer.setOutputFormat(QPrinter::NativeFormat);
+	//_printer.setOutputFileName("");
+	//_printer.setOutputFormat(QPrinter::NativeFormat);
 
 
 	// const QPageLayout &tmp = _printer.pageLayout();

@@ -24,12 +24,8 @@ class FacebookManager : public QDialog
 	Q_OBJECT
 
 public:
-	FacebookManager(QWidget *parent = 0);
+	FacebookManager(const QImage &img, QWidget *parent = 0);
 	~FacebookManager();
-
-	inline void setImage(const QImage *img) { _img = img; }
-
-	int exec();
 
 private slots:
 	void postPicture();
@@ -42,7 +38,7 @@ private slots:
 
 private:
 	Ui::FacebookManager* _ui;
-	const QImage *_img;
+	const QImage &_img;
 
 	bool _nextUpper;
 };

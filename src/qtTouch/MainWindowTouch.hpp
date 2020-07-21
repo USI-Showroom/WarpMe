@@ -52,7 +52,6 @@ private:
     QImage *_logo;
 
 	WebcamManager *_wbm;
-    FacebookManager _fbm;
 protected:
     void keyReleaseEvent(QKeyEvent * event);
 };

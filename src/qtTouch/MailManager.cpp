@@ -30,11 +30,8 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
 
     _ui->email->setFocus();
 
-    if(parent && parent->isFullScreen())
-        showFullScreen();
-    else
-        resize(parent->size());
-
+    setWindowFlags(Qt::FramelessWindowHint);
+    showFullScreen();
 
     connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
     connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
@@ -43,7 +40,6 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
     connect(_ui->email,SIGNAL(returnPressed()),this,SLOT(enterPressed()));
 
     _nextUpper=false;
-    
 }
 
 void MailManager::sendMail()
@@ -68,17 +64,14 @@ void MailManager::sendMail()
         );
     message.addPart(&text);
 
-
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
     _img.save(&buffer, "PNG");
 
-
     MimeAttachment attachment(byteArray,"picture.png");
     attachment.setContentType("image/png");
     message.addPart(&attachment);
-
 
     if (!client.connectToHost()) {
         std::cerr<<"Unable to connect to host. Check connection or mail settings"<<std::endl;
@@ -111,7 +104,6 @@ void MailManager::keyPressed(QString key)
     if(_nextUpper)
         key=key.toUpper();
     
-
     const int pos=_ui->email->cursorPosition();
     QString tmp=_ui->email->text();
     tmp.insert(pos,key);

@@ -23,16 +23,14 @@
 //static const int LARGE_BTN_SIZE = 50;
 //static const int BTN_OFFSET = 10;
 
-
 static const int SMALL_BTN_SIZE = 80;
 static const int LARGE_BTN_SIZE = 100;
 static const int BTN_OFFSET = 20;
 
 
 MainWindowTouch::MainWindowTouch(QWidget *parent) :
-QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL), _fbm(this)
+QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL)
 {
-
 
 	_ui->setupUi(this);
 // #ifndef DEBUG
@@ -92,8 +90,6 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	// std::cout<<tmp.mode()<<std::endl;
 	// std::cout<<sizeF.width()<<" "<<sizeF.height()<<std::endl;
 
-	
-
 
 	_ui->webcamImg->resize(LARGE_BTN_SIZE,LARGE_BTN_SIZE);
 	_ui->webcamImg->setIconSize(QSize(LARGE_BTN_SIZE,LARGE_BTN_SIZE));
@@ -132,8 +128,6 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 	// _ui->sendEmail->move(size.width() - SMALL_BTN_SIZE * 2 - BTN_OFFSET, size.height() - SMALL_BTN_SIZE-voffset);
 	// _ui->facebookShare->move(size.width() - SMALL_BTN_SIZE, size.height() - SMALL_BTN_SIZE-voffset);
 	// _ui->showHidePoly->move(0, size.height() - SMALL_BTN_SIZE-voffset);
-
-
 
 	const int voffset = 10;
 	const float offset = size.height() / 6.0f;
@@ -175,7 +169,6 @@ void MainWindowTouch::openWebcamPreview()
 	if(!_wbm)
 		_wbm = new WebcamManager(this);
 
-
 	_wbm->startCounter();
 	if(_wbm->exec())
 	{
@@ -213,9 +206,6 @@ void MainWindowTouch::getImage(QImage &img)
 	_ui->mainView->render(&painter);
 	_ui->mainView->setDrawForPrinting(false);
 	_ui->mainView->update();
-	
-
-
 
 	img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
 
@@ -229,9 +219,7 @@ void MainWindowTouch::print()
 	QImage img;
 	getImage(img);
 
-
 	QPainter painter(&_printer);
-
 
 	// if(!_logo)
 	// {
@@ -243,8 +231,8 @@ void MainWindowTouch::print()
 	const int w=painter.device()->width();
 	const int h=painter.device()->height();
 
-	std::cout<<w<<std::endl;
-	std::cout<<h<<std::endl;
+	//std::cout<<w<<std::endl;
+	//std::cout<<h<<std::endl;
 
 	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
@@ -258,7 +246,7 @@ void MainWindowTouch::sendMail()
 {
 	QImage img;
 	getImage(img);
-	MailManager mm(img,this);
+	MailManager mm(img,nullptr);
 	mm.exec();
 }
 
@@ -266,11 +254,9 @@ void MainWindowTouch::facebookShare()
 {
 	QImage img;
 	getImage(img);
-	_fbm.setImage(&img);
-	_fbm.exec();
+	FacebookManager fm(img, nullptr);
+	fm.exec();
 }
-
-
 
 void MainWindowTouch::preserveBoundayToggled(int)
 {

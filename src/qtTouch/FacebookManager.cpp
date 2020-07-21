@@ -21,19 +21,15 @@
 #include <QUuid>
 
 
-FacebookManager::FacebookManager(QWidget *parent)
-:QDialog(parent), _ui(new Ui::FacebookManager)
+FacebookManager::FacebookManager(const QImage &img, QWidget *parent)
+:QDialog(parent), _ui(new Ui::FacebookManager), _img(img)
 {
     _ui->setupUi(this);
 
     _ui->caption->setFocus();
 
-    if(parent && parent->isFullScreen())
-        showFullScreen();
-    else
-        resize(parent->size());
-    
-
+    setWindowFlags(Qt::FramelessWindowHint);
+    showFullScreen();
 
     connect(_ui->keyboard,SIGNAL(keyPressed(QString)),this,SLOT(keyPressed(QString)));
     connect(_ui->keyboard,SIGNAL(deletePressed()),this,SLOT(deletePressed()));
@@ -41,16 +37,6 @@ FacebookManager::FacebookManager(QWidget *parent)
     connect(_ui->keyboard,SIGNAL(enterPressed()),this,SLOT(enterPressed()));
 
     _nextUpper=false;
-}
-
-int FacebookManager::exec()
-{
-	if (parentWidget() && parentWidget()->isFullScreen())
-		showFullScreen();
-	else if(parentWidget())
-		resize(parentWidget()->size());
-
-	return QDialog::exec();
 }
 
 void FacebookManager::replyFinished(QNetworkReply *reply)
@@ -103,8 +89,7 @@ void FacebookManager::postPicture()
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
-    _img->save(&buffer, "PNG");
-
+    _img.save(&buffer, "PNG");
 
     body.append("--"+boundary+"\r\n");
     body.append("Content-Disposition:form-data; name=\"source\"; filename=\"photo.png\"\r\n");
@@ -122,17 +107,14 @@ void FacebookManager::postPicture()
 
 FacebookManager::~FacebookManager()
 {
+
 }
-
-
-
 
 void FacebookManager::keyPressed(QString key)
 {
     if(_nextUpper)
         key=key.toUpper();
     
-
     const int pos=_ui->caption->textCursor().position();
     QString tmp=_ui->caption->toPlainText();
     tmp.insert(pos,key);
@@ -155,7 +137,6 @@ void FacebookManager::deletePressed()
     QTextCursor cursor = _ui->caption->textCursor();
     cursor.setPosition(pos-1);
     _ui->caption->setTextCursor(cursor);
-
 
     _nextUpper=false;
 }

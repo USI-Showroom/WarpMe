@@ -51,7 +51,7 @@ void MailManager::sendMail()
     MimeMessage message;
 
     message.setSender(new EmailAddress(email, "WarpMe - USI"));
-    message.addRecipient(new EmailAddress(_ui->email->text(), _ui->email->text()));
+    message.addRecipient(new EmailAddress(_ui->email->text()));
     message.setSubject("WarpMe – Your picture");
 
     MimeHtml text;

@@ -106,7 +106,6 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 
 	_ui->showHidePoly->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
 	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
-	_ui->showHidePoly->setHidden(true);
 
 	_wbm = NULL;
 }
@@ -261,6 +260,11 @@ void MainWindowTouch::facebookShare()
 void MainWindowTouch::preserveBoundayToggled(int)
 {
 	_ui->mainView->togglePreseveBounday();
+}
+
+void MainWindowTouch::resetImage()
+{
+	_ui->mainView->setTexture(QString::fromStdString(PaperConstants::FACE_IMAGE()));
 }
 
 void MainWindowTouch::keyReleaseEvent(QKeyEvent * event)

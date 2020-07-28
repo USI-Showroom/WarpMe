@@ -45,6 +45,8 @@ private slots:
     void showHidePolyPressed();
     void showHidePolyReleased();
 
+    void resetImage();
+
 
 private:
     Ui::MainWindowTouch* _ui;

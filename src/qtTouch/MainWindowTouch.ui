@@ -266,7 +266,8 @@
    <sender>showHidePoly</sender>
    <signal>pressed()</signal>
    <receiver>MainWindowTouch</receiver>
-   <slot>showHidePolyPressed()</slot>
+   <slot>resetImage()</slot>
+   <!-- <slot>showHidePolyPressed()</slot> -->
    <hints>
     <hint type="sourcelabel">
      <x>259</x>
@@ -278,7 +279,7 @@
     </hint>
    </hints>
   </connection>
-  <connection>
+  <!-- <connection>
    <sender>showHidePoly</sender>
    <signal>released()</signal>
    <receiver>MainWindowTouch</receiver>
@@ -293,6 +294,6 @@
      <y>399</y>
     </hint>
    </hints>
-  </connection>
+  </connection> -->
  </connections>
 </ui>

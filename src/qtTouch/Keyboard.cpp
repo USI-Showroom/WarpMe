@@ -3,86 +3,85 @@
 #include <iostream>
 #include <cmath>
 
-
-
 Keyboard::Keyboard(QWidget *parent)
-: QWidget(parent)
+	: QWidget(parent)
 {
 	buildLayout();
-
 
 	_buttons.resize(_layout.size());
 	_cols.resize(_buttons.size());
 	_spaces.resize(_buttons.size());
 	_maxCols = 0;
-	
+
 	for (int i = 0; i < _layout.size(); ++i)
 	{
 		_buttons[i].resize(_layout[i].size());
-		int count=0;
+		int count = 0;
 
 		for (int j = 0; j < _layout[i].size(); ++j)
 		{
-			KeyboardButton *btn=new KeyboardButton(_layout[i][j],this);
-			
-			connect(btn,SIGNAL(keyPressed(QString)),this,SIGNAL(keyPressed(QString)));
-			connect(btn,SIGNAL(deletePressed()),this,SIGNAL(deletePressed()));
-			connect(btn,SIGNAL(shiftPressed()),this,SIGNAL(shiftPressed()));
-			connect(btn,SIGNAL(enterPressed()),this,SIGNAL(enterPressed()));
+			KeyboardButton *btn = new KeyboardButton(_layout[i][j], this);
 
-			_buttons[i][j]=btn;
-			count+=_buttons[i][j]->size();
+			connect(btn, SIGNAL(keyPressed(QString)), this, SIGNAL(keyPressed(QString)));
+			connect(btn, SIGNAL(deletePressed()), this, SIGNAL(deletePressed()));
+			connect(btn, SIGNAL(shiftPressed()), this, SIGNAL(shiftPressed()));
+			connect(btn, SIGNAL(enterPressed()), this, SIGNAL(enterPressed()));
+
+			_buttons[i][j] = btn;
+			count += _buttons[i][j]->size();
 		}
-		_cols[i]=count;
-		_spaces[i]=_layout[i].size()-1;
+		_cols[i] = count;
+		_spaces[i] = _layout[i].size() - 1;
 
-		if(_maxCols<count){
-			_maxCols=count;
-			_maxSpaces=_spaces[i];
+		if (_maxCols < count)
+		{
+			_maxCols = count;
+			_maxSpaces = _spaces[i];
 		}
 	}
 }
 
 Keyboard::~Keyboard()
 {
-	for (int i = 0; i < _buttons.size(); ++i){
-		for (int j = 0; j < _buttons[i].size(); ++j){
+	for (int i = 0; i < _buttons.size(); ++i)
+	{
+		for (int j = 0; j < _buttons[i].size(); ++j)
+		{
 			delete _buttons[i][j];
 		}
 	}
 }
 
-
-void Keyboard::resizeEvent(QResizeEvent * event)
+void Keyboard::resizeEvent(QResizeEvent *event)
 {
 	const QSize &size = this->size();
 
-	const int w=size.width();
+	const int w = size.width();
 
-	const int space=std::floor(w/_maxCols);
-	const int btnSize=std::floor(space*0.9f);
-	const int offset=std::floor((w - btnSize*_maxCols)/float(_maxSpaces));
+	const int space = std::floor(w / _maxCols);
+	const int btnSize = std::floor(space * 0.9f);
+	const int offset = std::floor((w - btnSize * _maxCols) / float(_maxSpaces));
 
+	setMinimumSize(QSize(size.width(), (btnSize + offset) * _layout.size()));
 
-	setMinimumSize(QSize(size.width(),(btnSize+offset)*_layout.size()));
+	int voffset = 0;
+	for (int i = 0; i < _buttons.size(); ++i)
+	{
+		const float startOffset = (w - btnSize * _cols[i] - _spaces[i] * offset) / 2.0f;
 
-	int voffset=0;
-	for (int i = 0; i < _buttons.size(); ++i){
-		const float startOffset = (w - btnSize*_cols[i]-_spaces[i]*offset)/2.0f;
+		int index = 0;
+		if (i == 4)
+			voffset = offset;
 
-		int index=0;
-		if(i==4) voffset=offset;
-
-		for (int j = 0; j < _buttons[i].size(); ++j){
-			KeyboardButton *btn=_buttons[i][j];
+		for (int j = 0; j < _buttons[i].size(); ++j)
+		{
+			KeyboardButton *btn = _buttons[i][j];
 			btn->resize(btnSize);
-			btn->move(startOffset+btnSize*index+offset*j,(btnSize+offset)*i+voffset);
-			index+=btn->size();
+			btn->move(startOffset + btnSize * index + offset * j, (btnSize + offset) * i + voffset);
+			index += btn->size();
 		}
 	}
 }
-
-
 
 void Keyboard::buildLayout()
 {
@@ -90,7 +89,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('~');
 		tmp.push_back('`');
 		tmp.push_back('-');
@@ -105,7 +104,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('!');
 		tmp.push_back('#');
 		tmp.push_back('$');
@@ -119,8 +118,8 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
-		
+		std::vector<int> &tmp = _layout.back();
+
 		tmp.push_back(',');
 		tmp.push_back(':');
 		tmp.push_back(';');
@@ -134,7 +133,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('1');
 		tmp.push_back('2');
 		tmp.push_back('3');
@@ -149,7 +148,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('q');
 		tmp.push_back('w');
 		tmp.push_back('e');
@@ -164,7 +163,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('a');
 		tmp.push_back('s');
 		tmp.push_back('d');
@@ -176,10 +175,9 @@ void Keyboard::buildLayout()
 		tmp.push_back('l');
 	}
 
-
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back(-2);
 		tmp.push_back('z');
 		tmp.push_back('x');
@@ -193,7 +191,7 @@ void Keyboard::buildLayout()
 
 	{
 		_layout.push_back(std::vector<int>());
-		std::vector<int> &tmp=_layout.back();
+		std::vector<int> &tmp = _layout.back();
 		tmp.push_back('@');
 		tmp.push_back('.');
 		tmp.push_back('<');
@@ -201,5 +199,4 @@ void Keyboard::buildLayout()
 		tmp.push_back(-1);
 		tmp.push_back(-4);
 	}
-
 }

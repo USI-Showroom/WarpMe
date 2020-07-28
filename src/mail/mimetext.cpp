@@ -28,25 +28,23 @@ MimeText::MimeText(const QString &txt)
     this->cEncoding = _8Bit;
 }
 
-MimeText::~MimeText() { }
+MimeText::~MimeText() {}
 
 /* [1] --- */
 
-
 /* [2] Getters and Setters */
 
-void MimeText::setText(const QString & text)
+void MimeText::setText(const QString &text)
 {
     this->text = text;
 }
 
-const QString & MimeText::getText() const
+const QString &MimeText::getText() const
 {
     return text;
 }
 
 /* [2] --- */
-
 
 /* [3] Protected Methods */
 

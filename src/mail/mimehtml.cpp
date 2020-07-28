@@ -29,22 +29,19 @@ MimeHtml::~MimeHtml() {}
 
 /* [1] --- */
 
-
 /* [2] Getters and Setters */
 
-void MimeHtml::setHtml(const QString & html)
+void MimeHtml::setHtml(const QString &html)
 {
     this->text = html;
 }
 
-const QString & MimeHtml::getHtml() const
+const QString &MimeHtml::getHtml() const
 {
     return text;
 }
 
-
 /* [2] --- */
-
 
 /* [3] Protected methods */
 

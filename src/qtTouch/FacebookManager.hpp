@@ -11,9 +11,8 @@
 #include <QObject>
 #include <QDialog>
 
-
-
-namespace Ui {
+namespace Ui
+{
 	class FacebookManager;
 }
 
@@ -37,12 +36,10 @@ private slots:
 	void enterPressed();
 
 private:
-	Ui::FacebookManager* _ui;
+	Ui::FacebookManager *_ui;
 	const QImage &_img;
 
 	bool _nextUpper;
 };
-
-
 
 #endif // __FACEBOOK_MANAGER_HPP__

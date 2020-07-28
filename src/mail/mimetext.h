@@ -26,37 +26,32 @@
 class MimeText : public MimePart
 {
 public:
+  /* [1] Constructors and Destructors */
 
-    /* [1] Constructors and Destructors */
+  MimeText(const QString &text = "");
+  ~MimeText();
 
-    MimeText(const QString &text = "");
-    ~MimeText();
+  /* [1] --- */
 
-    /* [1] --- */
+  /* [2] Getters and Setters*/
 
+  void setText(const QString &text);
 
-    /* [2] Getters and Setters*/
+  const QString &getText() const;
 
-    void setText(const QString & text);
-
-    const QString & getText() const;
-
-    /* [2] --- */
+  /* [2] --- */
 
 protected:
+  /* [3] Protected members */
 
-    /* [3] Protected members */
+  QString text;
+  /* [3] --- */
 
-    QString text;
-    /* [3] --- */
+  /* [4] Protected methods */
 
+  void prepare();
 
-    /* [4] Protected methods */
-
-    void prepare();
-
-    /* [4] --- */
-
+  /* [4] --- */
 };
 
 #endif // MIMETEXT_H

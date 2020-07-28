@@ -11,11 +11,10 @@
 #include <vector>
 #include <QMainWindow>
 
-
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
-
 
 class MainWindow : public QMainWindow
 {
@@ -31,11 +30,8 @@ private slots:
     void on_actionMorph_mode_triggered();
     void on_actionPreserve_bounday_triggered();
 
-
 private:
-    Ui::MainWindow* _ui;
+    Ui::MainWindow *_ui;
 };
-
-
 
 #endif // __MAINWINDOW_HPP__

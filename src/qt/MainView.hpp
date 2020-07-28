@@ -27,18 +27,15 @@
 #include "Grid.hpp"
 #include <map>
 
-
 class MainView : public QOpenGLWidget
 {
 	Q_OBJECT
 private:
-	typedef QOpenGLWidget  super;
+	typedef QOpenGLWidget super;
 
-	
 public:
 	MainView(QWidget *parent = NULL);
 	~MainView();
-
 
 	void mousePressEvent(QMouseEvent *e);
 	void mouseMoveEvent(QMouseEvent *e);
@@ -49,7 +46,12 @@ public:
 
 	void toggleMorphMode();
 	void togglePreseveBounday();
-	inline void clear() { _targetPoly.clear(); _sourcePoly.clear(); update(); }
+	inline void clear()
+	{
+		_targetPoly.clear();
+		_sourcePoly.clear();
+		update();
+	}
 
 	inline bool morphMode() const { return _morphMode; }
 	inline void setDrawForPrinting(const bool val) { _drawForPrinting = val; }
@@ -67,7 +69,7 @@ private:
 
 #ifdef TOUCH_SCREEN_MODE
 	void resetEllipse();
-	bool event(QEvent * e);
+	bool event(QEvent *e);
 #endif
 
 protected:
@@ -81,15 +83,14 @@ protected:
 	}
 #endif
 
-// #ifdef TOUCH_SCREEN_MODE
-// 	void resizeEvent(QResizeEvent * event)
-// 	{
-// 		// makeCurrent();
-// 		// glViewport(0, 0, (GLint)event->size().width(), (GLint)event->size().height());
-// 		QWidget::resizeEvent(event);
-// 	}
-// #endif
-
+	// #ifdef TOUCH_SCREEN_MODE
+	// 	void resizeEvent(QResizeEvent * event)
+	// 	{
+	// 		// makeCurrent();
+	// 		// glViewport(0, 0, (GLint)event->size().width(), (GLint)event->size().height());
+	// 		QWidget::resizeEvent(event);
+	// 	}
+	// #endif
 
 private:
 	QOpenGLShaderProgram _shader, _colorShader, _circleShader;
@@ -101,19 +102,16 @@ private:
 	GLuint _posLoc, _textureLoc;
 	QOpenGLTexture *_texture, *_circleTexture;
 
-
-	
 	std::vector<QVector2D> _sourcePoly;
 	std::vector<QVector2D> _boundayPoly;
 	std::vector<QVector2D> _targetPoly;
 
 	bool _morphMode, _preserveBounday, _drawForPrinting;
 	int _currentIndex;
-	std::map<int,int> _currentIndices;
+	std::map<int, int> _currentIndices;
 	QVector2D _currentPosition;
 
 #ifdef WIN32
 	QOpenGLFunctions_3_0 funs;
 #endif // WIN32
-
 };

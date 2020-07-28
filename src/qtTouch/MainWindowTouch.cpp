@@ -27,15 +27,13 @@ static const int SMALL_BTN_SIZE = 80;
 static const int LARGE_BTN_SIZE = 100;
 static const int BTN_OFFSET = 20;
 
-
-MainWindowTouch::MainWindowTouch(QWidget *parent) :
-QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL)
+MainWindowTouch::MainWindowTouch(QWidget *parent) : QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolution), _logo(NULL)
 {
 
 	_ui->setupUi(this);
-// #ifndef DEBUG
-	    showFullScreen();
-// #endif
+	// #ifndef DEBUG
+	showFullScreen();
+	// #endif
 
 	QList<QPrinterInfo> infos = QPrinterInfo::availablePrinters();
 
@@ -54,7 +52,7 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 			QSizeF page_size = sz.definitionSize();
 			// std::cout<<"page size = "<<sz.name().toStdString()<<" ("<<page_size.width()<<" x "<< page_size.height()<<")"<<std::endl;
 
-			if(fabs(PaperConstants::PAGE_WIDTH() - page_size.width()) < 1e-10 && fabs(PaperConstants::PAGE_HEIGHT() - page_size.height()) < 1e-10)
+			if (fabs(PaperConstants::PAGE_WIDTH() - page_size.width()) < 1e-10 && fabs(PaperConstants::PAGE_HEIGHT() - page_size.height()) < 1e-10)
 			{
 				size = sz;
 				found = true;
@@ -62,19 +60,19 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 		}
 	}
 
-	if(!found) 
+	if (!found)
 	{
-		std::cerr<<"Unable to locate correct paper size"<<std::endl;
+		std::cerr << "Unable to locate correct paper size" << std::endl;
 	}
 
-	std::cout<<"Using "<<_printer.printerName().toStdString()<<" printer"<<std::endl;
+	std::cout << "Using " << _printer.printerName().toStdString() << " printer" << std::endl;
 
 	//_printer.setPageSize(size);//QPrinter::A4);
 	//_printer.setResolution(PaperConstants::PAGE_DPI);
 	_printer.setCreator("WarpMe - USI");
 	_printer.setDocName("WarpMe - USI");
 	_printer.setOrientation(QPrinter::Portrait);
-	_printer.setPageMargins (1,1,1,1,QPrinter::Millimeter);
+	_printer.setPageMargins(1, 1, 1, 1, QPrinter::Millimeter);
 	//_printer.setFullPage(true);
 
 	// _printer.setOutputFileName("test.pdf");
@@ -83,39 +81,36 @@ QMainWindow(parent), _ui(new Ui::MainWindowTouch), _printer(QPrinter::HighResolu
 	//_printer.setOutputFileName("");
 	//_printer.setOutputFormat(QPrinter::NativeFormat);
 
-
 	// const QPageLayout &tmp = _printer.pageLayout();
 	// std::cout<<tmp.pageSize().size(QPageSize::Point).width()<<" "<<tmp.pageSize().size(QPageSize::Point).height()<<std::endl;
 	// std::cout<<size.size(QPageSize::Point).width()<<" "<<size.size(QPageSize::Point).height()<<std::endl;
 	// std::cout<<tmp.mode()<<std::endl;
 	// std::cout<<sizeF.width()<<" "<<sizeF.height()<<std::endl;
 
+	_ui->webcamImg->resize(LARGE_BTN_SIZE, LARGE_BTN_SIZE);
+	_ui->webcamImg->setIconSize(QSize(LARGE_BTN_SIZE, LARGE_BTN_SIZE));
 
-	_ui->webcamImg->resize(LARGE_BTN_SIZE,LARGE_BTN_SIZE);
-	_ui->webcamImg->setIconSize(QSize(LARGE_BTN_SIZE,LARGE_BTN_SIZE));
+	_ui->print->resize(SMALL_BTN_SIZE, SMALL_BTN_SIZE);
+	_ui->print->setIconSize(QSize(SMALL_BTN_SIZE, SMALL_BTN_SIZE));
 
-	_ui->print->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
-	_ui->print->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+	_ui->sendEmail->resize(SMALL_BTN_SIZE, SMALL_BTN_SIZE);
+	_ui->sendEmail->setIconSize(QSize(SMALL_BTN_SIZE, SMALL_BTN_SIZE));
 
-	_ui->sendEmail->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
-	_ui->sendEmail->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
-
-	_ui->facebookShare->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
-	_ui->facebookShare->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+	_ui->facebookShare->resize(SMALL_BTN_SIZE, SMALL_BTN_SIZE);
+	_ui->facebookShare->setIconSize(QSize(SMALL_BTN_SIZE, SMALL_BTN_SIZE));
 	_ui->facebookShare->setHidden(true);
 
-	_ui->showHidePoly->resize(SMALL_BTN_SIZE,SMALL_BTN_SIZE);
-	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE,SMALL_BTN_SIZE));
+	_ui->showHidePoly->resize(SMALL_BTN_SIZE, SMALL_BTN_SIZE);
+	_ui->showHidePoly->setIconSize(QSize(SMALL_BTN_SIZE, SMALL_BTN_SIZE));
 
 	_wbm = NULL;
 }
 
-
-void MainWindowTouch::resizeEvent(QResizeEvent * event)
+void MainWindowTouch::resizeEvent(QResizeEvent *event)
 {
 	const QSize &size = this->size();
 
-	const int h = float(size.width()) / PaperConstants::PAGE_WIDTH()*PaperConstants::PAGE_HEIGHT();
+	const int h = float(size.width()) / PaperConstants::PAGE_WIDTH() * PaperConstants::PAGE_HEIGHT();
 	const int editH = size.height() - h;
 	_ui->mainView->resize(size.width(), h);
 	_ui->mainView->move(0, editH);
@@ -133,20 +128,19 @@ void MainWindowTouch::resizeEvent(QResizeEvent * event)
 
 	_ui->webcamImg->move(size.width() - LARGE_BTN_SIZE - voffset, size.height() / 2 - offset);
 
-	_ui->print->move(		 size.width() - SMALL_BTN_SIZE - voffset, size.height() - SMALL_BTN_SIZE * 3 - 2 * BTN_OFFSET - offset);
-	_ui->sendEmail->move(	 size.width() - SMALL_BTN_SIZE - voffset, size.height() - SMALL_BTN_SIZE * 2 - BTN_OFFSET - offset);
+	_ui->print->move(size.width() - SMALL_BTN_SIZE - voffset, size.height() - SMALL_BTN_SIZE * 3 - 2 * BTN_OFFSET - offset);
+	_ui->sendEmail->move(size.width() - SMALL_BTN_SIZE - voffset, size.height() - SMALL_BTN_SIZE * 2 - BTN_OFFSET - offset);
 	_ui->facebookShare->move(size.width() - SMALL_BTN_SIZE - voffset, size.height() - SMALL_BTN_SIZE - offset);
-	_ui->showHidePoly->move( size.width() - SMALL_BTN_SIZE - voffset, size.height() + SMALL_BTN_SIZE + BTN_OFFSET - offset);
+	_ui->showHidePoly->move(size.width() - SMALL_BTN_SIZE - voffset, size.height() + SMALL_BTN_SIZE + BTN_OFFSET - offset);
 
 	{
-		const int logoH = size.width() / 2000.0f*382.0f;
+		const int logoH = size.width() / 2000.0f * 382.0f;
 		_ui->usi_logo->resize(size.width(), logoH);
 		_ui->usi_logo->move(0, editH - logoH);
 	}
 
 	QWidget::resizeEvent(event);
 }
-
 
 void MainWindowTouch::showHidePolyPressed()
 {
@@ -162,19 +156,17 @@ void MainWindowTouch::showHidePolyReleased()
 	_ui->mainView->update();
 }
 
-
 void MainWindowTouch::openWebcamPreview()
 {
-	if(!_wbm)
+	if (!_wbm)
 		_wbm = new WebcamManager(this);
 
 	_wbm->startCounter();
-	if(_wbm->exec())
+	if (_wbm->exec())
 	{
 		_ui->mainView->setTexture(_wbm->image());
 	}
 }
-
 
 MainWindowTouch::~MainWindowTouch()
 {
@@ -185,31 +177,31 @@ MainWindowTouch::~MainWindowTouch()
 
 void MainWindowTouch::getImage(QImage &img)
 {
-	const float w=_ui->mainView->width();
-	const float h=_ui->mainView->height();
+	const float w = _ui->mainView->width();
+	const float h = _ui->mainView->height();
 
 	float frameW, frameH;
 	PaperConstants::Scale(w, h, frameW, frameH);
 
-	if(!_logo)
+	if (!_logo)
 	{
 		const QFileInfo file(QString::fromStdString(PaperConstants::PRINT_LAYER()));
 		const QImage img = QImage(file.absoluteFilePath());
-		_logo = new QImage(img.scaled(frameW,frameH,Qt::KeepAspectRatio, Qt::SmoothTransformation));
+		_logo = new QImage(img.scaled(frameW, frameH, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	}
 
 	QImage imgTmp(_ui->mainView->size(), QImage::Format_RGB32);
-	
+
 	_ui->mainView->setDrawForPrinting(true);
 	QPainter painter(&imgTmp);
 	_ui->mainView->render(&painter);
 	_ui->mainView->setDrawForPrinting(false);
 	_ui->mainView->update();
 
-	img=imgTmp.copy(QRect((w-frameW)/2,(h-frameH)/2,frameW,frameH));
+	img = imgTmp.copy(QRect((w - frameW) / 2, (h - frameH) / 2, frameW, frameH));
 
 	QPainter p(&img);
-	p.drawImage(QPoint(0,0), *_logo);
+	p.drawImage(QPoint(0, 0), *_logo);
 	p.end();
 }
 
@@ -226,26 +218,25 @@ void MainWindowTouch::print()
 	// 	const QImage img = QImage(file.absoluteFilePath());
 	// 	_logo = new QImage(img.scaled(painter.device()->width(),painter.device()->height(),Qt::KeepAspectRatio));
 	// }
-	
-	const int w=painter.device()->width();
-	const int h=painter.device()->height();
+
+	const int w = painter.device()->width();
+	const int h = painter.device()->height();
 
 	//std::cout<<w<<std::endl;
 	//std::cout<<h<<std::endl;
 
-	QImage imgTmp=img.scaled(w,h,Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	QImage imgTmp = img.scaled(w, h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-	painter.drawImage(QPoint((w-imgTmp.width())/2,(h-imgTmp.height())/2),imgTmp);
+	painter.drawImage(QPoint((w - imgTmp.width()) / 2, (h - imgTmp.height()) / 2), imgTmp);
 	//painter.drawImage(QPoint(0,0),*_logo);
 	painter.end();
-	
 }
 
 void MainWindowTouch::sendMail()
 {
 	QImage img;
 	getImage(img);
-	MailManager mm(img,nullptr);
+	MailManager mm(img, nullptr);
 	mm.exec();
 }
 
@@ -267,9 +258,9 @@ void MainWindowTouch::resetImage()
 	_ui->mainView->setTexture(QString::fromStdString(PaperConstants::FACE_IMAGE()));
 }
 
-void MainWindowTouch::keyReleaseEvent(QKeyEvent * event)
+void MainWindowTouch::keyReleaseEvent(QKeyEvent *event)
 {
-	if(event->key()==Qt::Key_Escape)
+	if (event->key() == Qt::Key_Escape)
 		QApplication::quit();
 	else
 		QWidget::keyReleaseEvent(event);

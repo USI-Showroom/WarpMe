@@ -13,7 +13,7 @@ public:
 	Keyboard(QWidget *parent = NULL);
 	virtual ~Keyboard();
 
-	void resizeEvent(QResizeEvent * event);
+	void resizeEvent(QResizeEvent *event);
 
 signals:
 	void keyPressed(QString key);
@@ -22,8 +22,8 @@ signals:
 	void enterPressed();
 
 private:
-	std::vector<std::vector<KeyboardButton *> > _buttons;
-	std::vector<std::vector<int> > _layout;
+	std::vector<std::vector<KeyboardButton *>> _buttons;
+	std::vector<std::vector<int>> _layout;
 	std::vector<int> _cols;
 	std::vector<int> _spaces;
 	int _maxCols;

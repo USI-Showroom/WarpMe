@@ -25,7 +25,7 @@ QString QuotedPrintable::encode(const QByteArray &input)
     char byte;
     const char hex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    for (int i = 0; i < input.length() ; ++i)
+    for (int i = 0; i < input.length(); ++i)
     {
         byte = input[i];
 
@@ -43,7 +43,6 @@ QString QuotedPrintable::encode(const QByteArray &input)
 
     return output;
 }
-
 
 QByteArray QuotedPrintable::decode(const QString &input)
 {

@@ -29,18 +29,16 @@ class MimeAttachment : public MimeFile
 {
     Q_OBJECT
 public:
-
     /* [1] Constructors and Destructors */
 
-    MimeAttachment(QFile* file);
-    MimeAttachment(const QByteArray& stream, const QString& fileName);
+    MimeAttachment(QFile *file);
+    MimeAttachment(const QByteArray &stream, const QString &fileName);
 
     ~MimeAttachment();
 
     /* [1] --- */
 
 protected:
-
     /* [2] Protected methods */
 
     virtual void prepare();

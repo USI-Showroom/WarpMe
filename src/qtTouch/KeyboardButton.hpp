@@ -3,9 +3,9 @@
 
 #include <QPushButton>
 
-class KeyboardButton : public QPushButton 
+class KeyboardButton : public QPushButton
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	KeyboardButton(const int letter, QWidget *parent = NULL);
@@ -15,7 +15,6 @@ public:
 
 	inline int size() const { return _size; }
 
-	
 private slots:
 	void btnClicked(bool checked = false);
 signals:
@@ -32,8 +31,6 @@ private:
 protected:
 	void mousePressEvent(QMouseEvent *e);
 	void mouseReleaseEvent(QMouseEvent *e);
-
 };
 
 #endif //KEYBOARD_BUTTON_HPP__
-

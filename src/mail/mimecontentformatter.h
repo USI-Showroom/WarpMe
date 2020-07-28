@@ -28,7 +28,7 @@ class MimeContentFormatter : public QObject
 {
     Q_OBJECT
 public:
-    MimeContentFormatter (int max_length = 76);
+    MimeContentFormatter(int max_length = 76);
 
     void setMaxLength(int l);
     int getMaxLength() const;
@@ -37,7 +37,6 @@ public:
 
 protected:
     int max_length;
-
 };
 
 #endif // MIMECONTENTFORMATTER_H

@@ -27,13 +27,12 @@
 #endif
 
 MainView::MainView(QWidget *parent)
-: super(parent),
-_shader(this), _colorShader(this), _circleShader(this),
-_grid(500,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
+    : super(parent),
+      _shader(this), _colorShader(this), _circleShader(this),
+      _grid(500, 1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _currentIndex(-1)
 {
     _boundayPoly.resize(4);
     _drawForPrinting = false;
-
 
 #ifdef TOUCH_SCREEN_MODE
     setAttribute(Qt::WA_AcceptTouchEvents);
@@ -43,67 +42,66 @@ _grid(500,1000), _texture(NULL), _morphMode(false), _preserveBounday(true), _cur
 #ifdef TOUCH_SCREEN_MODE
 void MainView::resetEllipse()
 {
-    const int nPieces=16;
+    const int nPieces = 16;
     _sourcePoly.clear();
 
-    for(int i=nPieces-1;i>=0;--i)
+    for (int i = nPieces - 1; i >= 0; --i)
     {
-        const double t=2*M_PI/(nPieces)*i;
+        const double t = 2 * M_PI / (nPieces)*i;
 
-        _sourcePoly.push_back(QVector2D(0.5*cos(t),0.4+0.5*sin(t)));
+        _sourcePoly.push_back(QVector2D(0.5 * cos(t), 0.4 + 0.5 * sin(t)));
     }
 
-
-    _targetPoly.insert(_targetPoly.begin(),_sourcePoly.begin(), _sourcePoly.end());
+    _targetPoly.insert(_targetPoly.begin(), _sourcePoly.begin(), _sourcePoly.end());
 }
 
 bool MainView::event(QEvent *e)
 {
     switch (e->type())
     {
-        case QEvent::TouchBegin:
-        case QEvent::TouchUpdate:
-        case QEvent::TouchEnd:
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    {
+        QTouchEvent *te = static_cast<QTouchEvent *>(e);
+
+        for (int i = 0; i < te->touchPoints().count(); ++i)
         {
-            QTouchEvent *te = static_cast<QTouchEvent *>(e);
+            QTouchEvent::TouchPoint tp = te->touchPoints()[i];
+            const QPointF qtpos = tp.pos();
+            const QVector2D pos = mouseToOpenGl(qtpos.x(), qtpos.y());
 
-            for (int i = 0; i < te->touchPoints().count(); ++i)
+            switch (tp.state())
             {
-                QTouchEvent::TouchPoint tp = te->touchPoints()[i];
-                const QPointF qtpos = tp.pos();
-                const QVector2D pos = mouseToOpenGl(qtpos.x(),qtpos.y());
-
-                switch (tp.state())
-                {
-                    case Qt::TouchPointPressed:
-                    {
-                        _currentIndices[tp.id()]=getVertex(pos)+1;
-                        break;
-                    }
-                    case Qt::TouchPointReleased:
-                    {
-                        _currentIndices.erase(tp.id());
-                        break;
-                    }
-                    default:
-                    {
-                        const int index = _currentIndices[tp.id()]-1;
-                        if (index >= 0)
-                        {
-                            const QVector2D lastPos = mouseToOpenGl(tp.lastPos().x(),tp.lastPos().y());
-                            _targetPoly[index] += pos-lastPos;
-                        }
-
-                        update();
-
-                        break;
-                    }
-                }
+            case Qt::TouchPointPressed:
+            {
+                _currentIndices[tp.id()] = getVertex(pos) + 1;
+                break;
             }
+            case Qt::TouchPointReleased:
+            {
+                _currentIndices.erase(tp.id());
+                break;
+            }
+            default:
+            {
+                const int index = _currentIndices[tp.id()] - 1;
+                if (index >= 0)
+                {
+                    const QVector2D lastPos = mouseToOpenGl(tp.lastPos().x(), tp.lastPos().y());
+                    _targetPoly[index] += pos - lastPos;
+                }
 
-            return true;
+                update();
+
+                break;
+            }
+            }
         }
-        default:
+
+        return true;
+    }
+    default:
         return QWidget::event(e);
     }
 }
@@ -112,10 +110,10 @@ bool MainView::event(QEvent *e)
 
 int MainView::getVertex(const QVector2D &pos)
 {
-    for(int i=0;i<_targetPoly.size();++i)
+    for (int i = 0; i < _targetPoly.size(); ++i)
     {
         const float dist = pos.distanceToPoint(_targetPoly[i]);
-        if(dist<0.05)
+        if (dist < 0.05)
         {
             return i;
         }
@@ -123,8 +121,6 @@ int MainView::getVertex(const QVector2D &pos)
 
     return -1;
 }
-
-
 
 MainView::~MainView()
 {
@@ -136,7 +132,7 @@ MainView::~MainView()
     funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     funs.glDeleteBuffers(1, &_ibo);
 
-    funs.glBindBuffer(GL_ARRAY_BUFFER,0);
+    funs.glBindBuffer(GL_ARRAY_BUFFER, 0);
     funs.glDeleteBuffers(1, &_vbo);
 #else
     glBindVertexArrayAPPLE(0);
@@ -149,7 +145,7 @@ MainView::~MainView()
     glDeleteBuffers(1, &_vbo);
 #endif
 
-    if(_texture)
+    if (_texture)
     {
         _texture->destroy();
         delete _texture;
@@ -165,37 +161,35 @@ void MainView::toggleMorphMode()
 
     _targetPoly.clear();
 
-    if(_morphMode)
+    if (_morphMode)
     {
-        const int nEdges=_sourcePoly.size();
-        QVector2D prev,tmp;
+        const int nEdges = _sourcePoly.size();
+        QVector2D prev, tmp;
 
-        float totalAngle=0;
+        float totalAngle = 0;
 
-        for(int i=0;i<nEdges;++i)
+        for (int i = 0; i < nEdges; ++i)
         {
-            const int ip1=(i+1)%nEdges;
-            prev=_sourcePoly[(i-1+nEdges)%nEdges];
+            const int ip1 = (i + 1) % nEdges;
+            prev = _sourcePoly[(i - 1 + nEdges) % nEdges];
 
-            const QVector2D &current=_sourcePoly[i];
-            const QVector2D &next=_sourcePoly[ip1];
+            const QVector2D &current = _sourcePoly[i];
+            const QVector2D &next = _sourcePoly[ip1];
 
-            const QVector2D &prevE=current-prev;
-            const QVector2D &nextE=next-current;
+            const QVector2D &prevE = current - prev;
+            const QVector2D &nextE = next - current;
 
-            const float alpha=atan2(prevE.x()*nextE.y()-prevE.y()*nextE.x(), QVector2D::dotProduct(nextE,prevE));
+            const float alpha = atan2(prevE.x() * nextE.y() - prevE.y() * nextE.x(), QVector2D::dotProduct(nextE, prevE));
 
-            totalAngle+=alpha;
+            totalAngle += alpha;
         }
 
-        if(totalAngle>0)
+        if (totalAngle > 0)
         {
             std::reverse(_sourcePoly.begin(), _sourcePoly.end());
         }
 
-
-
-        _targetPoly.insert(_targetPoly.begin(),_sourcePoly.begin(), _sourcePoly.end());
+        _targetPoly.insert(_targetPoly.begin(), _sourcePoly.begin(), _sourcePoly.end());
     }
 
     update();
@@ -211,25 +205,25 @@ void MainView::togglePreseveBounday()
 void MainView::setUniforms()
 {
     GLuint vertLoc = _shader.uniformLocation("nVertices");
-    if(!_morphMode)
+    if (!_morphMode)
     {
-        _shader.setUniformValue(vertLoc,-1);
+        _shader.setUniformValue(vertLoc, -1);
         return;
     }
 
-    _shader.setUniformValue(vertLoc,GLint(_sourcePoly.size()));
+    _shader.setUniformValue(vertLoc, GLint(_sourcePoly.size()));
 
     GLuint sourceLoc = _shader.uniformLocation("source");
-    _shader.setUniformValueArray(sourceLoc,&_sourcePoly[0], _sourcePoly.size());
+    _shader.setUniformValueArray(sourceLoc, &_sourcePoly[0], _sourcePoly.size());
 
     GLuint targetLoc = _shader.uniformLocation("target");
-    _shader.setUniformValueArray(targetLoc,&_targetPoly[0], _targetPoly.size());
+    _shader.setUniformValueArray(targetLoc, &_targetPoly[0], _targetPoly.size());
 
     GLuint boundayLoc = _shader.uniformLocation("bounday");
-    _shader.setUniformValueArray(boundayLoc,&_boundayPoly[0], _boundayPoly.size());
+    _shader.setUniformValueArray(boundayLoc, &_boundayPoly[0], _boundayPoly.size());
 
     GLuint preserveBoundaryLoc = _shader.uniformLocation("preserveBoundary");
-    _shader.setUniformValue(preserveBoundaryLoc,_preserveBounday);
+    _shader.setUniformValue(preserveBoundaryLoc, _preserveBounday);
 
     checkGLError("setUniforms");
 }
@@ -244,13 +238,13 @@ void MainView::setTexture(const QImage &imgIn)
 {
     checkGLError("begin_setTexture");
 
-    if(_texture)
+    if (_texture)
     {
         _texture->destroy();
         delete _texture;
     }
 
-    _morphMode=false;
+    _morphMode = false;
 
     _targetPoly.clear();
     _sourcePoly.clear();
@@ -260,7 +254,7 @@ void MainView::setTexture(const QImage &imgIn)
     _texture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
     _texture->setMagnificationFilter(QOpenGLTexture::Linear);
 
-    _grid.generate(img.width(),img.height(),this->width(),this->height(),_boundayPoly);
+    _grid.generate(img.width(), img.height(), this->width(), this->height(), _boundayPoly);
 
 #ifdef TOUCH_SCREEN_MODE
     resetEllipse();
@@ -295,14 +289,15 @@ void MainView::updateVBO()
     glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     glBufferData(GL_ARRAY_BUFFER, _grid.vertices().size() * sizeof(GLfloat), &_grid.vertices()[0], GL_DYNAMIC_DRAW);
 
-    glVertexAttribPointer(_posLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), 0);
-    glVertexAttribPointer(_textureLoc, 2, GL_FLOAT, GL_FALSE, 4*sizeof(GLfloat), (void *)(2* sizeof(GLfloat)));
-    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glVertexAttribPointer(_posLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+    glVertexAttribPointer(_textureLoc, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 #endif
     checkGLError("end_bufferdata");
 }
 
-void MainView::initializeGL() {
+void MainView::initializeGL()
+{
     printf("Supported GLSL version is %s.\n", (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
     checkGLError("initializeGL");
 
@@ -313,10 +308,10 @@ void MainView::initializeGL() {
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-// glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
-// glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
-// glEnable(GL_LINE_SMOOTH);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+    // glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
+    // glEnable(GL_LINE_SMOOTH);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 #ifdef TOUCH_SCREEN_MODE
     glClearColor(0, 0, 0, 1);
@@ -331,7 +326,6 @@ void MainView::initializeGL() {
         QFileInfo vertFile(":/shaders/shader.vert");
         vertShader.compileSourceFile(vertFile.absoluteFilePath());
 
-
         QOpenGLShader fragShader(QOpenGLShader::Fragment);
         QFileInfo fragFile(":/shaders/shader.frag");
         fragShader.compileSourceFile(fragFile.absoluteFilePath());
@@ -341,8 +335,7 @@ void MainView::initializeGL() {
 
         _shader.link();
 
-
-        _posLoc     = _shader.attributeLocation("posIn");
+        _posLoc = _shader.attributeLocation("posIn");
         _textureLoc = _shader.attributeLocation("textureIn");
     }
 
@@ -350,7 +343,6 @@ void MainView::initializeGL() {
         QOpenGLShader vertShader(QOpenGLShader::Vertex);
         QFileInfo vertFile(":/shaders/circle.vert");
         vertShader.compileSourceFile(vertFile.absoluteFilePath());
-
 
         QOpenGLShader fragShader(QOpenGLShader::Fragment);
         QFileInfo fragFile(":/shaders/circle.frag");
@@ -366,7 +358,6 @@ void MainView::initializeGL() {
         QOpenGLShader vertShader(QOpenGLShader::Vertex);
         QFileInfo vertFile(":/shaders/color.vert");
         vertShader.compileSourceFile(vertFile.absoluteFilePath());
-
 
         QOpenGLShader fragShader(QOpenGLShader::Fragment);
         QFileInfo fragFile(":/shaders/color.frag");
@@ -409,7 +400,6 @@ void MainView::initializeGL() {
     glGenBuffers(1, &_vbo);
     checkGLError("end_ibufferdata");
 
-
 #ifdef TOUCH_SCREEN_MODE
     setTexture(QString::fromStdString(PaperConstants::FACE_IMAGE()));
 #else
@@ -423,9 +413,6 @@ void MainView::initializeGL() {
         _circleTexture->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
         _circleTexture->setMagnificationFilter(QOpenGLTexture::Linear);
     }
-
-
-
 
     checkGLError("begin_ibufferdata_1");
 
@@ -441,18 +428,16 @@ void MainView::initializeGL() {
     checkGLError("end_init");
 }
 
-
-
 QVector2D MainView::mouseToOpenGl(const float xx, const float yy) const
 {
-    const float x = 2.0f*xx/this->width() -1;
-    const float y = 2.0f*(this->height()-yy)/this->height()-1;
-    return QVector2D(x,y);
+    const float x = 2.0f * xx / this->width() - 1;
+    const float y = 2.0f * (this->height() - yy) / this->height() - 1;
+    return QVector2D(x, y);
 }
 
 QVector2D MainView::mouseToOpenGl(QMouseEvent *e) const
 {
-    return mouseToOpenGl(e->x(),e->y());
+    return mouseToOpenGl(e->x(), e->y());
 }
 
 void MainView::mousePressEvent(QMouseEvent *e)
@@ -466,11 +451,13 @@ void MainView::mousePressEvent(QMouseEvent *e)
 void MainView::mouseMoveEvent(QMouseEvent *e)
 {
 #ifndef TOUCH_SCREEN_MODE
-    if(!_morphMode) return;
-    if(_currentIndex<0) return;
+    if (!_morphMode)
+        return;
+    if (_currentIndex < 0)
+        return;
 
     QVector2D newPos = mouseToOpenGl(e);
-    _targetPoly[_currentIndex] += newPos-_currentPosition;
+    _targetPoly[_currentIndex] += newPos - _currentPosition;
 
     _currentPosition = newPos;
 
@@ -481,7 +468,7 @@ void MainView::mouseMoveEvent(QMouseEvent *e)
 void MainView::mouseReleaseEvent(QMouseEvent *e)
 {
 #ifndef TOUCH_SCREEN_MODE
-    if(_morphMode)
+    if (_morphMode)
     {
         _currentIndex = -1;
         return;
@@ -492,17 +479,15 @@ void MainView::mouseReleaseEvent(QMouseEvent *e)
 #endif
 }
 
-
 void MainView::paintGL()
 {
-    const std::vector<QVector2D> &currentPoly = _morphMode?_targetPoly:_sourcePoly;
+    const std::vector<QVector2D> &currentPoly = _morphMode ? _targetPoly : _sourcePoly;
 
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glLineWidth(10);
-
 
     _shader.bind();
     setUniforms();
@@ -514,7 +499,7 @@ void MainView::paintGL()
     funs.glEnableVertexAttribArray(_posLoc);
     funs.glEnableVertexAttribArray(_textureLoc);
     funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
-    funs.glDrawElements(GL_TRIANGLE_STRIP, _grid.indices().size(), GL_UNSIGNED_INT, (void*)0);
+    funs.glDrawElements(GL_TRIANGLE_STRIP, _grid.indices().size(), GL_UNSIGNED_INT, (void *)0);
 
     funs.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     funs.glDisableVertexAttribArray(_posLoc);
@@ -525,7 +510,7 @@ void MainView::paintGL()
     glEnableVertexAttribArray(_posLoc);
     glEnableVertexAttribArray(_textureLoc);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
-    glDrawElements(GL_TRIANGLE_STRIP, _grid.indices().size(), GL_UNSIGNED_INT, (void*)0  );
+    glDrawElements(GL_TRIANGLE_STRIP, _grid.indices().size(), GL_UNSIGNED_INT, (void *)0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(_posLoc);
@@ -537,54 +522,47 @@ void MainView::paintGL()
 
     _shader.release();
 
-
-    if(!_drawForPrinting)
+    if (!_drawForPrinting)
     {
         _colorShader.bind();
 
-
-
 #ifdef TOUCH_SCREEN_MODE
-        glColor3f(245.0f/255.0f,128.0f/255.0f,37.0f/255.0f);
+        glColor3f(245.0f / 255.0f, 128.0f / 255.0f, 37.0f / 255.0f);
         glLineWidth(5);
 #else
-        glColor3f(0.5f,0.5f,0.5f);
-        glLineWidth(_morphMode?2:10);
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glLineWidth(_morphMode ? 2 : 10);
 #endif
-        if(currentPoly.size()>=3)
+        if (currentPoly.size() >= 3)
         {
             glBegin(GL_LINE_LOOP);
-            for(int i=0;i<currentPoly.size();++i)
+            for (int i = 0; i < currentPoly.size(); ++i)
             {
-                glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+                glVertex2f(currentPoly[i].x(), currentPoly[i].y());
             }
             glEnd();
         }
 
-
-
-
 #ifndef TOUCH_SCREEN_MODE
-        if(_preserveBounday)
+        if (_preserveBounday)
         {
-            glColor3f(1.0f,0.0f,0.0f);
+            glColor3f(1.0f, 0.0f, 0.0f);
             glLineWidth(5);
             glBegin(GL_LINE_LOOP);
-            for(int i=0;i<_boundayPoly.size();++i)
+            for (int i = 0; i < _boundayPoly.size(); ++i)
             {
-                glVertex2f(_boundayPoly[i].x(),_boundayPoly[i].y());
+                glVertex2f(_boundayPoly[i].x(), _boundayPoly[i].y());
             }
             glEnd();
         }
 #endif
         _colorShader.release();
 
-
         glEnable(GL_POINT_SPRITE);
         _circleShader.bind();
 
         GLuint circleLoc = _circleShader.uniformLocation("circleTexture");
-        _circleShader.setUniformValue(circleLoc,0);
+        _circleShader.setUniformValue(circleLoc, 0);
         _circleTexture->bind(0);
 
         {
@@ -593,11 +571,11 @@ void MainView::paintGL()
 #else
             glPointSize(20);
 #endif
-            glColor3f(1.0f,0.0f,0.0f);
+            glColor3f(1.0f, 0.0f, 0.0f);
             glBegin(GL_POINTS);
-            for(int i=0;i<currentPoly.size();++i)
+            for (int i = 0; i < currentPoly.size(); ++i)
             {
-                glVertex2f(currentPoly[i].x(),currentPoly[i].y());
+                glVertex2f(currentPoly[i].x(), currentPoly[i].y());
             }
 
             glEnd();
@@ -614,12 +592,12 @@ void MainView::checkGLError(const std::string &msg)
 {
 #ifndef NDEBUG
     GLenum error = GL_NO_ERROR;
-    int index=0;
-    do {
+    int index = 0;
+    do
+    {
         error = glGetError();
         if (error != GL_NO_ERROR)
-            std::cerr<<"["<<msg<<"] "<<index++<<" "<<error<<std::endl;
+            std::cerr << "[" << msg << "] " << index++ << " " << error << std::endl;
     } while (error != GL_NO_ERROR);
 #endif
 }
-

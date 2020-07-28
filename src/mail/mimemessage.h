@@ -29,11 +29,11 @@
 class MimeMessage : public QObject
 {
 public:
-
-    enum RecipientType {
-        To,                 // primary
-        Cc,                 // carbon copy
-        Bcc                 // blind carbon copy
+    enum RecipientType
+    {
+        To, // primary
+        Cc, // carbon copy
+        Bcc // blind carbon copy
     };
 
     /* [1] Constructors and Destructors */
@@ -43,28 +43,26 @@ public:
 
     /* [1] --- */
 
-
     /* [2] Getters and Setters */
 
-    void setSender(EmailAddress* e);
-    void addRecipient(EmailAddress* rcpt, RecipientType type = To);
-    void addTo(EmailAddress* rcpt);
-    void addCc(EmailAddress* rcpt);
-    void addBcc(EmailAddress* rcpt);
-    void setSubject(const QString & subject);
-    void addPart(MimePart* part);
+    void setSender(EmailAddress *e);
+    void addRecipient(EmailAddress *rcpt, RecipientType type = To);
+    void addTo(EmailAddress *rcpt);
+    void addCc(EmailAddress *rcpt);
+    void addBcc(EmailAddress *rcpt);
+    void setSubject(const QString &subject);
+    void addPart(MimePart *part);
 
     void setHeaderEncoding(MimePart::Encoding);
 
-    const EmailAddress & getSender() const;
-    const QList<EmailAddress*> & getRecipients(RecipientType type = To) const;
-    const QString & getSubject() const;
-    const QList<MimePart*> & getParts() const;
+    const EmailAddress &getSender() const;
+    const QList<EmailAddress *> &getRecipients(RecipientType type = To) const;
+    const QString &getSubject() const;
+    const QList<MimePart *> &getParts() const;
 
-    MimePart& getContent();
+    MimePart &getContent();
     void setContent(MimePart *content);
     /* [2] --- */
-
 
     /* [3] Public methods */
 
@@ -73,20 +71,17 @@ public:
     /* [3] --- */
 
 protected:
-
     /* [4] Protected members */
 
-    EmailAddress* sender;
-    QList<EmailAddress*> recipientsTo, recipientsCc, recipientsBcc;
+    EmailAddress *sender;
+    QList<EmailAddress *> recipientsTo, recipientsCc, recipientsBcc;
     QString subject;
     MimePart *content;
     bool autoMimeContentCreated;
-    
+
     MimePart::Encoding hEncoding;
 
     /* [4] --- */
-
-
 };
 
 #endif // MIMEMESSAGE_H

@@ -18,11 +18,10 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QFont f=QApplication::font();
+	QFont f = QApplication::font();
 	f.setFamily("Helvetica");
 	QApplication::setFont(f);
 	a.setAttribute(Qt::AA_UseHighDpiPixmaps);
-
 
 #ifdef TOUCH_SCREEN_MODE
 	MainWindowTouch w;
@@ -30,9 +29,6 @@ int main(int argc, char *argv[])
 	MainWindow w;
 #endif
 	w.show();
-
-
-
 
 	return a.exec();
 }

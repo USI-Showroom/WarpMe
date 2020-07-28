@@ -28,18 +28,16 @@ class MimePart : public QObject
 {
     Q_OBJECT
 public:
-
     /* [0] Enumerations */
-    enum Encoding {        
+    enum Encoding
+    {
         _7Bit,
         _8Bit,
         Base64,
         QuotedPrintable
     };
 
-
     /* [0] --- */
-
 
     /* [1] Constructors and Destructors */
 
@@ -48,36 +46,34 @@ public:
 
     /* [1] --- */
 
-
     /* [2] Getters and Setters */
 
-    const QString& getHeader() const;
-    const QByteArray& getContent() const;
+    const QString &getHeader() const;
+    const QByteArray &getContent() const;
 
-    void setContent(const QByteArray & content);
-    void setHeader(const QString & header);
+    void setContent(const QByteArray &content);
+    void setHeader(const QString &header);
 
-    void addHeaderLine(const QString & line);
+    void addHeaderLine(const QString &line);
 
-    void setContentId(const QString & cId);
-    const QString & getContentId() const;
+    void setContentId(const QString &cId);
+    const QString &getContentId() const;
 
-    void setContentName(const QString & cName);
-    const QString & getContentName() const;
+    void setContentName(const QString &cName);
+    const QString &getContentName() const;
 
-    void setContentType(const QString & cType);
-    const QString & getContentType() const;
+    void setContentType(const QString &cType);
+    const QString &getContentType() const;
 
-    void setCharset(const QString & charset);
-    const QString & getCharset() const;
+    void setCharset(const QString &charset);
+    const QString &getCharset() const;
 
     void setEncoding(Encoding enc);
     Encoding getEncoding() const;
 
-    MimeContentFormatter& getContentFormatter();
+    MimeContentFormatter &getContentFormatter();
 
     /* [2] --- */
-
 
     /* [3] Public methods */
 
@@ -87,10 +83,7 @@ public:
 
     /* [3] --- */
 
-
-
 protected:
-
     /* [4] Protected members */
 
     QString header;

@@ -11,8 +11,8 @@
 #include <QObject>
 #include <QDialog>
 
-
-namespace Ui {
+namespace Ui
+{
 	class NewPicture;
 }
 
@@ -33,10 +33,8 @@ protected:
 	void resizeEvent(QResizeEvent *event);
 
 private:
-	Ui::NewPicture* _ui;
+	Ui::NewPicture *_ui;
 	QString _path;
 };
-
-
 
 #endif // __NEW_PICTURE_HPP__

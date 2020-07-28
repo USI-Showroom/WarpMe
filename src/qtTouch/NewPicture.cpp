@@ -13,31 +13,28 @@
 #include <iostream>
 #include <QDirIterator>
 
-static const char *IMAGE_PROP_NAME="image_path";
-
-
+static const char *IMAGE_PROP_NAME = "image_path";
 
 NewPicture::NewPicture(QWidget *parent)
-:QDialog(parent), _ui(new Ui::NewPicture)
+    : QDialog(parent), _ui(new Ui::NewPicture)
 {
     _ui->setupUi(this);
     setModal(true);
 
-
-    QDirIterator it(":/photos",  QDirIterator::Subdirectories);
+    QDirIterator it(":/photos", QDirIterator::Subdirectories);
     QLayout *layout = _ui->scrollPanelLayout;
 
-    while (it.hasNext()) {
-        QString imgPath=it.next();
+    while (it.hasNext())
+    {
+        QString imgPath = it.next();
 
-        QPushButton *btn = new QPushButton(QIcon(imgPath),"");
+        QPushButton *btn = new QPushButton(QIcon(imgPath), "");
         btn->setProperty(IMAGE_PROP_NAME, imgPath);
-        connect( btn, SIGNAL(clicked()), this, SLOT(imageClicked()));
+        connect(btn, SIGNAL(clicked()), this, SLOT(imageClicked()));
 
         layout->addWidget(btn);
     }
 }
-
 
 void NewPicture::imageClicked()
 {
@@ -48,26 +45,24 @@ void NewPicture::imageClicked()
 
 void NewPicture::resizeEvent(QResizeEvent *event)
 {
-    const float w=_ui->scrollPanel->width();
-    const float h=_ui->scrollPanel->height()-30;
+    const float w = _ui->scrollPanel->width();
+    const float h = _ui->scrollPanel->height() - 30;
 
     float frameW, frameH;
     PaperConstants::Scale(w, h, frameW, frameH);
 
-
     QLayout *layout = _ui->scrollPanelLayout;
-
 
     for (int i = 0; i < layout->count(); ++i)
     {
         QPushButton *button = static_cast<QPushButton *>(layout->itemAt(i)->widget());
-        if (button != NULL){
-            button->setMinimumSize(frameW,frameH);
-            button->setIconSize(QSize(frameW,frameH));
+        if (button != NULL)
+        {
+            button->setMinimumSize(frameW, frameH);
+            button->setIconSize(QSize(frameW, frameH));
         }
     }
 }
-
 
 NewPicture::~NewPicture()
 {

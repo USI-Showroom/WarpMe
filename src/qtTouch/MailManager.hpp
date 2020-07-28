@@ -11,9 +11,8 @@
 #include <QObject>
 #include <QDialog>
 
-
-
-namespace Ui {
+namespace Ui
+{
 	class MailManager;
 }
 class SmtpClient;
@@ -35,11 +34,9 @@ private slots:
 	void enterPressed();
 
 private:
-	Ui::MailManager* _ui;
+	Ui::MailManager *_ui;
 	const QImage &_img;
 	bool _nextUpper;
 };
-
-
 
 #endif // __MAIL_MANAGER_HPP__

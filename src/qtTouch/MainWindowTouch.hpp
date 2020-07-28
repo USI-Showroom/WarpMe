@@ -16,10 +16,10 @@
 #include "WebcamManager.hpp"
 #include "FacebookManager.hpp"
 
-namespace Ui {
+namespace Ui
+{
     class MainWindowTouch;
 }
-
 
 class MainWindowTouch : public QMainWindow
 {
@@ -30,7 +30,7 @@ public:
     ~MainWindowTouch();
 
 protected:
-    void resizeEvent(QResizeEvent * event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void getImage(QImage &img);
@@ -47,17 +47,15 @@ private slots:
 
     void resetImage();
 
-
 private:
-    Ui::MainWindowTouch* _ui;
+    Ui::MainWindowTouch *_ui;
     QPrinter _printer;
     QImage *_logo;
 
-	WebcamManager *_wbm;
+    WebcamManager *_wbm;
+
 protected:
-    void keyReleaseEvent(QKeyEvent * event);
+    void keyReleaseEvent(QKeyEvent *event);
 };
-
-
 
 #endif // __MAINWINDOW_Touch_HPP__

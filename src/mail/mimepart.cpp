@@ -35,70 +35,69 @@ MimePart::~MimePart()
 
 /* [1] --- */
 
-
 /* [2] Getters and Setters */
 
-void MimePart::setContent(const QByteArray & content)
+void MimePart::setContent(const QByteArray &content)
 {
     this->content = content;
 }
 
-void MimePart::setHeader(const QString & header)
+void MimePart::setHeader(const QString &header)
 {
     this->header = header;
 }
 
-void MimePart::addHeaderLine(const QString & line)
+void MimePart::addHeaderLine(const QString &line)
 {
     this->header += line + "\r\n";
 }
 
-const QString& MimePart::getHeader() const
+const QString &MimePart::getHeader() const
 {
     return header;
 }
 
-const QByteArray& MimePart::getContent() const
+const QByteArray &MimePart::getContent() const
 {
     return content;
 }
 
-void MimePart::setContentId(const QString & cId)
+void MimePart::setContentId(const QString &cId)
 {
     this->cId = cId;
 }
 
-const QString & MimePart::getContentId() const
+const QString &MimePart::getContentId() const
 {
     return this->cId;
 }
 
-void MimePart::setContentName(const QString & cName)
+void MimePart::setContentName(const QString &cName)
 {
     this->cName = cName;
 }
 
-const QString & MimePart::getContentName() const
+const QString &MimePart::getContentName() const
 {
     return this->cName;
 }
 
-void MimePart::setContentType(const QString & cType)
+void MimePart::setContentType(const QString &cType)
 {
     this->cType = cType;
 }
 
-const QString & MimePart::getContentType() const
+const QString &MimePart::getContentType() const
 {
     return this->cType;
 }
 
-void MimePart::setCharset(const QString & charset)
+void MimePart::setCharset(const QString &charset)
 {
     this->cCharset = charset;
 }
 
-const QString & MimePart::getCharset() const
+const QString &MimePart::getCharset() const
 {
     return this->cCharset;
 }
@@ -113,13 +112,12 @@ MimePart::Encoding MimePart::getEncoding() const
     return this->cEncoding;
 }
 
-MimeContentFormatter& MimePart::getContentFormatter()
+MimeContentFormatter &MimePart::getContentFormatter()
 {
     return this->formatter;
 }
 
 /* [2] --- */
-
 
 /* [3] Public methods */
 
@@ -132,7 +130,6 @@ QString MimePart::toString()
 }
 
 /* [3] --- */
-
 
 /* [4] Protected methods */
 

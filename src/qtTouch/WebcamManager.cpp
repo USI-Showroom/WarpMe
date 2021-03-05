@@ -400,13 +400,14 @@ void WebcamManager::paintEvent(QPaintEvent *event)
         arrow.lineTo(x, y); //9
 
         // painter.setBrush();
-        painter.fillPath(arrow, QBrush(QColor(245, 128, 37)));
+        // painter.fillPath(arrow, QBrush(QColor(245, 128, 37)));
     }
 
     painter.setFont(QFont("Arial", 60));
-    const int time = ceil((5000 - _elapsed.elapsed()) / 1000.0);
+    const int camera_timer = 5000; // ms
+    const int time = ceil((camera_timer - _elapsed.elapsed()) / 1000.0);
 
-    if (_elapsed.elapsed() > 2600 && !_soundPlayed)
+    if (_elapsed.elapsed() > (camera_timer - 400) && !_soundPlayed)
     {
         _clickSound.setPosition(0);
         _clickSound.play();

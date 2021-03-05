@@ -159,14 +159,14 @@ CameraCapture::CameraCapture(QObject *parent)
 
     if (!_videoCapture.isOpened())
     {
-        std::cerr << "unable to open video stream" << std::endl;
+        std::cerr << "Unable to open video stream" << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
     if (!_faceCascade.load("../src/resource/opencv/haarcascade_frontalface_alt.xml"))
-        std::cerr << "unable to load face cascade" << std::endl; // load face classifiers
+        std::cerr << "Unable to load face cascade" << std::endl; // load face classifiers
     if (!_eyesCascade.load("../src/resource/opencv/haarcascade_eye_tree_eyeglasses.xml"))
-        std::cerr << "unable to load eyes cascade" << std::endl; // load eye classifiers
+        std::cerr << "Unable to load eyes cascade" << std::endl; // load eye classifiers
 
     _videoCapture.set(CAP_PROP_FRAME_WIDTH, 2304 / 1.1);
     _videoCapture.set(CAP_PROP_FRAME_HEIGHT, 1296 / 1.1);
@@ -404,7 +404,7 @@ void WebcamManager::paintEvent(QPaintEvent *event)
     }
 
     painter.setFont(QFont("Arial", 60));
-    const int time = ceil((3000 - _elapsed.elapsed()) / 1000.0);
+    const int time = ceil((5000 - _elapsed.elapsed()) / 1000.0);
 
     if (_elapsed.elapsed() > 2600 && !_soundPlayed)
     {

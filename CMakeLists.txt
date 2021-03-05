@@ -125,7 +125,7 @@ SET(OpenCV_DIR "C:/opencv/build")
         INCLUDE_DIRECTORIES(OpenCV_INCLUDE_DIR)
         SET(BARY_MAPPING_LINK_LIBRARIES ${BARY_MAPPING_LINK_LIBRARIES}; ${OpenCV_LIBS})
     ELSE()
-        message(FATAL_ERROR "unable to find OpenCV")
+        message(FATAL_ERROR "Unable to find OpenCV")
     ENDIF()
 ENDIF()
 #########################

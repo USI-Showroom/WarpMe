@@ -23,8 +23,17 @@ MailManager::MailManager(const QImage &img, QWidget *parent)
 {
     _ui->setupUi(this);
 
+    if (const char *psw = std::getenv("WarpMe_password"))
+    {
+        client.setPassword(psw);
+    }
+    else
+    {
+        std::cerr << "No email password found! Please set the WarpMe_password env variable." << '\n';
+    }
+
     client.setUser(email);
-    client.setPassword("tasagef4");
+    client.setPassword(std::getenv("WarpMe_password"));
     client.setAuthMethod(SmtpClient::AuthLogin);
 
     _ui->email->setFocus();
@@ -47,12 +56,12 @@ void MailManager::sendMail()
 
     message.setSender(new EmailAddress(email, "WarpMe - USI"));
     message.addRecipient(new EmailAddress(_ui->email->text()));
-    message.setSubject("WarpMe – Your picture");
+    message.setSubject("WarpMe - Your picture");
 
     MimeHtml text;
     text.setHtml("Wow, amazing picture!<br>"
                  "Thank you for using WarpMe.<br>"
-                 "Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera italiana at <a href=\"http://inf.usi.ch/\">inf.usi.ch</a><br><br>"
+                 "Learn how to shape your future with Informatics at USI - Universit&agrave; della Svizzera italiana at <a href=\"https://inf.usi.ch\">inf.usi.ch</a><br><br>"
                  "We hope to see you soon :)<br><br><br>"
 
                  "Study Advisory and Promotion Service<br>"

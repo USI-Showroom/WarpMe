@@ -124,7 +124,7 @@
 	
 		\begin{figure}[H]
                 \centering
-                \includegraphics[width=0.7\textwidth]{img/cables_it.png}
+                \includegraphics[width=0.7\textwidth]{img/cables.png}
                 \caption{Schema dei vari collegamenti}
                 \label{cables}
         \end{figure}
@@ -136,7 +136,7 @@
 		\item Posizionare su 1 l'interruttore principale dello schermo, posizionato sul lato destro vicino al connettore di alimentazione
 		\item Premere il pulsante di accensione del NUC
 		\item Premere per qualche secondo il tasto \texttt{On} della stampante
-		\item Quando si presenta la schermata di blocco di Windows, trascinare l'immagine verso l'alto e inserire la password \texttt{usi-warpme} con l'aiuto della tastiera a schermo
+		\item Quando si presenta la schermata di blocco di Windows, trascinare l'immagine verso l'alto e inserire la password \texttt{usi-warpme} con l'aiuto della tastiera a schermo (controllare che l'utente sia \texttt{warpme})
 		\item Il software dovrebbe avviarsi automaticamente, mostrando un volto grigio. Qualora non fosse il caso, avviarlo toccando due volte l'icona \texttt{WarpMe} sul Desktop
 	\end{enumerate}	
 		
@@ -184,7 +184,21 @@
 		
 	\subsection{Inchiostro stampante}
 		
-		Per sostituire la cartuccia, aprire lo sportello collocato sul lato destro della stampante, estrarre la cartuccia usata sollevando il gancio marrone e inserire delicatamente quella nuova, con l'etichetta verso l'alto. Smaltire in maniera appropriata le vecchie cartuccie.
+		Per sostituire la cartuccia, aprire lo sportello collocato sul lato destro della stampante, estrarre la cartuccia usata sollevando il gancio marrone e inserire delicatamente quella nuova, con l'etichetta verso l'alto. Smaltire in maniera appropriata le vecchie cartucce.
+
+	\subsection{Password email}
+
+		Qualora la password per l'account email \texttt{warpme@usi.ch} dovesse cambiare, è possibile
+		aggiornarla facilmente senza dover modificare il codice dell'applicazione. Dal menu Start, cercare "environment variables" e aprire il risultato corrispondente.
+		Dopodiché cliccare sul bottone \texttt{Environment Variables...} (1) e modificare il valore di \texttt{WarpMe\_password}
+		con il tasto \texttt{Edit...} (2). Riavviare l'applicazione per applicare la modifica.
+
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.7\textwidth]{img/env.png}
+			\caption{Le variabili d'ambiente di Windows}
+			\label{env}
+	\end{figure}
 		
 		
 		
